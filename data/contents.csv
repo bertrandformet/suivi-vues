@@ -1,2 +1,3 @@
 id,title,description,created_by,created_at
 demo-content-1,Exemple de démonstration,Contenu fictif pour illustrer le regroupement de plusieurs URLs sous un même contenu.,admin,2026-01-01T00:00:00+00:00
+demo-content-2,Deuxième exemple,"Second contenu fictif, pour illustrer le filtre par contenu.",admin,2026-01-01T00:00:00+00:00
