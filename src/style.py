@@ -28,7 +28,7 @@ def inject():
 
 def format_number(value) -> str:
     try:
-        return f"{int(value):,}".replace(",", " ")
+        return f"{int(value):,}".replace(",", " ")
     except (ValueError, TypeError):
         return str(value)
 
@@ -63,3 +63,16 @@ SOURCE_LABELS = {
     "import": "import CSV",
     "adjustment": "ajustement",
 }
+
+
+def render_footer():
+    st.markdown(
+        "<div style='margin-top:48px;padding-top:14px;border-top:1px solid #E4E3DF;"
+        "font-size:12px;color:#8A94A0'>"
+        "© 2026 Bertrand Formet — "
+        "<a href='https://creativecommons.org/licenses/by/4.0/' target='_blank' style='color:#8A94A0'>"
+        "Licence CC BY 4.0</a>"
+        " — <a href='https://github.com/bertrandformet/suivi-vues' target='_blank' style='color:#8A94A0'>"
+        "Code source sur GitHub</a></div>",
+        unsafe_allow_html=True,
+    )
