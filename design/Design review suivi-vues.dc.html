@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Source Sans 3',system-ui,sans-serif}
+a{color:#33618F}a:hover{color:#254A70}
+doc-page:not(:defined){visibility:hidden}
+</style>
+</helmet>
+<x-import component-from-global-scope="doc-page" from="./doc-page.js" size="a4" margin="0.85in" hint-size="100%,1400px">
+<div style="font-size:14.5px;line-height:1.6;color:#1F2A37">
+
+<h1 style="font-family:'Source Serif 4',Georgia,serif;font-size:27px;line-height:1.25;margin:0 0 4px">Design review — suivi-vues</h1>
+<p style="margin:0 0 22px;color:#5D6B79;font-size:13.5px">Tableau de bord de veille des vues/écoutes · Streamlit · 8 juillet 2026 · destinataire : Claude Code (implémentation). Toutes les recommandations sont réalisables en Streamlit natif + CSS léger, sauf mention contraire.</p>
+
+<h2 style="font-size:18px;margin:26px 0 8px">0. Système transversal (à faire en premier)</h2>
+<ul style="margin:0;padding-left:20px">
+  <li><strong>Thème</strong> — dans <code>.streamlit/config.toml</code> : <code>primaryColor="#33618F"</code>, <code>backgroundColor="#FAFAF9"</code>, <code>secondaryBackgroundColor="#F2F1EE"</code>, <code>textColor="#1F2A37"</code>, <code>font="sans serif"</code>. Blancs légèrement chauds, jamais de gris saturé.</li>
+  <li><strong>Supprimer les emoji d'icônes</strong> (📊 ➕ 🔗 📥 🔄). Ils varient selon l'OS et donnent un ton non institutionnel. Nav en texte seul via <code>st.Page(..., icon=None)</code>, ou icônes Material (<code>icon=":material/monitoring:"</code>) si un repère visuel est voulu. Retirer l'emoji des titres de page (<code>st.title</code> sans emoji).</li>
+  <li><strong>Copy</strong> — renommer : « Ajouter une vue » → <em>Ajouter un relevé</em> (on saisit un relevé daté, pas une vue) ; « Gérer les URLs » → <em>Contenus &amp; URLs</em> ; « Importer un fichier » → <em>Importer des relevés</em>. Bannir les libellés anglais résiduels : page de connexion <em>Login/Username/Password</em> → <em>Connexion / Identifiant / Mot de passe</em> ; uploader → <code>st.file_uploader("…")</code> ne permet pas de traduire « Drag and drop », ajouter la consigne française en <code>help</code>/légende au-dessus et masquer le texte anglais est du CSS fragile — au minimum encadrer d'une consigne FR claire.</li>
+  <li><strong>Couleur = contenu</strong> (choix validé) : une couleur stable par contenu, déclinée sur toutes ses URLs. Palette catégorielle sobre, même luminosité/chroma : <code>#33618F</code>, <code>#8A6136</code>, puis <code>oklch(0.50 0.09 h)</code> en variant la teinte (140, 320, 90…). L'appliquer à la fois aux courbes Plotly (<code>color_discrete_map</code>) et aux barres. La plateforme est indiquée par le texte, jamais par la couleur.</li>
+  <li><strong>Nombres</strong> — format FR (espace fine comme séparateur de milliers), <code>tabular-nums</code> via CSS léger sur les tables/metrics.</li>
+</ul>
+
+<h2 style="font-size:18px;margin:26px 0 8px">1. Connexion (01)</h2>
+<ul style="margin:0;padding-left:20px">
+  <li>Formulaire pleine largeur ~1300&nbsp;px : le contraindre à ~420&nbsp;px centré (<code>st.columns([1,1,1])</code>, formulaire dans la colonne du milieu) avec le nom du produit au-dessus.</li>
+  <li>Le message « Veuillez vous connecter » en <code>st.info</code> bleu ressemble à une erreur douce ; c'est un état normal. Le remplacer par un sous-titre statique sous le titre. Réserver les alertes aux vrais échecs (<code>st.error("Identifiant ou mot de passe incorrect")</code>).</li>
+  <li>Bouton <em>Se connecter</em> en <code>type="primary"</code>, pleine largeur du formulaire ; soumission sur Entrée via <code>st.form</code>.</li>
+</ul>
+
+<h2 style="font-size:18px;margin:26px 0 8px">2. Tableau de bord (02, 07) — voir maquettes 1a / 1b / 1c</h2>
+<p style="margin:0 0 6px"><strong>Diagnostic</strong> : la hiérarchie filtres → courbe → comparaison → audit existe mais tout a le même poids visuel ; la courbe démarre à ~40&nbsp;% de la hauteur d'écran ; la légende Plotly à droite mange un tiers de la largeur ; aucun contexte (nb de contenus, dernière collecte).</p>
+<ul style="margin:0;padding-left:20px">
+  <li>Titre + ligne de contexte : « 2 contenus suivis · 4 URLs · dernière collecte le 19 janv. » (<code>st.caption</code>).</li>
+  <li>Filtres sur une seule rangée <code>st.columns(3)</code>, libellés courts ; « Regrouper les courbes par » → <em>Une courbe par</em>.</li>
+  <li>Courbe : légende horizontale au-dessus du graphe (<code>legend=dict(orientation="h", y=1.12)</code>) pour rendre la largeur au tracé ; grille horizontale seule ; axe Y sans titre « Vues » redondant si le titre de section le dit ; marqueurs uniquement au dernier point.</li>
+  <li>« Dernières vues par plateforme » → <em>Dernier relevé par plateforme</em>, barres horizontales avec valeur affichée, colorées par contenu.</li>
+  <li>Table d'audit : en-têtes FR lisibles (pas <code>platform_name</code>, <code>collection_method</code>) via <code>st.dataframe(column_config=…)</code> ; source en toutes lettres (<em>Collecte auto / Saisie manuelle / Import CSV</em>).</li>
+  <li>Rôle lecteur (07) : la sidebar quasi vide est déroutante. Afficher le nom du produit + « Lecteur · consultation seule » en badge, ou passer la nav en haut (voir 1c) pour que lecteur et admin partagent la même structure.</li>
+</ul>
+
+<h2 style="font-size:18px;margin:26px 0 8px">3. Ajouter un relevé (03)</h2>
+<ul style="margin:0;padding-left:20px">
+  <li>Usage fréquent → optimiser la vitesse : <code>st.form</code> avec soumission Entrée ; date par défaut = aujourd'hui ; après enregistrement, conserver l'URL sélectionnée et vider seulement la valeur (saisie en série).</li>
+  <li>« Nombre de vues » à 0 par défaut invite l'erreur : préremplir avec le dernier relevé connu de l'URL et l'afficher en aide (« Dernier relevé : 510 le 19 janv. ») — c'est le vrai garde-fou contre les régressions de compteur.</li>
+  <li>La case « Il s'agit d'un ajustement… » est ambiguë : la déduire automatiquement (si une valeur existe déjà pour cette date, basculer en mode ajustement et l'annoncer par un <code>st.warning</code> doux) plutôt que la demander.</li>
+  <li>Confirmation : <code>st.toast("Relevé enregistré — Épisode 12, 19 janv., 512 vues")</code>.</li>
+</ul>
+
+<h2 style="font-size:18px;margin:26px 0 8px">4. Contenus &amp; URLs (04)</h2>
+<ul style="margin:0;padding-left:20px">
+  <li>L'ordre des onglets inverse le modèle mental : on crée d'abord un contenu, puis on y rattache des URLs. Mettre <em>Créer un contenu</em> en premier onglet, ou fusionner : dans le formulaire d'URL, l'option « + Nouveau contenu » ouvre la création inline.</li>
+  <li>Table « URLs suivies » : en-têtes FR, URL raccourcie (domaine + …), colonne « Méthode » en libellé (<em>Auto / Manuel</em>) avec pastille discrète, tri par contenu.</li>
+  <li>« Méthode de collecte » ne devrait pas être un choix libre : elle découle de la plateforme (YouTube/PeerTube → auto, sinon manuel). L'afficher en champ désactivé ou en simple mention.</li>
+</ul>
+
+<h2 style="font-size:18px;margin:26px 0 8px">5. Importer des relevés (05)</h2>
+<ul style="margin:0;padding-left:20px">
+  <li>Écran trop nu : documenter le format attendu (colonnes, exemple) dans un <code>st.expander("Format attendu")</code> + lien de téléchargement d'un modèle CSV (<code>st.download_button</code>).</li>
+  <li>Après dépôt : aperçu des 5 premières lignes + rapport de validation (n lignes valides, n erreurs avec motif) avant écriture — étape <em>Vérifier puis confirmer</em>.</li>
+</ul>
+
+<h2 style="font-size:18px;margin:26px 0 8px">6. Collecte automatique (06)</h2>
+<ul style="margin:0;padding-left:20px">
+  <li>Ajouter les colonnes utiles : <em>Dernière collecte</em> (date + valeur) et <em>Statut</em> (OK / échec) — c'est la question que l'admin vient poser à cette page.</li>
+  <li>Pendant la collecte : <code>st.status("Collecte en cours…")</code> puis résumé (« 2 URLs collectées, 0 échec ») ; horodater « Dernière exécution » près du bouton.</li>
+  <li>Le bouton violet est hors palette : <code>type="primary"</code> suffit (reprendra le bleu du thème).</li>
+</ul>
+
+<h2 style="font-size:18px;margin:26px 0 8px">7. Réponses aux questions de la review</h2>
+<ul style="margin:0;padding-left:20px">
+  <li><strong>Hiérarchie du tableau de bord</strong> — pas claire aujourd'hui (tout au même poids, courbe trop basse). Corrigée par les maquettes : contexte en tête, filtres compacts, courbe dominante, audit en dernier (replié en 1c).</li>
+  <li><strong>Code couleur</strong> — la couleur par URL ne passe pas à l'échelle (11 plateformes × n contenus). Couleur par contenu + plateforme en texte : lisible et stable.</li>
+  <li><strong>Formulaire de saisie</strong> — assez rapide une fois : soumission Entrée, valeurs préremplies, saisie en série (voir §3).</li>
+  <li><strong>Distinction des rôles</strong> — insuffisante (sidebar vide côté lecteur). Badge de rôle explicite + structure de page identique entre rôles.</li>
+  <li><strong>Accessibilité (WCAG AA)</strong> — points à corriger : gris des libellés ≥ 4.5:1 (utiliser <code>#5D6B79</code> sur blanc, pas plus clair) ; ne jamais coder l'information par la couleur seule (étiquettes texte sur les courbes) ; cibles cliquables ≥ 44&nbsp;px (boutons pleine hauteur) ; <code>label</code> explicite sur chaque widget ; contraste des courbes sur fond blanc ≥ 3:1 (les deux teintes proposées passent).</li>
+</ul>
+
+<h2 style="font-size:18px;margin:26px 0 8px">Hors périmètre Streamlit natif</h2>
+<p style="margin:0">Non recommandé sans développement significatif : nav horizontale custom stylée (1c — possible via <code>st.tabs</code> mais rendu approximatif ; la sidebar de 1a/1b est le choix sûr), traduction du texte interne de <code>st.file_uploader</code>, tables avec pastilles colorées riches (préférer <code>column_config</code> simple).</p>
+
+</div>
+</x-import>
+
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EFEDE8;font-family:'Source Sans 3',system-ui,sans-serif}
+a{color:#33618F}a:hover{color:#254A70}
+.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(0,0,0,.08);scroll-margin-top:16px}
+.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}
+.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}
+.dv-tname{font:600 13px/1.2 system-ui,sans-serif;color:#1a1a1a}
+.dv-opts{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}
+.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}
+.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 11px/1.3 system-ui,sans-serif;color:rgba(0,0,0,.55)}
+.dv-card{max-width:100%;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}
+.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}
+.dv-next{margin:22px 0 0;font:12px/1.5 system-ui,sans-serif;color:rgba(0,0,0,.5)}
+</style>
+</helmet>
+
+<section class="dv-turn" id="t3" data-screen-label="Turn 3 — Les 6 autres écrans, direction 2a">
+<div class="dv-thd"><a class="dv-tid" href="#t3">3</a><span class="dv-tname">Déclinaison de <a class="dv-oid" href="#2a">2a</a> sur les 6 autres écrans (recommandations de la review appliquées)</span></div>
+<div class="dv-opts">
+
+<!-- 3a Connexion -->
+<div class="dv-opt" id="3a" data-screen-label="3a Connexion">
+<div class="dv-olabel"><a class="dv-oid" href="#3a">3a</a>Connexion — formulaire centré, plus de fausse alerte</div>
+<div class="dv-card" style="width:1280px">
+<div style="min-height:640px;background:#FBFAF7;color:#1F2A37;font-size:15px;line-height:1.5;display:flex;align-items:center;justify-content:center">
+  <div style="width:420px;display:flex;flex-direction:column;gap:22px;padding:40px 0">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+      <div style="width:16px;height:16px;background:#33618F;border-radius:4px"></div>
+      <div style="font-weight:700;font-size:20px;letter-spacing:.01em">suivi-vues</div>
+      <div style="font-size:14px;color:#5D6B79">Suivi des vues et écoutes des contenus surveillés</div>
+    </div>
+    <div style="background:#FFFFFF;border:1px solid #E4E3DF;border-radius:10px;padding:26px 26px 24px;display:flex;flex-direction:column;gap:16px">
+      <h1 style="margin:0;font-size:19px;font-weight:700">Connexion</h1>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <label style="font-size:13px;font-weight:600;color:#5D6B79">Identifiant</label>
+        <div style="border:1px solid #D5D9DE;border-radius:6px;padding:10px 12px;background:#FFF;font-size:14.5px;color:#8A94A0">votre identifiant</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <label style="font-size:13px;font-weight:600;color:#5D6B79">Mot de passe</label>
+        <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid #D5D9DE;border-radius:6px;padding:10px 12px;background:#FFF;font-size:14.5px;color:#8A94A0"><span>••••••••</span><span style="font-size:12.5px;text-decoration:underline;text-underline-offset:2px;color:#5D6B79">afficher</span></div>
+      </div>
+      <div style="background:#33618F;color:#FFFFFF;border-radius:6px;padding:11px 12px;text-align:center;font-weight:600;font-size:15px">Se connecter</div>
+    </div>
+    <div style="font-size:12.5px;color:#8A94A0;text-align:center">Accès réservé — contactez l'administrateur pour obtenir un compte.</div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- 3b Ajouter un relevé -->
+<div class="dv-opt" id="3b" data-screen-label="3b Ajouter un relevé">
+<div class="dv-olabel"><a class="dv-oid" href="#3b">3b</a>Ajouter un relevé — dernier relevé affiché, ajustement déduit, saisie en série</div>
+<div class="dv-card" style="width:1280px">
+<div style="display:flex;min-height:760px;background:#FBFAF7;color:#1F2A37;font-size:15px;line-height:1.5">
+  <div style="width:230px;flex:none;background:#FFFFFF;border-right:1px solid #E4E3DF;display:flex;flex-direction:column;padding:20px 14px 18px">
+    <div style="display:flex;align-items:center;gap:8px;padding:2px 10px 18px">
+      <div style="width:12px;height:12px;background:#33618F;border-radius:3px"></div>
+      <div style="font-weight:700;font-size:16px;letter-spacing:.01em">suivi-vues</div>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:2px;font-size:14.5px">
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Tableau de bord</div>
+      <div style="padding:9px 12px;border-radius:6px;background:#EEF2F6;color:#1F2A37;font-weight:600">Ajouter un relevé</div>
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Contenus &amp; URLs</div>
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Importer un fichier</div>
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Collecte automatique</div>
+    </nav>
+    <div style="margin-top:auto;border-top:1px solid #E4E3DF;padding:14px 12px 0;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:13.5px;color:#5D6B79">Admin</span>
+        <span style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#33618F;background:#E7EEF5;border:1px solid #C9D8E6;border-radius:99px;padding:2px 8px">éditeur</span>
+      </div>
+      <div style="font-size:13.5px;color:#5D6B79;text-decoration:underline;text-underline-offset:2px">Se déconnecter</div>
+    </div>
+  </div>
+  <div style="flex:1;min-width:0">
+    <div style="max-width:1000px;margin:0 auto;padding:36px 40px 44px;display:flex;flex-direction:column;gap:26px">
+      <div>
+        <h1 style="margin:0;font-size:30px;font-weight:700;letter-spacing:-.015em">Ajouter un relevé</h1>
+        <div style="margin-top:6px;font-size:15px;color:#5D6B79">Un relevé = la valeur du compteur d'une URL à une date donnée. Entrée pour enregistrer, la sélection est conservée pour la saisie en série.</div>
+      </div>
+      <div style="width:640px;background:#FFFFFF;border:1px solid #E4E3DF;border-radius:10px;padding:24px 26px;display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label style="font-size:13px;font-weight:600;color:#5D6B79">URL suivie</label>
+          <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid #D5D9DE;border-radius:6px;padding:10px 12px;background:#FFF;font-size:14.5px">Épisode 12 — YouTube<span style="color:#8A94A0">▾</span></div>
+          <div style="font-size:12.5px;color:#5D6B79">Dernier relevé : <strong>510</strong> le 19 janv. 2026 (collecte auto)</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label style="font-size:13px;font-weight:600;color:#5D6B79">Date du relevé</label>
+            <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid #D5D9DE;border-radius:6px;padding:10px 12px;background:#FFF;font-size:14.5px">8 juil. 2026<span style="color:#8A94A0">▾</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label style="font-size:13px;font-weight:600;color:#5D6B79">Nombre de vues</label>
+            <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid #D5D9DE;border-radius:6px;padding:10px 12px;background:#FFF;font-size:14.5px;font-variant-numeric:tabular-nums">512<span style="color:#8A94A0">− +</span></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label style="font-size:13px;font-weight:600;color:#5D6B79">Note <span style="font-weight:400">(optionnel)</span></label>
+          <div style="border:1px solid #D5D9DE;border-radius:6px;padding:10px 12px;background:#FFF;font-size:14.5px;color:#8A94A0">Ex : correction après export erroné</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="background:#33618F;color:#FFFFFF;border-radius:6px;padding:10px 22px;font-weight:600;font-size:15px">Enregistrer le relevé</div>
+          <span style="font-size:13px;color:#5D6B79">puis passe à l'URL suivante</span>
+        </div>
+      </div>
+      <div style="width:640px;display:flex;gap:10px;align-items:flex-start;background:#FDF6EC;border:1px solid #EBDCC3;border-radius:8px;padding:12px 16px;font-size:13.5px;color:#6B5426">
+        <span style="width:8px;height:8px;background:#B98A3E;border-radius:99px;flex:none;margin-top:6px"></span>
+        <span>Si une valeur existe déjà pour cette date, l'enregistrement devient automatiquement un <strong>ajustement</strong> — plus de case à cocher, l'application l'annonce ici avant confirmation.</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- 3c Contenus & URLs -->
+<div class="dv-opt" id="3c" data-screen-label="3c Contenus et URLs">
+<div class="dv-olabel"><a class="dv-oid" href="#3c">3c</a>Contenus &amp; URLs — contenu d'abord, méthode de collecte déduite, table en français</div>
+<div class="dv-card" style="width:1280px">
+<div style="display:flex;min-height:880px;background:#FBFAF7;color:#1F2A37;font-size:15px;line-height:1.5">
+  <div style="width:230px;flex:none;background:#FFFFFF;border-right:1px solid #E4E3DF;display:flex;flex-direction:column;padding:20px 14px 18px">
+    <div style="display:flex;align-items:center;gap:8px;padding:2px 10px 18px">
+      <div style="width:12px;height:12px;background:#33618F;border-radius:3px"></div>
+      <div style="font-weight:700;font-size:16px;letter-spacing:.01em">suivi-vues</div>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:2px;font-size:14.5px">
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Tableau de bord</div>
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Ajouter un relevé</div>
+      <div style="padding:9px 12px;border-radius:6px;background:#EEF2F6;color:#1F2A37;font-weight:600">Contenus &amp; URLs</div>
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Importer un fichier</div>
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Collecte automatique</div>
+    </nav>
+    <div style="margin-top:auto;border-top:1px solid #E4E3DF;padding:14px 12px 0;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:13.5px;color:#5D6B79">Admin</span>
+        <span style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#33618F;background:#E7EEF5;border:1px solid #C9D8E6;border-radius:99px;padding:2px 8px">éditeur</span>
+      </div>
+      <div style="font-size:13.5px;color:#5D6B79;text-decoration:underline;text-underline-offset:2px">Se déconnecter</div>
+    </div>
+  </div>
+  <div style="flex:1;min-width:0">
+    <div style="max-width:1000px;margin:0 auto;padding:36px 40px 44px;display:flex;flex-direction:column;gap:24px">
+      <div>
+        <h1 style="margin:0;font-size:30px;font-weight:700;letter-spacing:-.015em">Contenus &amp; URLs suivies</h1>
+        <div style="margin-top:6px;font-size:15px;color:#5D6B79">Un contenu regroupe ses URLs sur les différentes plateformes. Créez le contenu d'abord, rattachez-lui ensuite ses URLs.</div>
+      </div>
+      <div style="display:flex;gap:2px;border-bottom:1px solid #E4E3DF;font-size:14.5px">
+        <div style="padding:9px 16px;color:#5D6B79">Créer un contenu</div>
+        <div style="padding:9px 16px;font-weight:600;color:#1F2A37;border-bottom:2px solid #33618F;margin-bottom:-1px">Ajouter une URL suivie</div>
+      </div>
+      <div style="width:640px;background:#FFFFFF;border:1px solid #E4E3DF;border-radius:10px;padding:24px 26px;display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label style="font-size:13px;font-weight:600;color:#5D6B79">Contenu</label>
+          <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid #D5D9DE;border-radius:6px;padding:10px 12px;background:#FFF;font-size:14.5px">Épisode 12<span style="color:#8A94A0">▾</span></div>
+          <div style="font-size:12.5px;color:#5D6B79;text-decoration:underline;text-underline-offset:2px">+ Nouveau contenu</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label style="font-size:13px;font-weight:600;color:#5D6B79">Plateforme</label>
+            <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid #D5D9DE;border-radius:6px;padding:10px 12px;background:#FFF;font-size:14.5px">YouTube<span style="color:#8A94A0">▾</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label style="font-size:13px;font-weight:600;color:#5D6B79">Méthode de collecte</label>
+            <div style="border:1px solid #E4E3DF;border-radius:6px;padding:10px 12px;background:#F5F5F3;font-size:14.5px;color:#5D6B79">Automatique — déduite de la plateforme</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label style="font-size:13px;font-weight:600;color:#5D6B79">URL</label>
+          <div style="border:1px solid #D5D9DE;border-radius:6px;padding:10px 12px;background:#FFF;font-size:14.5px;color:#8A94A0">https://…</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label style="font-size:13px;font-weight:600;color:#5D6B79">Libellé</label>
+          <div style="border:1px solid #D5D9DE;border-radius:6px;padding:10px 12px;background:#FFF;font-size:14.5px;color:#8A94A0">Ex : Épisode 12 — YouTube</div>
+        </div>
+        <div style="display:flex">
+          <div style="background:#33618F;color:#FFFFFF;border-radius:6px;padding:10px 22px;font-weight:600;font-size:15px">Ajouter l'URL</div>
+        </div>
+      </div>
+      <div>
+        <h2 style="margin:0 0 12px;font-size:19px;font-weight:700">URLs suivies <span style="font-weight:400;font-size:14px;color:#5D6B79">— 4</span></h2>
+        <div style="background:#FFFFFF;border:1px solid #E4E3DF;border-radius:10px;overflow:hidden">
+          <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 1.6fr .9fr;font-size:13.5px">
+            <div style="padding:10px 16px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF;font-size:12.5px">Libellé</div>
+            <div style="padding:10px 16px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF;font-size:12.5px">Plateforme</div>
+            <div style="padding:10px 16px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF;font-size:12.5px">Contenu</div>
+            <div style="padding:10px 16px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF;font-size:12.5px">URL</div>
+            <div style="padding:10px 16px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF;font-size:12.5px">Méthode</div>
+            <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3">Épisode 12 — YouTube</div>
+            <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3;color:#5D6B79">YouTube</div>
+            <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3"><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;background:#33618F;border-radius:2px"></span>Épisode 12</span></div>
+            <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3;color:#5D6B79">youtube.com/watch?v=jNQ…</div>
+            <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3;color:#5D6B79">Auto</div>
+            <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3">Épisode 12 — Apple Podcasts</div>
+            <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3;color:#5D6B79">Apple Podcasts</div>
+            <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3"><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;background:#33618F;border-radius:2px"></span>Épisode 12</span></div>
+            <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3;color:#5D6B79">podcasts.apple.com/exem…</div>
+            <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3;color:#5D6B79">Manuel</div>
+            <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3">Table ronde — Spotify</div>
+            <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3;color:#5D6B79">Spotify</div>
+            <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3"><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;background:#8A6136;border-radius:2px"></span>Table ronde</span></div>
+            <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3;color:#5D6B79">open.spotify.com/episo…</div>
+            <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3;color:#5D6B79">Manuel</div>
+            <div style="padding:11px 16px">Table ronde — PeerTube</div>
+            <div style="padding:11px 16px;color:#5D6B79">PeerTube</div>
+            <div style="padding:11px 16px"><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;background:#8A6136;border-radius:2px"></span>Table ronde</span></div>
+            <div style="padding:11px 16px;color:#5D6B79">video.exemple.org/w/9k…</div>
+            <div style="padding:11px 16px;color:#5D6B79">Auto</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- 3d Importer -->
+<div class="dv-opt" id="3d" data-screen-label="3d Importer des relevés">
+<div class="dv-olabel"><a class="dv-oid" href="#3d">3d</a>Importer des relevés — format documenté, modèle téléchargeable, vérification avant écriture</div>
+<div class="dv-card" style="width:1280px">
+<div style="display:flex;min-height:760px;background:#FBFAF7;color:#1F2A37;font-size:15px;line-height:1.5">
+  <div style="width:230px;flex:none;background:#FFFFFF;border-right:1px solid #E4E3DF;display:flex;flex-direction:column;padding:20px 14px 18px">
+    <div style="display:flex;align-items:center;gap:8px;padding:2px 10px 18px">
+      <div style="width:12px;height:12px;background:#33618F;border-radius:3px"></div>
+      <div style="font-weight:700;font-size:16px;letter-spacing:.01em">suivi-vues</div>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:2px;font-size:14.5px">
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Tableau de bord</div>
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Ajouter un relevé</div>
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Contenus &amp; URLs</div>
+      <div style="padding:9px 12px;border-radius:6px;background:#EEF2F6;color:#1F2A37;font-weight:600">Importer un fichier</div>
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Collecte automatique</div>
+    </nav>
+    <div style="margin-top:auto;border-top:1px solid #E4E3DF;padding:14px 12px 0;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:13.5px;color:#5D6B79">Admin</span>
+        <span style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#33618F;background:#E7EEF5;border:1px solid #C9D8E6;border-radius:99px;padding:2px 8px">éditeur</span>
+      </div>
+      <div style="font-size:13.5px;color:#5D6B79;text-decoration:underline;text-underline-offset:2px">Se déconnecter</div>
+    </div>
+  </div>
+  <div style="flex:1;min-width:0">
+    <div style="max-width:1000px;margin:0 auto;padding:36px 40px 44px;display:flex;flex-direction:column;gap:24px">
+      <div>
+        <h1 style="margin:0;font-size:30px;font-weight:700;letter-spacing:-.015em">Importer des relevés</h1>
+        <div style="margin-top:6px;font-size:15px;color:#5D6B79">Fichier CSV ou Excel exporté depuis une plateforme. Les lignes sont vérifiées avant d'être enregistrées.</div>
+      </div>
+      <div style="width:720px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;border:1.5px dashed #C6CCD2;border-radius:10px;padding:26px 26px;background:#FFFFFF">
+          <div style="display:flex;align-items:center;gap:16px">
+            <div style="width:38px;height:38px;border:1.5px solid #C6CCD2;border-radius:99px;flex:none;display:flex;align-items:center;justify-content:center;color:#8A94A0;font-size:18px">↑</div>
+            <div>
+              <div style="font-weight:600;font-size:15px">Déposez votre fichier ici</div>
+              <div style="font-size:13px;color:#5D6B79">CSV ou XLSX · 200 Mo max</div>
+            </div>
+          </div>
+          <div style="border:1px solid #D5D9DE;border-radius:6px;padding:9px 18px;background:#FFF;font-weight:600;font-size:14px">Parcourir…</div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E4E3DF;border-radius:10px;padding:18px 22px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px">
+            <span style="font-weight:600;font-size:15px">Format attendu</span>
+            <span style="font-size:13px;color:#33618F;text-decoration:underline;text-underline-offset:2px">Télécharger le modèle CSV</span>
+          </div>
+          <div style="display:grid;grid-template-columns:150px 1fr;gap:0;font-size:13.5px;border:1px solid #F0F1F3;border-radius:6px;overflow:hidden">
+            <div style="padding:8px 12px;background:#F8F8F6;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;border-bottom:1px solid #F0F1F3">date</div>
+            <div style="padding:8px 12px;color:#5D6B79;border-bottom:1px solid #F0F1F3">AAAA-MM-JJ — ex : 2026-01-19</div>
+            <div style="padding:8px 12px;background:#F8F8F6;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;border-bottom:1px solid #F0F1F3">url</div>
+            <div style="padding:8px 12px;color:#5D6B79;border-bottom:1px solid #F0F1F3">doit correspondre à une URL suivie existante</div>
+            <div style="padding:8px 12px;background:#F8F8F6;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;border-bottom:1px solid #F0F1F3">vues</div>
+            <div style="padding:8px 12px;color:#5D6B79;border-bottom:1px solid #F0F1F3">nombre entier ≥ 0</div>
+            <div style="padding:8px 12px;background:#F8F8F6;font-family:ui-monospace,Menlo,monospace;font-size:12.5px">note</div>
+            <div style="padding:8px 12px;color:#5D6B79">optionnelle</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;background:#EEF2F6;border:1px solid #D3DEE8;border-radius:8px;padding:12px 16px;font-size:13.5px;color:#33618F">
+          <span style="width:8px;height:8px;background:#33618F;border-radius:99px;flex:none;margin-top:6px"></span>
+          <span>Après dépôt : aperçu des 5 premières lignes et rapport de validation (lignes valides / erreurs avec motif), puis bouton <strong>Confirmer l'import</strong>. Rien n'est écrit avant votre confirmation.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- 3e Collecte automatique -->
+<div class="dv-opt" id="3e" data-screen-label="3e Collecte automatique">
+<div class="dv-olabel"><a class="dv-oid" href="#3e">3e</a>Collecte automatique — statut et dernière valeur par URL, historique d'exécution</div>
+<div class="dv-card" style="width:1280px">
+<div style="display:flex;min-height:700px;background:#FBFAF7;color:#1F2A37;font-size:15px;line-height:1.5">
+  <div style="width:230px;flex:none;background:#FFFFFF;border-right:1px solid #E4E3DF;display:flex;flex-direction:column;padding:20px 14px 18px">
+    <div style="display:flex;align-items:center;gap:8px;padding:2px 10px 18px">
+      <div style="width:12px;height:12px;background:#33618F;border-radius:3px"></div>
+      <div style="font-weight:700;font-size:16px;letter-spacing:.01em">suivi-vues</div>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:2px;font-size:14.5px">
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Tableau de bord</div>
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Ajouter un relevé</div>
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Contenus &amp; URLs</div>
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Importer un fichier</div>
+      <div style="padding:9px 12px;border-radius:6px;background:#EEF2F6;color:#1F2A37;font-weight:600">Collecte automatique</div>
+    </nav>
+    <div style="margin-top:auto;border-top:1px solid #E4E3DF;padding:14px 12px 0;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:13.5px;color:#5D6B79">Admin</span>
+        <span style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#33618F;background:#E7EEF5;border:1px solid #C9D8E6;border-radius:99px;padding:2px 8px">éditeur</span>
+      </div>
+      <div style="font-size:13.5px;color:#5D6B79;text-decoration:underline;text-underline-offset:2px">Se déconnecter</div>
+    </div>
+  </div>
+  <div style="flex:1;min-width:0">
+    <div style="max-width:1000px;margin:0 auto;padding:36px 40px 44px;display:flex;flex-direction:column;gap:24px">
+      <div>
+        <h1 style="margin:0;font-size:30px;font-weight:700;letter-spacing:-.015em">Collecte automatique</h1>
+        <div style="margin-top:6px;font-size:15px;color:#5D6B79">URLs YouTube et PeerTube uniquement (API). Une tâche planifiée lance aussi la collecte chaque lundi à 06:00.</div>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #E4E3DF;border-radius:10px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:1.7fr 1fr 1.8fr 1.3fr .9fr;font-size:13.5px">
+          <div style="padding:10px 16px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF;font-size:12.5px">Libellé</div>
+          <div style="padding:10px 16px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF;font-size:12.5px">Plateforme</div>
+          <div style="padding:10px 16px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF;font-size:12.5px">URL</div>
+          <div style="padding:10px 16px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF;font-size:12.5px">Dernière collecte</div>
+          <div style="padding:10px 16px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF;font-size:12.5px">Statut</div>
+          <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3">Épisode 12 — YouTube</div>
+          <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3;color:#5D6B79">YouTube</div>
+          <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3;color:#5D6B79">youtube.com/watch?v=jNQ…</div>
+          <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3;color:#5D6B79">19 janv., 06:02 · <span style="font-weight:600;color:#1F2A37;font-variant-numeric:tabular-nums">510</span></div>
+          <div style="padding:11px 16px;border-bottom:1px solid #F0F1F3"><span style="display:inline-flex;align-items:center;gap:6px;color:#2E6B4F;font-weight:600"><span style="width:8px;height:8px;background:#2E6B4F;border-radius:99px"></span>OK</span></div>
+          <div style="padding:11px 16px">Table ronde — PeerTube</div>
+          <div style="padding:11px 16px;color:#5D6B79">PeerTube</div>
+          <div style="padding:11px 16px;color:#5D6B79">video.exemple.org/w/9k…</div>
+          <div style="padding:11px 16px;color:#5D6B79">19 janv., 06:04 · <span style="font-weight:600;color:#1F2A37;font-variant-numeric:tabular-nums">180</span></div>
+          <div style="padding:11px 16px"><span style="display:inline-flex;align-items:center;gap:6px;color:#2E6B4F;font-weight:600"><span style="width:8px;height:8px;background:#2E6B4F;border-radius:99px"></span>OK</span></div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <div style="background:#33618F;color:#FFFFFF;border-radius:6px;padding:10px 22px;font-weight:600;font-size:15px">Lancer la collecte maintenant</div>
+        <span style="font-size:13.5px;color:#5D6B79">Dernière exécution : 19 janv. 2026, 06:04 — 2 URLs collectées, 0 échec</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- 3f Lecteur -->
+<div class="dv-opt" id="3f" data-screen-label="3f Tableau de bord lecteur">
+<div class="dv-olabel"><a class="dv-oid" href="#3f">3f</a>Tableau de bord côté lecteur — même structure, nav réduite, rôle explicite</div>
+<div class="dv-card" style="width:1280px">
+<div style="display:flex;min-height:900px;background:#FBFAF7;color:#1F2A37;font-size:15px;line-height:1.5">
+  <div style="width:230px;flex:none;background:#FFFFFF;border-right:1px solid #E4E3DF;display:flex;flex-direction:column;padding:20px 14px 18px">
+    <div style="display:flex;align-items:center;gap:8px;padding:2px 10px 18px">
+      <div style="width:12px;height:12px;background:#33618F;border-radius:3px"></div>
+      <div style="font-weight:700;font-size:16px;letter-spacing:.01em">suivi-vues</div>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:2px;font-size:14.5px">
+      <div style="padding:9px 12px;border-radius:6px;background:#EEF2F6;color:#1F2A37;font-weight:600">Tableau de bord</div>
+    </nav>
+    <div style="margin-top:14px;font-size:13px;color:#8A94A0;padding:0 12px;line-height:1.45">Consultation seule — la saisie et la gestion des URLs sont réservées aux éditeurs.</div>
+    <div style="margin-top:auto;border-top:1px solid #E4E3DF;padding:14px 12px 0;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:13.5px;color:#5D6B79">Lecteur</span>
+        <span style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#5D6B79;background:#F0F0ED;border:1px solid #DDDDD7;border-radius:99px;padding:2px 8px">consultation</span>
+      </div>
+      <div style="font-size:13.5px;color:#5D6B79;text-decoration:underline;text-underline-offset:2px">Se déconnecter</div>
+    </div>
+  </div>
+  <div style="flex:1;min-width:0">
+    <div style="max-width:1000px;margin:0 auto;padding:36px 40px 44px;display:flex;flex-direction:column;gap:26px">
+      <div>
+        <h1 style="margin:0;font-size:30px;font-weight:700;letter-spacing:-.015em">Évolution des vues</h1>
+        <div style="margin-top:6px;font-size:15px;color:#5D6B79">Du 5 au 19 janvier 2026 · 2 contenus, 4 URLs suivies · dernière collecte le 19 janv.</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:8px;border:1px solid #D5D9DE;border-radius:99px;padding:7px 14px;background:#FFF;font-size:14px"><span style="color:#5D6B79">Contenu :</span><span style="font-weight:600">Tous</span><span style="color:#8A94A0">▾</span></div>
+        <div style="display:flex;align-items:center;gap:8px;border:1px solid #D5D9DE;border-radius:99px;padding:7px 14px;background:#FFF;font-size:14px"><span style="color:#5D6B79">Plateforme :</span><span style="font-weight:600">Toutes</span><span style="color:#8A94A0">▾</span></div>
+        <div style="display:flex;align-items:center;gap:8px;border:1px solid #D5D9DE;border-radius:99px;padding:7px 14px;background:#FFF;font-size:14px"><span style="color:#5D6B79">Une courbe par :</span><span style="font-weight:600">URL suivie</span><span style="color:#8A94A0">▾</span></div>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #E4E3DF;border-radius:10px;padding:26px 28px 16px">
+        <svg viewBox="0 0 960 300" style="width:100%;display:block" role="img" aria-label="Courbe d'évolution des vues, étiquettes en bout de ligne">
+          <line x1="44" y1="40" x2="760" y2="40" stroke="#EDEEF0"></line>
+          <line x1="44" y1="100" x2="760" y2="100" stroke="#EDEEF0"></line>
+          <line x1="44" y1="160" x2="760" y2="160" stroke="#EDEEF0"></line>
+          <line x1="44" y1="220" x2="760" y2="220" stroke="#EDEEF0"></line>
+          <line x1="44" y1="256" x2="760" y2="256" stroke="#D5D9DE"></line>
+          <text x="36" y="44" font-size="12" fill="#8A94A0" text-anchor="end">500</text>
+          <text x="36" y="164" font-size="12" fill="#8A94A0" text-anchor="end">250</text>
+          <text x="36" y="260" font-size="12" fill="#8A94A0" text-anchor="end">0</text>
+          <polyline points="44,204 146,190 248,168 350,146 452,131 554,105 656,84 758,62" fill="none" stroke="#33618F" stroke-width="3"></polyline>
+          <polyline points="44,229 146,219 248,204 350,201 452,182 554,172 656,152 758,142" fill="none" stroke="#8A6136" stroke-width="3"></polyline>
+          <circle cx="758" cy="62" r="4.5" fill="#33618F"></circle>
+          <circle cx="758" cy="142" r="4.5" fill="#8A6136"></circle>
+          <text x="772" y="58" font-size="13" font-weight="600" fill="#33618F">Épisode 12 — YouTube</text>
+          <text x="772" y="74" font-size="12" fill="#5D6B79">510 vues</text>
+          <text x="772" y="140" font-size="13" font-weight="600" fill="#8A6136">Épisode 12 — Apple Podcasts</text>
+          <text x="772" y="156" font-size="12" fill="#5D6B79">330 écoutes</text>
+          <text x="44" y="282" font-size="12" fill="#8A94A0" text-anchor="middle">5 janv.</text>
+          <text x="350" y="282" font-size="12" fill="#8A94A0" text-anchor="middle">12 janv.</text>
+          <text x="758" y="282" font-size="12" fill="#8A94A0" text-anchor="middle">19 janv.</text>
+        </svg>
+      </div>
+      <div>
+        <h2 style="margin:0 0 4px;font-size:19px;font-weight:700">Dernier relevé par plateforme</h2>
+        <div style="font-size:13.5px;color:#5D6B79;margin-bottom:14px">La couleur indique le contenu, pas la plateforme.</div>
+        <div style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #E4E3DF;border-radius:10px;overflow:hidden">
+          <div style="display:grid;grid-template-columns:150px 1fr 220px 70px;gap:14px;align-items:center;padding:13px 20px;border-bottom:1px solid #F0F1F3">
+            <span style="font-weight:600">YouTube</span>
+            <div style="height:12px;background:#F5F5F3;border-radius:3px"><div style="width:100%;height:100%;background:#33618F;border-radius:3px"></div></div>
+            <span style="font-size:13.5px;color:#5D6B79">Épisode 12 · collecte auto</span>
+            <span style="font-weight:700;text-align:right;font-variant-numeric:tabular-nums">510</span>
+          </div>
+          <div style="display:grid;grid-template-columns:150px 1fr 220px 70px;gap:14px;align-items:center;padding:13px 20px;border-bottom:1px solid #F0F1F3">
+            <span style="font-weight:600">Apple Podcasts</span>
+            <div style="height:12px;background:#F5F5F3;border-radius:3px"><div style="width:65%;height:100%;background:#8A6136;border-radius:3px"></div></div>
+            <span style="font-size:13.5px;color:#5D6B79">Épisode 12 · saisie manuelle</span>
+            <span style="font-weight:700;text-align:right;font-variant-numeric:tabular-nums">330</span>
+          </div>
+          <div style="display:grid;grid-template-columns:150px 1fr 220px 70px;gap:14px;align-items:center;padding:13px 20px;border-bottom:1px solid #F0F1F3">
+            <span style="font-weight:600">Spotify</span>
+            <div style="height:12px;background:#F5F5F3;border-radius:3px"><div style="width:41%;height:100%;background:#8A6136;border-radius:3px"></div></div>
+            <span style="font-size:13.5px;color:#5D6B79">Table ronde · import CSV</span>
+            <span style="font-weight:700;text-align:right;font-variant-numeric:tabular-nums">210</span>
+          </div>
+          <div style="display:grid;grid-template-columns:150px 1fr 220px 70px;gap:14px;align-items:center;padding:13px 20px">
+            <span style="font-weight:600">PeerTube</span>
+            <div style="height:12px;background:#F5F5F3;border-radius:3px"><div style="width:35%;height:100%;background:#33618F;border-radius:3px"></div></div>
+            <span style="font-size:13.5px;color:#5D6B79">Table ronde · collecte auto</span>
+            <span style="font-weight:700;text-align:right;font-variant-numeric:tabular-nums">180</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;background:#FFFFFF;border:1px solid #E4E3DF;border-radius:10px;padding:15px 20px">
+        <span style="font-weight:600;font-size:15px">Journal des relevés <span style="font-weight:400;color:#5D6B79">— 28 entrées, avec notes et ajustements</span></span>
+        <span style="color:#8A94A0;font-size:13px">Déplier ▾</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Essayer ensuite : « journal déplié dans <a class="dv-oid" href="#3f">3f</a> » · « état d'erreur de collecte dans <a class="dv-oid" href="#3e">3e</a> » · « aperçu post-dépôt dans <a class="dv-oid" href="#3d">3d</a> »</p>
+</section>
+
+<section class="dv-turn" id="t2" data-screen-label="Turn 2 — 1c avec menu latéral">
+<div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">Direction retenue : <a class="dv-oid" href="#1c">1c</a> (aéré, étiquettes directes, audit replié) avec le menu latéral</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="2a" data-screen-label="2a — 1c + sidebar">
+<div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>Mise en page de <a class="dv-oid" href="#1c">1c</a>, navigation latérale claire, palette de <a class="dv-oid" href="#1c">1c</a> conservée</div>
+<div class="dv-card" style="width:1280px">
+<div style="display:flex;min-height:900px;background:#FBFAF7;color:#1F2A37;font-size:15px;line-height:1.5">
+  <!-- sidebar claire -->
+  <div style="width:230px;flex:none;background:#FFFFFF;border-right:1px solid #E4E3DF;display:flex;flex-direction:column;padding:20px 14px 18px">
+    <div style="display:flex;align-items:center;gap:8px;padding:2px 10px 18px">
+      <div style="width:12px;height:12px;background:#33618F;border-radius:3px"></div>
+      <div style="font-weight:700;font-size:16px;letter-spacing:.01em">suivi-vues</div>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:2px;font-size:14.5px">
+      <div style="padding:9px 12px;border-radius:6px;background:#EEF2F6;color:#1F2A37;font-weight:600">Tableau de bord</div>
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Ajouter un relevé</div>
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Contenus &amp; URLs</div>
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Importer un fichier</div>
+      <div style="padding:9px 12px;border-radius:6px;color:#5D6B79">Collecte automatique</div>
+    </nav>
+    <div style="margin-top:auto;border-top:1px solid #E4E3DF;padding:14px 12px 0;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:13.5px;color:#5D6B79">Admin</span>
+        <span style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#33618F;background:#E7EEF5;border:1px solid #C9D8E6;border-radius:99px;padding:2px 8px">éditeur</span>
+      </div>
+      <div style="font-size:13.5px;color:#5D6B79;text-decoration:underline;text-underline-offset:2px">Se déconnecter</div>
+    </div>
+  </div>
+  <!-- main 1c -->
+  <div style="flex:1;min-width:0">
+    <div style="max-width:1000px;margin:0 auto;padding:36px 40px 44px;display:flex;flex-direction:column;gap:26px">
+      <div>
+        <h1 style="margin:0;font-size:30px;font-weight:700;letter-spacing:-.015em">Évolution des vues</h1>
+        <div style="margin-top:6px;font-size:15px;color:#5D6B79">Du 5 au 19 janvier 2026 · 2 contenus, 4 URLs suivies · dernière collecte le 19 janv.</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:8px;border:1px solid #D5D9DE;border-radius:99px;padding:7px 14px;background:#FFF;font-size:14px"><span style="color:#5D6B79">Contenu :</span><span style="font-weight:600">Tous</span><span style="color:#8A94A0">▾</span></div>
+        <div style="display:flex;align-items:center;gap:8px;border:1px solid #D5D9DE;border-radius:99px;padding:7px 14px;background:#FFF;font-size:14px"><span style="color:#5D6B79">Plateforme :</span><span style="font-weight:600">Toutes</span><span style="color:#8A94A0">▾</span></div>
+        <div style="display:flex;align-items:center;gap:8px;border:1px solid #D5D9DE;border-radius:99px;padding:7px 14px;background:#FFF;font-size:14px"><span style="color:#5D6B79">Une courbe par :</span><span style="font-weight:600">URL suivie</span><span style="color:#8A94A0">▾</span></div>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #E4E3DF;border-radius:10px;padding:26px 28px 16px">
+        <svg viewBox="0 0 960 300" style="width:100%;display:block" role="img" aria-label="Courbe d'évolution des vues, étiquettes en bout de ligne">
+          <line x1="44" y1="40" x2="760" y2="40" stroke="#EDEEF0"></line>
+          <line x1="44" y1="100" x2="760" y2="100" stroke="#EDEEF0"></line>
+          <line x1="44" y1="160" x2="760" y2="160" stroke="#EDEEF0"></line>
+          <line x1="44" y1="220" x2="760" y2="220" stroke="#EDEEF0"></line>
+          <line x1="44" y1="256" x2="760" y2="256" stroke="#D5D9DE"></line>
+          <text x="36" y="44" font-size="12" fill="#8A94A0" text-anchor="end">500</text>
+          <text x="36" y="164" font-size="12" fill="#8A94A0" text-anchor="end">250</text>
+          <text x="36" y="260" font-size="12" fill="#8A94A0" text-anchor="end">0</text>
+          <polyline points="44,204 146,190 248,168 350,146 452,131 554,105 656,84 758,62" fill="none" stroke="#33618F" stroke-width="3"></polyline>
+          <polyline points="44,229 146,219 248,204 350,201 452,182 554,172 656,152 758,142" fill="none" stroke="#8A6136" stroke-width="3"></polyline>
+          <circle cx="758" cy="62" r="4.5" fill="#33618F"></circle>
+          <circle cx="758" cy="142" r="4.5" fill="#8A6136"></circle>
+          <text x="772" y="58" font-size="13" font-weight="600" fill="#33618F">Épisode 12 — YouTube</text>
+          <text x="772" y="74" font-size="12" fill="#5D6B79">510 vues</text>
+          <text x="772" y="140" font-size="13" font-weight="600" fill="#8A6136">Épisode 12 — Apple Podcasts</text>
+          <text x="772" y="156" font-size="12" fill="#5D6B79">330 écoutes</text>
+          <text x="44" y="282" font-size="12" fill="#8A94A0" text-anchor="middle">5 janv.</text>
+          <text x="350" y="282" font-size="12" fill="#8A94A0" text-anchor="middle">12 janv.</text>
+          <text x="758" y="282" font-size="12" fill="#8A94A0" text-anchor="middle">19 janv.</text>
+        </svg>
+      </div>
+      <div>
+        <h2 style="margin:0 0 4px;font-size:19px;font-weight:700">Dernier relevé par plateforme</h2>
+        <div style="font-size:13.5px;color:#5D6B79;margin-bottom:14px">La couleur indique le contenu, pas la plateforme.</div>
+        <div style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #E4E3DF;border-radius:10px;overflow:hidden">
+          <div style="display:grid;grid-template-columns:150px 1fr 220px 70px;gap:14px;align-items:center;padding:13px 20px;border-bottom:1px solid #F0F1F3">
+            <span style="font-weight:600">YouTube</span>
+            <div style="height:12px;background:#F5F5F3;border-radius:3px"><div style="width:100%;height:100%;background:#33618F;border-radius:3px"></div></div>
+            <span style="font-size:13.5px;color:#5D6B79">Épisode 12 · collecte auto</span>
+            <span style="font-weight:700;text-align:right;font-variant-numeric:tabular-nums">510</span>
+          </div>
+          <div style="display:grid;grid-template-columns:150px 1fr 220px 70px;gap:14px;align-items:center;padding:13px 20px;border-bottom:1px solid #F0F1F3">
+            <span style="font-weight:600">Apple Podcasts</span>
+            <div style="height:12px;background:#F5F5F3;border-radius:3px"><div style="width:65%;height:100%;background:#8A6136;border-radius:3px"></div></div>
+            <span style="font-size:13.5px;color:#5D6B79">Épisode 12 · saisie manuelle</span>
+            <span style="font-weight:700;text-align:right;font-variant-numeric:tabular-nums">330</span>
+          </div>
+          <div style="display:grid;grid-template-columns:150px 1fr 220px 70px;gap:14px;align-items:center;padding:13px 20px;border-bottom:1px solid #F0F1F3">
+            <span style="font-weight:600">Spotify</span>
+            <div style="height:12px;background:#F5F5F3;border-radius:3px"><div style="width:41%;height:100%;background:#8A6136;border-radius:3px"></div></div>
+            <span style="font-size:13.5px;color:#5D6B79">Table ronde · import CSV</span>
+            <span style="font-weight:700;text-align:right;font-variant-numeric:tabular-nums">210</span>
+          </div>
+          <div style="display:grid;grid-template-columns:150px 1fr 220px 70px;gap:14px;align-items:center;padding:13px 20px">
+            <span style="font-weight:600">PeerTube</span>
+            <div style="height:12px;background:#F5F5F3;border-radius:3px"><div style="width:35%;height:100%;background:#33618F;border-radius:3px"></div></div>
+            <span style="font-size:13.5px;color:#5D6B79">Table ronde · collecte auto</span>
+            <span style="font-weight:700;text-align:right;font-variant-numeric:tabular-nums">180</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;background:#FFFFFF;border:1px solid #E4E3DF;border-radius:10px;padding:15px 20px">
+        <span style="font-weight:600;font-size:15px">Journal des relevés <span style="font-weight:400;color:#5D6B79">— 28 entrées, avec notes et ajustements</span></span>
+        <span style="color:#8A94A0;font-size:13px">Déplier ▾</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Essayer ensuite : « décline <a class="dv-oid" href="#2a">2a</a> sur les 6 autres écrans » · « montre la version lecteur de <a class="dv-oid" href="#2a">2a</a> » · « journal déplié dans <a class="dv-oid" href="#2a">2a</a> »</p>
+</section>
+
+<section class="dv-turn" id="t1" data-screen-label="Turn 1 — Tableau de bord, 3 directions">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">suivi-vues — Tableau de bord, 3 directions (sobre &amp; institutionnel, couleur par contenu, faisable en Streamlit natif + CSS léger)</span></div>
+<div class="dv-opts">
+
+<!-- ============ 1a ============ -->
+<div class="dv-opt" id="1a" data-screen-label="1a Structure actuelle, resserrée">
+<div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Structure actuelle, resserrée — hiérarchie filtres → courbe → comparaison + relevés côte à côte</div>
+<div class="dv-card" style="width:1280px">
+<div style="display:flex;min-height:840px;background:#FAFAF9;color:#1F2A37;font-size:15px;line-height:1.45">
+  <!-- sidebar -->
+  <div style="width:230px;flex:none;background:#F2F1EE;border-right:1px solid #E4E3DF;display:flex;flex-direction:column;padding:20px 14px 18px">
+    <div style="display:flex;align-items:center;gap:8px;padding:2px 10px 18px">
+      <div style="width:12px;height:12px;background:#33618F;border-radius:3px"></div>
+      <div style="font-weight:700;font-size:16px;letter-spacing:.01em">suivi-vues</div>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:2px">
+      <div style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:6px;background:#FFFFFF;border:1px solid #E4E3DF;font-weight:600;color:#1F2A37"><span style="width:8px;height:8px;background:#33618F;border-radius:2px;flex:none"></span>Tableau de bord</div>
+      <div style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:6px;color:#5D6B79"><span style="width:8px;height:8px;background:#C6CCD2;border-radius:2px;flex:none"></span>Ajouter un relevé</div>
+      <div style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:6px;color:#5D6B79"><span style="width:8px;height:8px;background:#C6CCD2;border-radius:2px;flex:none"></span>Contenus &amp; URLs</div>
+      <div style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:6px;color:#5D6B79"><span style="width:8px;height:8px;background:#C6CCD2;border-radius:2px;flex:none"></span>Importer un fichier</div>
+      <div style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:6px;color:#5D6B79"><span style="width:8px;height:8px;background:#C6CCD2;border-radius:2px;flex:none"></span>Collecte automatique</div>
+    </nav>
+    <div style="margin-top:auto;border-top:1px solid #E4E3DF;padding:14px 10px 0;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:13.5px;color:#5D6B79">Admin</span>
+        <span style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#33618F;background:#E7EEF5;border:1px solid #C9D8E6;border-radius:99px;padding:2px 8px">éditeur</span>
+      </div>
+      <div style="font-size:13.5px;color:#5D6B79;text-decoration:underline;text-underline-offset:2px">Se déconnecter</div>
+    </div>
+  </div>
+  <!-- main -->
+  <div style="flex:1;padding:28px 32px 32px;display:flex;flex-direction:column;gap:18px">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px">
+      <div>
+        <h1 style="margin:0;font-size:26px;font-weight:700;letter-spacing:-.01em">Tableau de bord</h1>
+        <div style="margin-top:4px;font-size:14px;color:#5D6B79">2 contenus suivis · 4 URLs · dernière collecte automatique le 19 janv. 2026</div>
+      </div>
+    </div>
+    <!-- filtres -->
+    <div style="display:flex;gap:12px;align-items:flex-end;background:#FFFFFF;border:1px solid #E4E3DF;border-radius:8px;padding:14px 16px">
+      <div style="display:flex;flex-direction:column;gap:5px;flex:1">
+        <label style="font-size:12.5px;font-weight:600;color:#5D6B79">Contenu</label>
+        <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid #D5D9DE;border-radius:6px;padding:8px 12px;background:#FFF;font-size:14.5px">Tous les contenus<span style="color:#8A94A0">▾</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px;flex:1">
+        <label style="font-size:12.5px;font-weight:600;color:#5D6B79">Plateforme</label>
+        <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid #D5D9DE;border-radius:6px;padding:8px 12px;background:#FFF;font-size:14.5px">Toutes les plateformes<span style="color:#8A94A0">▾</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px;flex:1">
+        <label style="font-size:12.5px;font-weight:600;color:#5D6B79">Une courbe par</label>
+        <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid #D5D9DE;border-radius:6px;padding:8px 12px;background:#FFF;font-size:14.5px">URL suivie<span style="color:#8A94A0">▾</span></div>
+      </div>
+      <div style="flex:none;font-size:13.5px;color:#5D6B79;padding-bottom:9px">Période affichée : 5 – 19 janv. 2026</div>
+    </div>
+    <!-- courbe -->
+    <div style="background:#FFFFFF;border:1px solid #E4E3DF;border-radius:8px;padding:18px 20px 12px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <h2 style="margin:0;font-size:17px;font-weight:700">Évolution des vues</h2>
+        <div style="display:flex;gap:18px;font-size:13.5px;color:#3D4854">
+          <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:14px;height:3px;background:#33618F;border-radius:2px"></span>Épisode 12 — YouTube</span>
+          <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:14px;height:3px;background:#8A6136;border-radius:2px"></span>Épisode 12 — Apple Podcasts</span>
+        </div>
+      </div>
+      <svg viewBox="0 0 860 262" style="width:100%;display:block;margin-top:10px" role="img" aria-label="Courbe d'évolution des vues du 5 au 19 janvier 2026">
+        <line x1="40" y1="38" x2="820" y2="38" stroke="#EDEEF0" stroke-width="1"></line>
+        <line x1="40" y1="74" x2="820" y2="74" stroke="#EDEEF0" stroke-width="1"></line>
+        <line x1="40" y1="111" x2="820" y2="111" stroke="#EDEEF0" stroke-width="1"></line>
+        <line x1="40" y1="147" x2="820" y2="147" stroke="#EDEEF0" stroke-width="1"></line>
+        <line x1="40" y1="184" x2="820" y2="184" stroke="#EDEEF0" stroke-width="1"></line>
+        <line x1="40" y1="220" x2="820" y2="220" stroke="#D5D9DE" stroke-width="1"></line>
+        <text x="32" y="42" font-size="11" fill="#8A94A0" text-anchor="end">500</text>
+        <text x="32" y="115" font-size="11" fill="#8A94A0" text-anchor="end">300</text>
+        <text x="32" y="188" font-size="11" fill="#8A94A0" text-anchor="end">100</text>
+        <polyline points="40,176 151,155 262,133 373,111 484,96 595,71 706,53 817,35" fill="none" stroke="#33618F" stroke-width="2.5"></polyline>
+        <polyline points="40,198 151,187 262,169 373,166 484,144 595,133 706,111 817,100" fill="none" stroke="#8A6136" stroke-width="2.5"></polyline>
+        <circle cx="817" cy="35" r="4" fill="#33618F"></circle>
+        <circle cx="817" cy="100" r="4" fill="#8A6136"></circle>
+        <text x="40" y="242" font-size="11" fill="#8A94A0" text-anchor="middle">5 janv.</text>
+        <text x="262" y="242" font-size="11" fill="#8A94A0" text-anchor="middle">9 janv.</text>
+        <text x="484" y="242" font-size="11" fill="#8A94A0" text-anchor="middle">13 janv.</text>
+        <text x="706" y="242" font-size="11" fill="#8A94A0" text-anchor="middle">17 janv.</text>
+        <text x="817" y="242" font-size="11" fill="#8A94A0" text-anchor="middle">19 janv.</text>
+      </svg>
+    </div>
+    <!-- comparaison + relevés -->
+    <div style="display:grid;grid-template-columns:5fr 7fr;gap:18px;align-items:start">
+      <div style="background:#FFFFFF;border:1px solid #E4E3DF;border-radius:8px;padding:18px 20px">
+        <h2 style="margin:0 0 4px;font-size:17px;font-weight:700">Dernier relevé par plateforme</h2>
+        <div style="font-size:13px;color:#5D6B79;margin-bottom:14px">Valeur la plus récente pour chaque URL suivie</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:grid;grid-template-columns:110px 1fr 48px;gap:10px;align-items:center;font-size:13.5px">
+            <span style="color:#3D4854">YouTube</span>
+            <div style="height:14px;background:#F0F1F3;border-radius:3px"><div style="width:100%;height:100%;background:#33618F;border-radius:3px"></div></div>
+            <span style="font-weight:600;text-align:right;font-variant-numeric:tabular-nums">510</span>
+          </div>
+          <div style="display:grid;grid-template-columns:110px 1fr 48px;gap:10px;align-items:center;font-size:13.5px">
+            <span style="color:#3D4854">Apple Podcasts</span>
+            <div style="height:14px;background:#F0F1F3;border-radius:3px"><div style="width:65%;height:100%;background:#8A6136;border-radius:3px"></div></div>
+            <span style="font-weight:600;text-align:right;font-variant-numeric:tabular-nums">330</span>
+          </div>
+          <div style="display:grid;grid-template-columns:110px 1fr 48px;gap:10px;align-items:center;font-size:13.5px">
+            <span style="color:#3D4854">Spotify</span>
+            <div style="height:14px;background:#F0F1F3;border-radius:3px"><div style="width:41%;height:100%;background:#8A6136;border-radius:3px"></div></div>
+            <span style="font-weight:600;text-align:right;font-variant-numeric:tabular-nums">210</span>
+          </div>
+          <div style="display:grid;grid-template-columns:110px 1fr 48px;gap:10px;align-items:center;font-size:13.5px">
+            <span style="color:#3D4854">PeerTube</span>
+            <div style="height:14px;background:#F0F1F3;border-radius:3px"><div style="width:35%;height:100%;background:#33618F;border-radius:3px"></div></div>
+            <span style="font-weight:600;text-align:right;font-variant-numeric:tabular-nums">180</span>
+          </div>
+        </div>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #E4E3DF;border-radius:8px;padding:18px 20px">
+        <h2 style="margin:0 0 14px;font-size:17px;font-weight:700">Derniers relevés</h2>
+        <div style="display:grid;grid-template-columns:88px 1fr 120px 64px 118px;font-size:13.5px">
+          <div style="padding:6px 8px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF;font-size:12.5px">Date</div>
+          <div style="padding:6px 8px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF;font-size:12.5px">URL suivie</div>
+          <div style="padding:6px 8px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF;font-size:12.5px">Plateforme</div>
+          <div style="padding:6px 8px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF;font-size:12.5px;text-align:right">Vues</div>
+          <div style="padding:6px 8px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF;font-size:12.5px">Source</div>
+          <div style="padding:8px;border-bottom:1px solid #F0F1F3;font-variant-numeric:tabular-nums">19 janv.</div>
+          <div style="padding:8px;border-bottom:1px solid #F0F1F3">Épisode 12 — YouTube</div>
+          <div style="padding:8px;border-bottom:1px solid #F0F1F3;color:#5D6B79">YouTube</div>
+          <div style="padding:8px;border-bottom:1px solid #F0F1F3;text-align:right;font-weight:600;font-variant-numeric:tabular-nums">510</div>
+          <div style="padding:8px;border-bottom:1px solid #F0F1F3;color:#5D6B79">Collecte auto</div>
+          <div style="padding:8px;border-bottom:1px solid #F0F1F3;font-variant-numeric:tabular-nums">19 janv.</div>
+          <div style="padding:8px;border-bottom:1px solid #F0F1F3">Épisode 12 — Apple Podcasts</div>
+          <div style="padding:8px;border-bottom:1px solid #F0F1F3;color:#5D6B79">Apple Podcasts</div>
+          <div style="padding:8px;border-bottom:1px solid #F0F1F3;text-align:right;font-weight:600;font-variant-numeric:tabular-nums">330</div>
+          <div style="padding:8px;border-bottom:1px solid #F0F1F3;color:#5D6B79">Saisie manuelle</div>
+          <div style="padding:8px;border-bottom:1px solid #F0F1F3;font-variant-numeric:tabular-nums">17 janv.</div>
+          <div style="padding:8px;border-bottom:1px solid #F0F1F3">Table ronde — Spotify</div>
+          <div style="padding:8px;border-bottom:1px solid #F0F1F3;color:#5D6B79">Spotify</div>
+          <div style="padding:8px;border-bottom:1px solid #F0F1F3;text-align:right;font-weight:600;font-variant-numeric:tabular-nums">210</div>
+          <div style="padding:8px;border-bottom:1px solid #F0F1F3;color:#5D6B79">Import CSV</div>
+          <div style="padding:8px">15 janv.</div>
+          <div style="padding:8px">Table ronde — PeerTube</div>
+          <div style="padding:8px;color:#5D6B79">PeerTube</div>
+          <div style="padding:8px;text-align:right;font-weight:600;font-variant-numeric:tabular-nums">180</div>
+          <div style="padding:8px;color:#5D6B79">Collecte auto</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ============ 1b ============ -->
+<div class="dv-opt" id="1b" data-screen-label="1b Dense, data-first">
+<div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Dense, data-first — bandeau de synthèse, courbe + comparaison côte à côte, journal complet en bas</div>
+<div class="dv-card" style="width:1280px">
+<div style="display:flex;min-height:860px;background:#FFFFFF;color:#1F2A37;font-size:14.5px;line-height:1.4">
+  <!-- sidebar sombre -->
+  <div style="width:204px;flex:none;background:#243447;color:#C9D3DE;display:flex;flex-direction:column;padding:18px 12px 16px">
+    <div style="display:flex;align-items:center;gap:8px;padding:2px 10px 16px">
+      <div style="width:11px;height:11px;background:#7FA6CC;border-radius:3px"></div>
+      <div style="font-weight:700;font-size:15px;color:#FFFFFF">suivi-vues</div>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:1px;font-size:13.5px">
+      <div style="padding:8px 10px;border-radius:5px;background:#33618F;color:#FFFFFF;font-weight:600">Tableau de bord</div>
+      <div style="padding:8px 10px;border-radius:5px">Ajouter un relevé</div>
+      <div style="padding:8px 10px;border-radius:5px">Contenus &amp; URLs</div>
+      <div style="padding:8px 10px;border-radius:5px">Importer un fichier</div>
+      <div style="padding:8px 10px;border-radius:5px">Collecte automatique</div>
+    </nav>
+    <div style="margin-top:auto;border-top:1px solid #3A4C61;padding:12px 10px 0;font-size:12.5px">
+      <div style="color:#FFFFFF;font-weight:600">Admin <span style="font-weight:400;color:#8FA3B8">· éditeur</span></div>
+      <div style="margin-top:6px;text-decoration:underline;text-underline-offset:2px">Se déconnecter</div>
+    </div>
+  </div>
+  <!-- main -->
+  <div style="flex:1;padding:22px 26px 26px;display:flex;flex-direction:column;gap:14px;background:#FAFAF9">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <h1 style="margin:0;font-size:21px;font-weight:700">Tableau de bord</h1>
+      <div style="display:flex;gap:8px;align-items:center">
+        <div style="display:flex;align-items:center;gap:8px;border:1px solid #D5D9DE;border-radius:6px;padding:6px 10px;background:#FFF;font-size:13px"><span style="color:#5D6B79">Contenu</span><span style="font-weight:600">Tous</span><span style="color:#8A94A0">▾</span></div>
+        <div style="display:flex;align-items:center;gap:8px;border:1px solid #D5D9DE;border-radius:6px;padding:6px 10px;background:#FFF;font-size:13px"><span style="color:#5D6B79">Plateforme</span><span style="font-weight:600">Toutes</span><span style="color:#8A94A0">▾</span></div>
+        <div style="display:flex;align-items:center;gap:8px;border:1px solid #D5D9DE;border-radius:6px;padding:6px 10px;background:#FFF;font-size:13px"><span style="color:#5D6B79">Courbes par</span><span style="font-weight:600">URL</span><span style="color:#8A94A0">▾</span></div>
+      </div>
+    </div>
+    <!-- bandeau synthèse -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+      <div style="background:#FFF;border:1px solid #E4E3DF;border-radius:8px;padding:12px 16px">
+        <div style="font-size:12px;font-weight:600;color:#5D6B79;text-transform:uppercase;letter-spacing:.05em">Vues cumulées</div>
+        <div style="font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px">1 230</div>
+      </div>
+      <div style="background:#FFF;border:1px solid #E4E3DF;border-radius:8px;padding:12px 16px">
+        <div style="font-size:12px;font-weight:600;color:#5D6B79;text-transform:uppercase;letter-spacing:.05em">Sur 7 jours</div>
+        <div style="font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px;color:#2E6B4F">+184</div>
+      </div>
+      <div style="background:#FFF;border:1px solid #E4E3DF;border-radius:8px;padding:12px 16px">
+        <div style="font-size:12px;font-weight:600;color:#5D6B79;text-transform:uppercase;letter-spacing:.05em">URLs suivies</div>
+        <div style="font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px">4</div>
+      </div>
+      <div style="background:#FFF;border:1px solid #E4E3DF;border-radius:8px;padding:12px 16px">
+        <div style="font-size:12px;font-weight:600;color:#5D6B79;text-transform:uppercase;letter-spacing:.05em">Prochaine collecte auto</div>
+        <div style="font-size:16.5px;font-weight:600;margin-top:8px">lun. 26 janv., 06:00</div>
+      </div>
+    </div>
+    <!-- courbe + comparaison -->
+    <div style="display:grid;grid-template-columns:8fr 4fr;gap:12px;align-items:stretch">
+      <div style="background:#FFF;border:1px solid #E4E3DF;border-radius:8px;padding:14px 16px 8px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <h2 style="margin:0;font-size:15.5px;font-weight:700">Évolution des vues</h2>
+          <div style="display:flex;gap:14px;font-size:12.5px;color:#3D4854">
+            <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:3px;background:#33618F;border-radius:2px"></span>Épisode 12</span>
+            <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:3px;background:#8A6136;border-radius:2px"></span>Table ronde</span>
+          </div>
+        </div>
+        <svg viewBox="0 0 640 230" style="width:100%;display:block;margin-top:8px" role="img" aria-label="Courbe d'évolution des vues">
+          <line x1="34" y1="30" x2="616" y2="30" stroke="#EDEEF0"></line>
+          <line x1="34" y1="76" x2="616" y2="76" stroke="#EDEEF0"></line>
+          <line x1="34" y1="122" x2="616" y2="122" stroke="#EDEEF0"></line>
+          <line x1="34" y1="168" x2="616" y2="168" stroke="#EDEEF0"></line>
+          <line x1="34" y1="196" x2="616" y2="196" stroke="#D5D9DE"></line>
+          <text x="27" y="34" font-size="10" fill="#8A94A0" text-anchor="end">500</text>
+          <text x="27" y="126" font-size="10" fill="#8A94A0" text-anchor="end">250</text>
+          <polyline points="34,155 117,138 200,120 283,102 366,90 449,68 532,52 615,32" fill="none" stroke="#33618F" stroke-width="2.5"></polyline>
+          <polyline points="34,175 117,166 200,152 283,149 366,131 449,122 532,104 615,95" fill="none" stroke="#8A6136" stroke-width="2.5"></polyline>
+          <circle cx="615" cy="32" r="3.5" fill="#33618F"></circle>
+          <circle cx="615" cy="95" r="3.5" fill="#8A6136"></circle>
+          <text x="34" y="216" font-size="10" fill="#8A94A0" text-anchor="middle">5 janv.</text>
+          <text x="283" y="216" font-size="10" fill="#8A94A0" text-anchor="middle">12 janv.</text>
+          <text x="615" y="216" font-size="10" fill="#8A94A0" text-anchor="middle">19 janv.</text>
+        </svg>
+      </div>
+      <div style="background:#FFF;border:1px solid #E4E3DF;border-radius:8px;padding:14px 16px">
+        <h2 style="margin:0 0 12px;font-size:15.5px;font-weight:700">Dernier relevé</h2>
+        <div style="display:flex;flex-direction:column;gap:11px;font-size:13px">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;justify-content:space-between"><span>YouTube</span><span style="font-weight:700;font-variant-numeric:tabular-nums">510</span></div>
+            <div style="height:8px;background:#F0F1F3;border-radius:2px"><div style="width:100%;height:100%;background:#33618F;border-radius:2px"></div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;justify-content:space-between"><span>Apple Podcasts</span><span style="font-weight:700;font-variant-numeric:tabular-nums">330</span></div>
+            <div style="height:8px;background:#F0F1F3;border-radius:2px"><div style="width:65%;height:100%;background:#8A6136;border-radius:2px"></div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;justify-content:space-between"><span>Spotify</span><span style="font-weight:700;font-variant-numeric:tabular-nums">210</span></div>
+            <div style="height:8px;background:#F0F1F3;border-radius:2px"><div style="width:41%;height:100%;background:#8A6136;border-radius:2px"></div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;justify-content:space-between"><span>PeerTube</span><span style="font-weight:700;font-variant-numeric:tabular-nums">180</span></div>
+            <div style="height:8px;background:#F0F1F3;border-radius:2px"><div style="width:35%;height:100%;background:#33618F;border-radius:2px"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- journal -->
+    <div style="background:#FFF;border:1px solid #E4E3DF;border-radius:8px;padding:14px 16px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+        <h2 style="margin:0;font-size:15.5px;font-weight:700">Journal des relevés</h2>
+        <span style="font-size:12.5px;color:#5D6B79">28 relevés · export CSV</span>
+      </div>
+      <div style="display:grid;grid-template-columns:84px 1fr 116px 60px 110px 1fr;font-size:12.5px">
+        <div style="padding:5px 8px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF">Date</div>
+        <div style="padding:5px 8px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF">URL suivie</div>
+        <div style="padding:5px 8px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF">Plateforme</div>
+        <div style="padding:5px 8px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF;text-align:right">Vues</div>
+        <div style="padding:5px 8px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF">Source</div>
+        <div style="padding:5px 8px;font-weight:600;color:#5D6B79;border-bottom:1px solid #E4E3DF">Note</div>
+        <div style="padding:6px 8px;border-bottom:1px solid #F0F1F3;font-variant-numeric:tabular-nums">19 janv.</div>
+        <div style="padding:6px 8px;border-bottom:1px solid #F0F1F3">Épisode 12 — YouTube</div>
+        <div style="padding:6px 8px;border-bottom:1px solid #F0F1F3;color:#5D6B79">YouTube</div>
+        <div style="padding:6px 8px;border-bottom:1px solid #F0F1F3;text-align:right;font-weight:600;font-variant-numeric:tabular-nums">510</div>
+        <div style="padding:6px 8px;border-bottom:1px solid #F0F1F3;color:#5D6B79">Collecte auto</div>
+        <div style="padding:6px 8px;border-bottom:1px solid #F0F1F3;color:#8A94A0">—</div>
+        <div style="padding:6px 8px;border-bottom:1px solid #F0F1F3;font-variant-numeric:tabular-nums">19 janv.</div>
+        <div style="padding:6px 8px;border-bottom:1px solid #F0F1F3">Épisode 12 — Apple Podcasts</div>
+        <div style="padding:6px 8px;border-bottom:1px solid #F0F1F3;color:#5D6B79">Apple Podcasts</div>
+        <div style="padding:6px 8px;border-bottom:1px solid #F0F1F3;text-align:right;font-weight:600;font-variant-numeric:tabular-nums">330</div>
+        <div style="padding:6px 8px;border-bottom:1px solid #F0F1F3;color:#5D6B79">Saisie manuelle</div>
+        <div style="padding:6px 8px;border-bottom:1px solid #F0F1F3;color:#8A94A0">—</div>
+        <div style="padding:6px 8px;border-bottom:1px solid #F0F1F3;font-variant-numeric:tabular-nums">17 janv.</div>
+        <div style="padding:6px 8px;border-bottom:1px solid #F0F1F3">Table ronde — Spotify</div>
+        <div style="padding:6px 8px;border-bottom:1px solid #F0F1F3;color:#5D6B79">Spotify</div>
+        <div style="padding:6px 8px;border-bottom:1px solid #F0F1F3;text-align:right;font-weight:600;font-variant-numeric:tabular-nums">210</div>
+        <div style="padding:6px 8px;border-bottom:1px solid #F0F1F3;color:#5D6B79">Import CSV</div>
+        <div style="padding:6px 8px;border-bottom:1px solid #F0F1F3;color:#3D4854">Correction export erroné</div>
+        <div style="padding:6px 8px;font-variant-numeric:tabular-nums">15 janv.</div>
+        <div style="padding:6px 8px">Table ronde — PeerTube</div>
+        <div style="padding:6px 8px;color:#5D6B79">PeerTube</div>
+        <div style="padding:6px 8px;text-align:right;font-weight:600;font-variant-numeric:tabular-nums">180</div>
+        <div style="padding:6px 8px;color:#5D6B79">Collecte auto</div>
+        <div style="padding:6px 8px;color:#8A94A0">—</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ============ 1c ============ -->
+<div class="dv-opt" id="1c" data-screen-label="1c Éditorial, aéré">
+<div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Éditorial, aéré — navigation horizontale (st.tabs), courbe pleine largeur avec étiquettes directes, audit replié</div>
+<div class="dv-card" style="width:1280px">
+<div style="min-height:830px;background:#FBFAF7;color:#1F2A37;font-size:15px;line-height:1.5">
+  <!-- top bar -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 40px;background:#FFFFFF;border-bottom:1px solid #E4E3DF">
+    <div style="display:flex;align-items:center;gap:28px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:12px;height:12px;background:#33618F;border-radius:3px"></div>
+        <span style="font-weight:700;font-size:16px">suivi-vues</span>
+      </div>
+      <nav style="display:flex;gap:4px;font-size:14px">
+        <span style="padding:7px 12px;border-radius:6px;background:#EEF2F6;color:#1F2A37;font-weight:600">Tableau de bord</span>
+        <span style="padding:7px 12px;border-radius:6px;color:#5D6B79">Ajouter un relevé</span>
+        <span style="padding:7px 12px;border-radius:6px;color:#5D6B79">Contenus &amp; URLs</span>
+        <span style="padding:7px 12px;border-radius:6px;color:#5D6B79">Importer</span>
+        <span style="padding:7px 12px;border-radius:6px;color:#5D6B79">Collecte auto</span>
+      </nav>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;font-size:13.5px;color:#5D6B79">
+      <span>Admin <span style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#33618F;background:#E7EEF5;border:1px solid #C9D8E6;border-radius:99px;padding:2px 8px;margin-left:4px">éditeur</span></span>
+      <span style="text-decoration:underline;text-underline-offset:2px">Se déconnecter</span>
+    </div>
+  </div>
+  <div style="max-width:1040px;margin:0 auto;padding:36px 40px 44px;display:flex;flex-direction:column;gap:26px">
+    <div>
+      <h1 style="margin:0;font-size:30px;font-weight:700;letter-spacing:-.015em">Évolution des vues</h1>
+      <div style="margin-top:6px;font-size:15px;color:#5D6B79">Du 5 au 19 janvier 2026 · 2 contenus, 4 URLs suivies · dernière collecte le 19 janv.</div>
+    </div>
+    <!-- filtres en ligne -->
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:8px;border:1px solid #D5D9DE;border-radius:99px;padding:7px 14px;background:#FFF;font-size:14px"><span style="color:#5D6B79">Contenu :</span><span style="font-weight:600">Tous</span><span style="color:#8A94A0">▾</span></div>
+      <div style="display:flex;align-items:center;gap:8px;border:1px solid #D5D9DE;border-radius:99px;padding:7px 14px;background:#FFF;font-size:14px"><span style="color:#5D6B79">Plateforme :</span><span style="font-weight:600">Toutes</span><span style="color:#8A94A0">▾</span></div>
+      <div style="display:flex;align-items:center;gap:8px;border:1px solid #D5D9DE;border-radius:99px;padding:7px 14px;background:#FFF;font-size:14px"><span style="color:#5D6B79">Une courbe par :</span><span style="font-weight:600">URL suivie</span><span style="color:#8A94A0">▾</span></div>
+    </div>
+    <!-- courbe pleine largeur, étiquettes directes -->
+    <div style="background:#FFFFFF;border:1px solid #E4E3DF;border-radius:10px;padding:26px 28px 16px">
+      <svg viewBox="0 0 960 300" style="width:100%;display:block" role="img" aria-label="Courbe d'évolution des vues, étiquettes en bout de ligne">
+        <line x1="44" y1="40" x2="760" y2="40" stroke="#EDEEF0"></line>
+        <line x1="44" y1="100" x2="760" y2="100" stroke="#EDEEF0"></line>
+        <line x1="44" y1="160" x2="760" y2="160" stroke="#EDEEF0"></line>
+        <line x1="44" y1="220" x2="760" y2="220" stroke="#EDEEF0"></line>
+        <line x1="44" y1="256" x2="760" y2="256" stroke="#D5D9DE"></line>
+        <text x="36" y="44" font-size="12" fill="#8A94A0" text-anchor="end">500</text>
+        <text x="36" y="164" font-size="12" fill="#8A94A0" text-anchor="end">250</text>
+        <text x="36" y="260" font-size="12" fill="#8A94A0" text-anchor="end">0</text>
+        <polyline points="44,204 146,190 248,168 350,146 452,131 554,105 656,84 758,62" fill="none" stroke="#33618F" stroke-width="3"></polyline>
+        <polyline points="44,229 146,219 248,204 350,201 452,182 554,172 656,152 758,142" fill="none" stroke="#8A6136" stroke-width="3"></polyline>
+        <circle cx="758" cy="62" r="4.5" fill="#33618F"></circle>
+        <circle cx="758" cy="142" r="4.5" fill="#8A6136"></circle>
+        <text x="772" y="58" font-size="13" font-weight="600" fill="#33618F">Épisode 12 — YouTube</text>
+        <text x="772" y="74" font-size="12" fill="#5D6B79">510 vues</text>
+        <text x="772" y="140" font-size="13" font-weight="600" fill="#8A6136">Épisode 12 — Apple Podcasts</text>
+        <text x="772" y="156" font-size="12" fill="#5D6B79">330 écoutes</text>
+        <text x="44" y="282" font-size="12" fill="#8A94A0" text-anchor="middle">5 janv.</text>
+        <text x="350" y="282" font-size="12" fill="#8A94A0" text-anchor="middle">12 janv.</text>
+        <text x="758" y="282" font-size="12" fill="#8A94A0" text-anchor="middle">19 janv.</text>
+      </svg>
+    </div>
+    <!-- comparaison en liste -->
+    <div>
+      <h2 style="margin:0 0 4px;font-size:19px;font-weight:700">Dernier relevé par plateforme</h2>
+      <div style="font-size:13.5px;color:#5D6B79;margin-bottom:14px">La couleur indique le contenu, pas la plateforme.</div>
+      <div style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #E4E3DF;border-radius:10px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:150px 1fr 220px 70px;gap:14px;align-items:center;padding:13px 20px;border-bottom:1px solid #F0F1F3">
+          <span style="font-weight:600">YouTube</span>
+          <div style="height:12px;background:#F5F5F3;border-radius:3px"><div style="width:100%;height:100%;background:#33618F;border-radius:3px"></div></div>
+          <span style="font-size:13.5px;color:#5D6B79">Épisode 12 · collecte auto</span>
+          <span style="font-weight:700;text-align:right;font-variant-numeric:tabular-nums">510</span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr 220px 70px;gap:14px;align-items:center;padding:13px 20px;border-bottom:1px solid #F0F1F3">
+          <span style="font-weight:600">Apple Podcasts</span>
+          <div style="height:12px;background:#F5F5F3;border-radius:3px"><div style="width:65%;height:100%;background:#8A6136;border-radius:3px"></div></div>
+          <span style="font-size:13.5px;color:#5D6B79">Épisode 12 · saisie manuelle</span>
+          <span style="font-weight:700;text-align:right;font-variant-numeric:tabular-nums">330</span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr 220px 70px;gap:14px;align-items:center;padding:13px 20px;border-bottom:1px solid #F0F1F3">
+          <span style="font-weight:600">Spotify</span>
+          <div style="height:12px;background:#F5F5F3;border-radius:3px"><div style="width:41%;height:100%;background:#8A6136;border-radius:3px"></div></div>
+          <span style="font-size:13.5px;color:#5D6B79">Table ronde · import CSV</span>
+          <span style="font-weight:700;text-align:right;font-variant-numeric:tabular-nums">210</span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr 220px 70px;gap:14px;align-items:center;padding:13px 20px">
+          <span style="font-weight:600">PeerTube</span>
+          <div style="height:12px;background:#F5F5F3;border-radius:3px"><div style="width:35%;height:100%;background:#33618F;border-radius:3px"></div></div>
+          <span style="font-size:13.5px;color:#5D6B79">Table ronde · collecte auto</span>
+          <span style="font-weight:700;text-align:right;font-variant-numeric:tabular-nums">180</span>
+        </div>
+      </div>
+    </div>
+    <!-- audit replié -->
+    <div style="display:flex;justify-content:space-between;align-items:center;background:#FFFFFF;border:1px solid #E4E3DF;border-radius:10px;padding:15px 20px">
+      <span style="font-weight:600;font-size:15px">Journal des relevés <span style="font-weight:400;color:#5D6B79">— 28 entrées, avec notes et ajustements</span></span>
+      <span style="color:#8A94A0;font-size:13px">Déplier ▾</span>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Essayer ensuite : « garde <a class="dv-oid" href="#1a">1a</a> mais avec le bandeau de synthèse de <a class="dv-oid" href="#1b">1b</a> » · « décline <a class="dv-oid" href="#1c">1c</a> sur les 6 autres écrans » · « montre la version lecteur de <a class="dv-oid" href="#1b">1b</a> »</p>
+</section>
+
+</x-dc>
+</body>
+</html>
