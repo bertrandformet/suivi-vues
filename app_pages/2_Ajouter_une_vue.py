@@ -13,11 +13,13 @@ st.caption(
 
 if not auth.is_editeur():
     st.error("Réservé aux éditeurs.")
+    style.render_footer()
     st.stop()
 
 urls = data_layer.enriched_tracked_urls()
 if urls.empty:
     st.info("Aucune URL suivie pour l'instant. Ajoutez-en une dans « Contenus & URLs ».")
+    style.render_footer()
     st.stop()
 
 urls = urls.copy()
@@ -92,3 +94,5 @@ if submitted:
     st.session_state["add_snapshot_views"] = 0
     st.session_state["add_snapshot_note"] = ""
     st.rerun()
+
+style.render_footer()
