@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 
-from src import charts, data as data_layer, style
+from src import auth, charts, data as data_layer, style
 
 st.title("Évolution des vues")
 
@@ -9,6 +9,7 @@ df = charts.build_view_dataset()
 
 if df.empty:
     st.info("Aucun relevé de vues pour l'instant. Ajoutez une URL suivie et un premier relevé.")
+    style.render_footer()
     st.stop()
 
 n_contents = data_layer.load_contents().shape[0]
@@ -48,6 +49,24 @@ bar_fig = charts.latest_by_platform_chart(filtered)
 if bar_fig:
     st.plotly_chart(bar_fig, use_container_width=True)
 
+
+@st.dialog("Confirmer la suppression")
+def confirm_delete_snapshot(snapshot_id, label):
+    st.write("Supprimer définitivement ce relevé ?")
+    st.caption(label)
+    st.caption(
+        "Cette action est irréversible dans l'application "
+        "(l'historique reste consultable dans les commits GitHub du dépôt)."
+    )
+    c1, c2 = st.columns(2)
+    if c1.button("Annuler", use_container_width=True):
+        st.rerun()
+    if c2.button("Supprimer définitivement", type="primary", use_container_width=True):
+        data_layer.delete_snapshot(snapshot_id, st.session_state["username"])
+        st.toast("Relevé supprimé.")
+        st.rerun()
+
+
 with st.expander("Journal des relevés (audit)"):
     display = filtered.copy()
     display["source"] = display["source"].map(style.SOURCE_LABELS).fillna(display["source"]).str.capitalize()
@@ -68,3 +87,29 @@ with st.expander("Journal des relevés (audit)"):
             "entered_at": "Saisi le",
         },
     )
+
+    if auth.is_editeur() and not filtered.empty:
+        st.divider()
+        ordered = filtered.sort_values("recorded_at", ascending=False)
+        option_labels = {
+            row["id_x"]: (
+                f"{style.format_date_fr(row['recorded_at'])} — {row['label']} — "
+                f"{style.format_number(row['view_count'])} vues "
+                f"({style.SOURCE_LABELS.get(row['source'], row['source'])})"
+            )
+            for _, row in ordered.iterrows()
+        }
+        col_a, col_b = st.columns([3, 1])
+        with col_a:
+            to_delete = st.selectbox(
+                "Supprimer un relevé erroné",
+                list(option_labels.keys()),
+                format_func=lambda k: option_labels[k],
+            )
+        with col_b:
+            st.write("")
+            st.write("")
+            if st.button("Supprimer", use_container_width=True):
+                confirm_delete_snapshot(to_delete, option_labels[to_delete])
+
+style.render_footer()
