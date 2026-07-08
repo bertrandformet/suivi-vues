@@ -12,6 +12,7 @@ st.caption(
 
 if not auth.is_editeur():
     st.error("Réservé aux éditeurs.")
+    style.render_footer()
     st.stop()
 
 urls = data_layer.enriched_tracked_urls()
@@ -19,6 +20,7 @@ eligible = urls[urls["collection_method"].isin(COLLECTORS.keys())] if not urls.e
 
 if eligible.empty:
     st.info("Aucune URL n'est configurée en collecte automatique pour l'instant.")
+    style.render_footer()
     st.stop()
 
 snapshots = data_layer.load_snapshots()
@@ -77,3 +79,5 @@ if run_clicked:
             [{"URL": r["label"], "Méthode": r["method"], "Erreur": r["error"]} for r in errors],
             use_container_width=True, hide_index=True,
         )
+
+style.render_footer()
