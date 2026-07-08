@@ -27,3 +27,9 @@ def append_row(path: str, row: dict, message: str):
     df = gh_api.append_row(get_config(), path, row, message)
     read_csv.clear()
     return df
+
+
+def remove_row(path: str, row_id: str, message: str):
+    df = gh_api.remove_row(get_config(), path, row_id, message)
+    read_csv.clear()
+    return df
