@@ -3,6 +3,8 @@
 import streamlit as st
 import streamlit_authenticator as stauth
 
+from src import style
+
 FIELDS = {
     "Form name": "Connexion",
     "Username": "Identifiant",
@@ -63,6 +65,7 @@ def login():
                     "</div>",
                     unsafe_allow_html=True,
                 )
+        style.render_footer()
         return None
 
     username = st.session_state["username"]
