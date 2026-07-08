@@ -90,3 +90,24 @@ def append_row(cfg: GitHubConfig, path: str, row: dict, message: str, retry: boo
             raise
         return append_row(cfg, path, row, message, retry=False)
     return df
+
+
+def remove_row(cfg: GitHubConfig, path: str, row_id: str, message: str, id_column: str = "id", retry: bool = True):
+    """Supprime la ligne dont `id_column` vaut `row_id` (lecture fraîche + écriture).
+
+    Contrairement à append_row, ceci retire définitivement une ligne du CSV — l'historique
+    reste toutefois consultable dans les commits GitHub (chaque suppression en crée un).
+    """
+    content, sha = get_file(cfg, path)
+    if content is None:
+        return None
+    df = pd.read_csv(StringIO(content), dtype=str, keep_default_na=False)
+    df = df[df[id_column] != row_id]
+    csv_text = df.to_csv(index=False)
+    try:
+        put_file(cfg, path, csv_text, sha, message)
+    except ConflictError:
+        if not retry:
+            raise
+        return remove_row(cfg, path, row_id, message, id_column, retry=False)
+    return df
