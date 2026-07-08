@@ -11,6 +11,7 @@ st.caption(
 
 if not auth.is_editeur():
     st.error("Réservé aux éditeurs.")
+    style.render_footer()
     st.stop()
 
 tab_contents, tab_urls = st.tabs(["Créer un contenu", "Ajouter une URL suivie"])
@@ -75,3 +76,5 @@ with tab_urls:
                 "added_at": "Ajouté le",
             },
         )
+
+style.render_footer()
