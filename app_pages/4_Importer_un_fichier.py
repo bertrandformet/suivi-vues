@@ -1,13 +1,14 @@
 import pandas as pd
 import streamlit as st
 
-from src import auth, data as data_layer
+from src import auth, data as data_layer, style
 
 st.title("Importer des relevés")
 st.caption("Fichier CSV ou Excel exporté depuis une plateforme. Les lignes sont vérifiées avant d'être enregistrées.")
 
 if not auth.is_editeur():
     st.error("Réservé aux éditeurs.")
+    style.render_footer()
     st.stop()
 
 with st.expander("Format attendu"):
@@ -25,10 +26,12 @@ with st.expander("Format attendu"):
 urls = data_layer.enriched_tracked_urls()
 if urls.empty:
     st.info("Aucune URL suivie pour l'instant. Ajoutez-en une dans « Contenus & URLs » avant d'importer.")
+    style.render_footer()
     st.stop()
 
 uploaded = st.file_uploader("Déposez votre fichier ici", type=["csv", "xlsx"])
 if not uploaded:
+    style.render_footer()
     st.stop()
 
 if uploaded.name.endswith(".xlsx"):
@@ -119,3 +122,5 @@ if "import_preview" in st.session_state:
             )
         st.toast(f"{len(preview)} relevé(s) importé(s).")
         del st.session_state["import_preview"]
+
+style.render_footer()
