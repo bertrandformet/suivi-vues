@@ -1,14 +1,14 @@
 # Suivi Vues
 
-Suivi de l'évolution des vues d'URLs ciblées sur YouTube, PeerTube, Apple Podcasts, Spotify, Podcast Addict, Deezer, Pocket Casts, Castbox, Overcast, Castro et Canotech.
+Suivi de l'évolution des vues d'URLs ciblées sur YouTube, PeerTube, Apple Podcasts, Spotify, Podcast Addict, Deezer, Pocket Casts, Castbox, Overcast, Castro, etc.
 
 Les données (contenus, URLs suivies, relevés de vues) sont stockées sous forme de CSV **dans un dépôt GitHub**, lues et écrites via l'API GitHub — chaque ajout ou ajustement crée un commit, ce qui donne un historique d'audit complet sans base de données externe.
 
-Ce dépôt est un **template réutilisable** : il contient des données et des comptes de démonstration (aucune donnée réelle). Pour un usage réel, dupliquez-le en dépôt privé (voir ci-dessous) — vos vraies URLs suivies et votre dashboard quotidien ne doivent jamais être publics.
+Ce dépôt est un **template réutilisable** : il contient des données et des comptes de démonstration (aucune donnée réelle). Pour un usage réel, dupliquez-le en dépôt privé (voir ci-dessous) pour que vos vraies URLs suivies et votre dashboard quotidien ne soient jamais publics.
 
 **Collecte des vues** :
 - ✅ **YouTube** et **PeerTube** : collecte automatique (API publique), déclenchable manuellement ou chaque semaine via GitHub Actions.
-- **Apple Podcasts, Spotify, Podcast Addict, Deezer, Pocket Casts, Castbox, Overcast, Castro, Canotech** : aucune de ces plateformes n'expose publiquement un nombre de vues/écoutes par épisode pour du contenu dont on n'est pas propriétaire — ces relevés restent en saisie manuelle ou en import de fichier. L'architecture (`src/collectors.py`) est prévue pour qu'on puisse ajouter facilement une future source automatique, quelle qu'elle soit.
+- **Apple Podcasts, Spotify, Podcast Addict, Deezer, Pocket Casts, Castbox, Overcast, Castro, etc.** : aucune de ces plateformes n'expose publiquement un nombre de vues/écoutes par épisode pour du contenu dont on n'est pas propriétaire — ces relevés restent en saisie manuelle ou en import de fichier. L'architecture (`src/collectors.py`) est prévue pour qu'on puisse ajouter facilement une future source automatique, quelle qu'elle soit.
 
 ## 0. Dépôt public (démo) vs dépôt privé (production)
 
