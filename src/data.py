@@ -105,6 +105,10 @@ def add_snapshot(
     return snapshot_id
 
 
+def delete_snapshot(snapshot_id: str, user: str):
+    store.remove_row(SNAPSHOTS_PATH, snapshot_id, f"Suppression relevé {snapshot_id} (par {user})")
+
+
 def latest_per_url_and_date(snapshots: pd.DataFrame) -> pd.DataFrame:
     """Pour chaque (tracked_url_id, recorded_at), ne garde que la dernière saisie (entered_at)."""
     if snapshots.empty:
