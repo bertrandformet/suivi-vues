@@ -83,7 +83,17 @@ Pour le dépôt privé de production, Streamlit Cloud propose une app "privée" 
 
 - **Lecteur** : consulte le Tableau de bord (courbes d'évolution, comparaison par plateforme, table d'audit).
 - **Admin** : en plus, peut créer des contenus, ajouter des URLs à suivre (avec leur méthode de collecte), saisir ou ajuster des relevés de vues, importer des fichiers CSV/Excel, et déclencher la collecte automatique à la demande.
-- Chaque relevé est conservé (pas d'édition destructive) : un ajustement est une nouvelle ligne horodatée, cochée « ajustement », avec une note explicative. Les relevés automatiques portent la source « auto ».
+- Chaque relevé est conservé (pas d'édition destructive) : un ajustement est une nouvelle ligne horodatée, cochée « ajustement », avec une note explicative. Les relevés automatiques portent la source « auto ». Un relevé erroné peut aussi être supprimé directement depuis le journal d'audit du tableau de bord, avec une confirmation avant suppression.
+
+### Regrouper les URLs d'un même épisode
+
+Un même épisode (podcast ou vidéo) existe souvent sur plusieurs plateformes à la fois (YouTube, Spotify, Apple Podcasts...). Pour suivre sa performance globale plutôt que plateforme par plateforme, créez un **Contenu** qui les regroupe :
+
+1. Dans « Contenus & URLs » → onglet **Créer un contenu**, donnez-lui un nom (ex. « Mon podcast — Épisode 13 »).
+2. Toujours dans « Contenus & URLs » → onglet **Ajouter une URL suivie**, ajoutez chaque URL de cet épisode (une par plateforme) en la rattachant à ce contenu via le menu « Rattacher à un contenu ».
+3. Sur le Tableau de bord, le filtre « Contenu » permet d'isoler cet épisode, et toutes ses URLs partagent la même couleur sur les graphiques (la couleur code le contenu, jamais la plateforme) pour comparer sa portée d'une plateforme à l'autre.
+
+Une URL peut aussi rester indépendante (sans contenu) si elle ne fait partie d'aucun regroupement.
 
 ## Développement local
 
@@ -96,3 +106,7 @@ Pour tester la collecte en ligne de commande, sans Streamlit (comme le fera GitH
 ```bash
 GITHUB_TOKEN=... GITHUB_REPO=owner/repo YOUTUBE_API_KEY=... python scripts/run_collection.py
 ```
+
+## Licence
+
+© 2026 Bertrand Formet — [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) (Creative Commons Attribution 4.0 International). Voir le fichier [LICENSE](LICENSE).
