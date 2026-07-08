@@ -1,0 +1,3 @@
+id,content_id,platform_id,url,label,collection_method,added_by,added_at
+demo-url-youtube,demo-content-1,youtube,https://www.youtube.com/watch?v=jNQXAC9IVRw,Exemple YouTube (collecte automatique),youtube,admin,2026-01-01T00:00:00+00:00
+demo-url-manual,demo-content-1,apple_podcasts,https://podcasts.apple.com/exemple,Exemple Apple Podcasts (saisie manuelle),manual,admin,2026-01-01T00:00:00+00:00

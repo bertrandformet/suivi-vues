@@ -1,0 +1,4 @@
+id,tracked_url_id,recorded_at,view_count,source,note,entered_by,entered_at
+demo-snap-1,demo-url-manual,2026-01-05,120,manual,Valeur d'exemple,admin,2026-01-05T09:00:00+00:00
+demo-snap-2,demo-url-manual,2026-01-12,340,manual,Valeur d'exemple,admin,2026-01-12T09:00:00+00:00
+demo-snap-3,demo-url-manual,2026-01-19,510,manual,Valeur d'exemple,admin,2026-01-19T09:00:00+00:00
