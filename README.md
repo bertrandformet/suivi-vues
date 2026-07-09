@@ -95,6 +95,38 @@ Un même épisode (podcast ou vidéo) existe souvent sur plusieurs plateformes �
 
 Une URL peut aussi rester indépendante si elle ne fait partie d'aucun regroupement.
 
+## Passer de deux comptes à plusieurs comptes
+
+L'app est livrée avec exactement deux comptes (`admin`/`lecteur`) pour rester simple, mais ce n'est pas une limite technique : `src/auth.py` lit tout le contenu de `[auth.credentials.usernames.*]` dans les secrets, quel que soit le nombre d'entrées. Voici comment évoluer, du plus simple au plus poussé — tout gratuit et durable, sans revente de données.
+
+**1. Ajouter des comptes individuels (recommandé, rien à développer)**
+
+Dans les secrets Streamlit, dupliquez un bloc `[auth.credentials.usernames.XXX]` par personne, avec son propre nom, son propre mot de passe haché (même commande qu'à l'étape 3) et son rôle (`editeur` ou `lecteur`) :
+
+```toml
+[auth.credentials.usernames.marie]
+name = "Marie"
+password = "$2b$12$..."
+role = "editeur"
+
+[auth.credentials.usernames.julien]
+name = "Julien"
+password = "$2b$12$..."
+role = "lecteur"
+```
+
+Aucune dépendance nouvelle, aucune donnée envoyée à un tiers : les identifiants restent uniquement dans les secrets Streamlit (chiffrés, jamais dans le dépôt) et dans les commits GitHub (que vous générez et poussez vous-même). Pour révoquer quelqu'un, supprimez son bloc.
+
+**2. Restreindre qui peut même ouvrir l'app (complémentaire, sans code)**
+
+Sur le dépôt privé de production, Streamlit Cloud permet d'inviter des emails précis dans les paramètres de partage de l'app — une deuxième barrière gratuite, native, avant même d'arriver à l'écran de connexion.
+
+**3. Si vous avez besoin d'un vrai système de comptes en libre-service** (auto-inscription, réinitialisation de mot de passe, beaucoup d'utilisateurs), ces options gratuites en démarrage et respectueuses des données méritent d'être évaluées le moment venu — cela demande un vrai développement (remplacer `streamlit-authenticator` par leur SDK), pas juste une configuration :
+- [Supabase Auth](https://supabase.com/auth) — offre gratuite généreuse, données hébergées dans une base Postgres que vous contrôlez.
+- [Clerk](https://clerk.com) — offre gratuite jusqu'à un certain nombre d'utilisateurs actifs, bon support Python/Streamlit communautaire.
+
+Dans tous les cas, toute clé/secret d'un tel service se stocke dans les secrets Streamlit (jamais dans le code ni dans un CSV), exactement comme le token GitHub ou la clé YouTube aujourd'hui.
+
 ## Développement local
 
 ```bash

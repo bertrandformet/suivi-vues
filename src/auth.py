@@ -31,13 +31,17 @@ def _roles() -> dict:
 
 
 def get_authenticator() -> stauth.Authenticate:
-    cookie = st.secrets["auth"]["cookie"]
-    return stauth.Authenticate(
-        _credentials_dict(),
-        cookie["name"],
-        cookie["key"],
-        cookie.get("expiry_days", 30),
-    )
+    """Un seul `Authenticate` par session : son `CookieManager` interne plante
+    (clé de composant dupliquée) si on en instancie un second dans le même run."""
+    if "_authenticator" not in st.session_state:
+        cookie = st.secrets["auth"]["cookie"]
+        st.session_state["_authenticator"] = stauth.Authenticate(
+            _credentials_dict(),
+            cookie["name"],
+            cookie["key"],
+            cookie.get("expiry_days", 30),
+        )
+    return st.session_state["_authenticator"]
 
 
 def login():
@@ -50,7 +54,7 @@ def login():
             st.markdown(
                 "<div style='text-align:center;margin-bottom:8px'>"
                 "<div style='font-weight:700;font-size:20px'>Suivi Vues</div>"
-                "<div class='svv-muted'>Suivi des vues et écoutes des contenus surveillés</div>"
+                "<div class='svv-muted'>Suivi des vues et écoutes</div>"
                 "</div>",
                 unsafe_allow_html=True,
             )
@@ -73,25 +77,29 @@ def login():
     role = _roles().get(username, "lecteur")
     st.session_state["role"] = role
 
-    with st.sidebar:
-        if role != "editeur":
-            st.markdown(
-                "<div class='svv-muted' style='font-size:13px;margin-bottom:10px'>"
-                "Consultation seule — la saisie et la gestion des URLs sont réservées aux éditeurs."
-                "</div>",
-                unsafe_allow_html=True,
-            )
-        badge_class = "svv-badge-editeur" if role == "editeur" else "svv-badge-lecteur"
+    return name, username, role
+
+
+def render_account_sidebar(name: str, role: str):
+    """Affiche le badge de rôle et le bouton de déconnexion. À appeler explicitement
+    en fin de sidebar (après la nav et le sélecteur de dossier), pour que ce bloc
+    de compte reste tout en bas de la colonne plutôt qu'en haut."""
+    if role != "editeur":
         st.markdown(
-            f"<div style='display:flex;align-items:center;gap:8px;margin-bottom:8px'>"
-            f"<span>{name}</span>"
-            f"<span class='svv-badge {badge_class}'>{ROLE_LABELS.get(role, role)}</span>"
-            f"</div>",
+            "<div class='svv-muted' style='font-size:13px;margin-bottom:10px'>"
+            "Consultation seule — la saisie et la gestion des URLs sont réservées aux éditeurs."
+            "</div>",
             unsafe_allow_html=True,
         )
-        authenticator.logout("Se déconnecter", "sidebar")
-
-    return name, username, role
+    badge_class = "svv-badge-editeur" if role == "editeur" else "svv-badge-lecteur"
+    st.markdown(
+        f"<div style='display:flex;align-items:center;gap:8px;margin-bottom:8px'>"
+        f"<span>{name}</span>"
+        f"<span class='svv-badge {badge_class}'>{ROLE_LABELS.get(role, role)}</span>"
+        f"</div>",
+        unsafe_allow_html=True,
+    )
+    get_authenticator().logout("Se déconnecter", "sidebar")
 
 
 def is_editeur() -> bool:

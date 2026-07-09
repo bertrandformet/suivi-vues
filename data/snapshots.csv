@@ -8,4 +8,29 @@ demo-snap-6,demo-url-spotify,2026-01-19,210,manual,Valeur d'exemple,admin,2026-0
 demo-snap-7,demo-url-deezer,2026-01-05,20,manual,Valeur d'exemple,admin,2026-01-05T09:00:00+00:00
 demo-snap-8,demo-url-deezer,2026-01-12,45,manual,Valeur d'exemple,admin,2026-01-12T09:00:00+00:00
 demo-snap-9,demo-url-deezer,2026-01-19,70,manual,Valeur d'exemple,admin,2026-01-19T09:00:00+00:00
+demo-snap-pt-1,demo-url-peertube,2026-04-15,8,auto,Collecte automatique (peertube),admin,2026-04-15T06:03:00+00:00
+demo-snap-pt-2,demo-url-peertube,2026-05-01,11,auto,Collecte automatique (peertube),admin,2026-05-01T06:03:00+00:00
+demo-snap-pt-3,demo-url-peertube,2026-05-15,14,auto,Collecte automatique (peertube),admin,2026-05-15T06:03:00+00:00
+demo-snap-pt-4,demo-url-peertube,2026-06-01,17,auto,Collecte automatique (peertube),admin,2026-06-01T06:03:00+00:00
+demo-snap-pt-5,demo-url-peertube,2026-06-15,19,auto,Collecte automatique (peertube),admin,2026-06-15T06:03:00+00:00
 f74d9bf9b2ad,demo-url-peertube,2026-07-09,20,auto,Collecte automatique (peertube),admin,2026-07-09T05:22:19+00:00
+snap-ia-pt-1,url-ia-peertube,2026-04-15,2400,auto,Collecte automatique (peertube),admin,2026-04-15T06:05:00+00:00
+snap-ia-pt-2,url-ia-peertube,2026-05-01,2650,auto,Collecte automatique (peertube),admin,2026-05-01T06:05:00+00:00
+snap-ia-pt-3,url-ia-peertube,2026-05-15,2820,auto,Collecte automatique (peertube),admin,2026-05-15T06:05:00+00:00
+snap-ia-pt-4,url-ia-peertube,2026-06-01,2950,auto,Collecte automatique (peertube),admin,2026-06-01T06:05:00+00:00
+snap-ia-pt-5,url-ia-peertube,2026-06-15,3050,auto,Collecte automatique (peertube),admin,2026-06-15T06:05:00+00:00
+snap-ia-pod-1,url-ia-podcast,2026-04-15,90,manual,Valeur d'exemple,admin,2026-04-15T09:00:00+00:00
+snap-ia-pod-2,url-ia-podcast,2026-05-15,180,manual,Valeur d'exemple,admin,2026-05-15T09:00:00+00:00
+snap-ia-pod-3,url-ia-podcast,2026-06-15,260,manual,Valeur d'exemple,admin,2026-06-15T09:00:00+00:00
+snap-pedago-cano-1,url-pedago-canotech,2026-04-15,30,manual,Valeur d'exemple,admin,2026-04-15T09:00:00+00:00
+snap-pedago-cano-2,url-pedago-canotech,2026-05-15,65,manual,Valeur d'exemple,admin,2026-05-15T09:00:00+00:00
+snap-pedago-cano-3,url-pedago-canotech,2026-06-15,110,manual,Valeur d'exemple,admin,2026-06-15T09:00:00+00:00
+snap-pedago-spo-1,url-pedago-spotify,2026-04-15,50,manual,Valeur d'exemple,admin,2026-04-15T09:00:00+00:00
+snap-pedago-spo-2,url-pedago-spotify,2026-05-15,95,manual,Valeur d'exemple,admin,2026-05-15T09:00:00+00:00
+snap-pedago-spo-3,url-pedago-spotify,2026-06-15,140,manual,Valeur d'exemple,admin,2026-06-15T09:00:00+00:00
+snap-env-dz-1,url-env-deezer,2026-04-15,15,manual,Valeur d'exemple,admin,2026-04-15T09:00:00+00:00
+snap-env-dz-2,url-env-deezer,2026-05-15,40,manual,Valeur d'exemple,admin,2026-05-15T09:00:00+00:00
+snap-env-dz-3,url-env-deezer,2026-06-15,68,manual,Valeur d'exemple,admin,2026-06-15T09:00:00+00:00
+snap-env-pa-1,url-env-podcastaddict,2026-04-15,22,manual,Valeur d'exemple,admin,2026-04-15T09:00:00+00:00
+snap-env-pa-2,url-env-podcastaddict,2026-05-15,58,manual,Valeur d'exemple,admin,2026-05-15T09:00:00+00:00
+snap-env-pa-3,url-env-podcastaddict,2026-06-15,95,manual,Valeur d'exemple,admin,2026-06-15T09:00:00+00:00

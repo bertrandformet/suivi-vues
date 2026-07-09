@@ -4,3 +4,9 @@ demo-url-manual,demo-content-1,apple_podcasts,https://podcasts.apple.com/exemple
 demo-url-spotify,demo-content-1,spotify,https://open.spotify.com/episode/exemple,Exemple Spotify (saisie manuelle),manual,dossier-demo,admin,2026-01-01T00:00:00+00:00
 demo-url-peertube,demo-content-2,peertube,https://framatube.org/w/609e77dd-c85f-46cc-b7b6-7516f84e5cfc,Exemple PeerTube (collecte automatique),peertube,dossier-demo,admin,2026-01-01T00:00:00+00:00
 demo-url-deezer,demo-content-2,deezer,https://www.deezer.com/show/exemple,Exemple Deezer (saisie manuelle),manual,dossier-demo,admin,2026-01-01T00:00:00+00:00
+url-ia-peertube,content-ia-1,peertube,https://tube.reseau-canope.fr/w/bykxzTFZZ7Lrn8L2phiWQU,Éduquer aux IA génératives (collecte automatique),peertube,dossier-ia,admin,2026-04-01T00:00:00+00:00
+url-ia-podcast,content-ia-1,apple_podcasts,https://podcasts.apple.com/exemple-ia,Éduquer aux IA génératives (saisie manuelle),manual,dossier-ia,admin,2026-04-01T00:00:00+00:00
+url-pedago-canotech,content-pedago-1,canotech,https://www.canotech.fr/exemple-webinaire,Webinaire pédagogie (saisie manuelle),manual,dossier-pedagogie,admin,2026-04-01T00:00:00+00:00
+url-pedago-spotify,content-pedago-1,spotify,https://open.spotify.com/episode/exemple-pedagogie,Podcast pédagogie (saisie manuelle),manual,dossier-pedagogie,admin,2026-04-01T00:00:00+00:00
+url-env-deezer,content-env-1,deezer,https://www.deezer.com/show/exemple-environnement,Podcast environnement (saisie manuelle),manual,dossier-environnement,admin,2026-04-01T00:00:00+00:00
+url-env-podcastaddict,content-env-1,podcast_addict,https://podcastaddict.com/exemple-environnement,Podcast environnement — Podcast Addict (saisie manuelle),manual,dossier-environnement,admin,2026-04-01T00:00:00+00:00
