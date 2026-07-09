@@ -32,6 +32,7 @@ with st.sidebar:
                 _create_dossier_form("first")
         else:
             st.info("Aucun dossier disponible pour l'instant.")
+        auth.render_account_sidebar(name, role)
         st.stop()
 
     dossier_names = dossiers["name"].tolist()
@@ -45,6 +46,8 @@ with st.sidebar:
     if role == "editeur":
         with st.popover("+ Nouveau dossier"):
             _create_dossier_form("new")
+
+    auth.render_account_sidebar(name, role)
 
 lecture_pages = [
     st.Page("app_pages/1_Tableau_de_bord.py", title="Tableau de bord", default=True),
