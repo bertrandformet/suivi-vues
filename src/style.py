@@ -1,9 +1,13 @@
 """CSS léger transversal (nombres tabulaires, gris conforme WCAG AA) et
 utilitaires de formatage FR, appliqués sur toutes les pages."""
 
+from zoneinfo import ZoneInfo
+
+import pandas as pd
 import streamlit as st
 
 MUTED_TEXT = "#5D6B79"
+LOCAL_TZ = ZoneInfo("Europe/Paris")
 
 _CSS = f"""
 <style>
@@ -42,6 +46,25 @@ _MONTHS_FR = [
 def format_date_fr(date) -> str:
     """Formate une date en français ('19 janv. 2026') sans dépendre de la locale système."""
     return f"{date.day} {_MONTHS_FR[date.month - 1]} {date.year}"
+
+
+def to_local(value):
+    """Convertit un timestamp (aware, ou naïf supposé UTC — c'est le format de
+    stockage de `entered_at`) vers l'heure de Paris, pour l'affichage uniquement."""
+    if value is None or pd.isna(value):
+        return value
+    ts = pd.Timestamp(value)
+    if ts.tzinfo is None:
+        ts = ts.tz_localize("UTC")
+    return ts.tz_convert(LOCAL_TZ)
+
+
+def format_datetime_fr(value) -> str:
+    """Formate un timestamp en heure de Paris, ex. '9 juil. 2026 à 16:23'."""
+    local = to_local(value)
+    if local is None or pd.isna(local):
+        return str(value)
+    return f"{format_date_fr(local)} à {local:%H:%M}"
 
 
 def shorten_url(url: str, max_path: int = 18) -> str:

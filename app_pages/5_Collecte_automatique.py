@@ -50,8 +50,8 @@ for _, r in eligible.iterrows():
 
 st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
-last_run = pd.to_datetime(auto_snapshots["entered_at"]).max() if not auto_snapshots.empty else None
-last_run_text = f"Dernière exécution : {style.format_date_fr(last_run)}" if last_run is not None else "Aucune exécution pour l'instant"
+last_run = auto_snapshots["entered_at"].max() if not auto_snapshots.empty else None
+last_run_text = f"Dernière exécution : {style.format_datetime_fr(last_run)}" if last_run is not None else "Aucune exécution pour l'instant"
 
 col1, col2 = st.columns([1, 3])
 with col1:
