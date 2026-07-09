@@ -5,6 +5,8 @@ from src import auth, data as data_layer, github_store, style
 from src.collectors import COLLECTORS
 from src.collection_runner import run_collection
 
+dossier_id = st.session_state["current_dossier_id"]
+
 st.title("Collecte automatique")
 st.caption(
     "URLs YouTube et PeerTube uniquement (API). Une tâche planifiée lance aussi la collecte chaque lundi à 06:00."
@@ -15,7 +17,7 @@ if not auth.is_editeur():
     style.render_footer()
     st.stop()
 
-urls = data_layer.enriched_tracked_urls()
+urls = data_layer.enriched_tracked_urls(dossier_id)
 eligible = urls[urls["collection_method"].isin(COLLECTORS.keys())] if not urls.empty else urls
 
 if eligible.empty:
@@ -25,6 +27,9 @@ if eligible.empty:
 
 snapshots = data_layer.load_snapshots()
 auto_snapshots = snapshots[snapshots["source"] == "auto"] if not snapshots.empty else snapshots
+auto_snapshots = (
+    auto_snapshots[auto_snapshots["tracked_url_id"].isin(eligible["id"])] if not auto_snapshots.empty else auto_snapshots
+)
 
 
 def last_auto(url_id):
@@ -63,7 +68,7 @@ if run_clicked:
     cfg = github_store.get_config()
     api_keys = {"youtube": st.secrets.get("youtube", {}).get("api_key")}
     with st.status("Collecte en cours…", expanded=True) as status:
-        report = run_collection(cfg, api_keys, actor=st.session_state["username"])
+        report = run_collection(cfg, api_keys, actor=st.session_state["username"], dossier_id=dossier_id)
         ok = [r for r in report if r["status"] == "ok"]
         errors = [r for r in report if r["status"] == "error"]
         status.update(label=f"{len(ok)} URL(s) collectée(s), {len(errors)} échec(s)", state="complete")

@@ -16,7 +16,9 @@ if not auth.is_editeur():
     style.render_footer()
     st.stop()
 
-urls = data_layer.enriched_tracked_urls()
+dossier_id = st.session_state["current_dossier_id"]
+
+urls = data_layer.enriched_tracked_urls(dossier_id)
 if urls.empty:
     st.info("Aucune URL suivie pour l'instant. Ajoutez-en une dans « Regroupements & URLs ».")
     style.render_footer()

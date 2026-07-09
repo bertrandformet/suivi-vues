@@ -15,10 +15,14 @@ from src.ids import new_id, now_iso
 from src.paths import SNAPSHOTS_PATH, TRACKED_URLS_PATH
 
 
-def run_collection(cfg: gh_api.GitHubConfig, api_keys: dict, actor: str) -> list[dict]:
+def run_collection(cfg: gh_api.GitHubConfig, api_keys: dict, actor: str, dossier_id: str | None = None) -> list[dict]:
     """Parcourt les URLs suivies dont collection_method a un collecteur enregistré,
     récupère la valeur, écrit un snapshot (source="auto"), et retourne un rapport
     par URL : {tracked_url_id, label, method, status: "ok"|"error", value|error}.
+
+    Si `dossier_id` est fourni, ne collecte que les URLs de ce dossier (utilisé par le
+    bouton manuel du dashboard, scopé au dossier ouvert). Sans `dossier_id` (cas de la
+    tâche planifiée GitHub Actions), collecte tous les dossiers.
     """
     urls = gh_api.read_csv(cfg, TRACKED_URLS_PATH)
     report = []
@@ -27,6 +31,8 @@ def run_collection(cfg: gh_api.GitHubConfig, api_keys: dict, actor: str) -> list
         return report
 
     eligible = urls[urls["collection_method"].isin(COLLECTORS.keys())]
+    if dossier_id is not None:
+        eligible = eligible[eligible["dossier_id"] == dossier_id]
 
     for _, row in eligible.iterrows():
         method = row["collection_method"]

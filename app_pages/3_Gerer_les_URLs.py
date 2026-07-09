@@ -3,6 +3,8 @@ import streamlit as st
 from src import auth, data as data_layer, github_store, style
 from src.collectors import COLLECTORS
 
+dossier_id = st.session_state["current_dossier_id"]
+
 st.title("Regroupements & URLs suivies")
 st.caption(
     "Un regroupement rassemble ses URLs sur les différentes plateformes. "
@@ -23,7 +25,7 @@ with tab_contents:
         submitted = st.form_submit_button("Créer le regroupement", type="primary")
     if submitted and title:
         try:
-            data_layer.add_content(title, description, st.session_state["username"])
+            data_layer.add_content(title, description, st.session_state["username"], dossier_id)
         except github_store.ConflictError:
             st.error("Une autre modification vient d'être enregistrée en même temps. Réessayez.")
         else:
@@ -31,7 +33,8 @@ with tab_contents:
 
 with tab_urls:
     platforms = data_layer.load_platforms()
-    contents = data_layer.load_contents()
+    all_contents = data_layer.load_contents()
+    contents = all_contents[all_contents["dossier_id"] == dossier_id] if not all_contents.empty else all_contents
 
     platform_choice = st.selectbox("Plateforme", platforms["name"])
     platform_id = platforms.loc[platforms["name"] == platform_choice, "id"].iloc[0]
@@ -52,7 +55,7 @@ with tab_urls:
             content_id = contents.loc[contents["title"] == content_choice, "id"].iloc[0]
         try:
             data_layer.add_tracked_url(
-                content_id, platform_id, url, label, st.session_state["username"], collection_method
+                content_id, platform_id, url, label, st.session_state["username"], dossier_id, collection_method
             )
         except github_store.ConflictError:
             st.error("Une autre modification vient d'être enregistrée en même temps. Réessayez.")
@@ -60,7 +63,7 @@ with tab_urls:
             st.toast(f"URL « {label} » ajoutée pour {platform_choice}.")
 
     st.subheader("URLs suivies")
-    tracked = data_layer.enriched_tracked_urls()
+    tracked = data_layer.enriched_tracked_urls(dossier_id)
     if not tracked.empty:
         display = tracked.copy()
         display["content_title"] = display["content_title"].fillna("—")
