@@ -117,7 +117,7 @@ role = "lecteur"
 
 Aucune dépendance nouvelle, aucune donnée envoyée à un tiers : les identifiants restent uniquement dans les secrets Streamlit (chiffrés, jamais dans le dépôt) et dans les commits GitHub (que vous générez et poussez vous-même). Pour révoquer quelqu'un, supprimez son bloc.
 
-**2. Restreindre qui peut même ouvrir l'app (complémentaire, sans code)**
+**2. Restreindre qui peut ouvrir l'app (complémentaire, sans code)**
 
 Sur le dépôt privé de production, Streamlit Cloud permet d'inviter des emails précis dans les paramètres de partage de l'app — une deuxième barrière gratuite, native, avant même d'arriver à l'écran de connexion.
 
