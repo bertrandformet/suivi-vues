@@ -5,6 +5,8 @@ stable par contenu, déclinée sur toutes ses URLs, pour rester lisible à
 mesure que le nombre de plateformes suivies augmente.
 """
 
+from __future__ import annotations
+
 import pandas as pd
 import plotly.express as px
 
@@ -12,28 +14,33 @@ from src import data as data_layer
 from src import palette
 
 
-def _enrich_snapshots(snapshots: pd.DataFrame) -> pd.DataFrame:
-    """Jointe des relevés avec le libellé/plateforme/contenu de leur URL suivie.
+def _enrich_snapshots(snapshots: pd.DataFrame, dossier_id: str | None = None) -> pd.DataFrame:
+    """Jointe des relevés avec le libellé/plateforme/contenu/dossier de leur URL suivie.
 
     Suffixes explicites (plutôt que de laisser pandas déduire `id_x`/`id_y`) :
     la colonne `id` du relevé devient `id_snapshot`, celle de l'URL `id_url`.
+    Filtre optionnellement sur `dossier_id` (un relevé hérite du dossier de son URL).
     """
     if snapshots.empty:
         return snapshots
     urls = data_layer.enriched_tracked_urls()
     merged = snapshots.merge(
-        urls[["id", "label", "url", "platform_name", "content_title", "content_id"]],
+        urls[["id", "label", "url", "platform_name", "content_title", "content_id", "dossier_id"]],
         left_on="tracked_url_id",
         right_on="id",
         how="left",
         suffixes=("_snapshot", "_url"),
     )
+    if dossier_id is not None:
+        merged = merged[merged["dossier_id"] == dossier_id]
+        if merged.empty:
+            return merged
     merged["content_label"] = merged["content_title"].fillna(merged["label"])
     merged["color_key"] = merged.apply(palette.color_key, axis=1)
     return merged
 
 
-def build_view_dataset() -> pd.DataFrame:
+def build_view_dataset(dossier_id: str | None = None) -> pd.DataFrame:
     """Relevés dédupliqués (dernière saisie par URL/date) enrichis avec plateforme et contenu.
 
     Destiné aux graphiques : une seule valeur par (URL, date), utile pour tracer
@@ -43,10 +50,10 @@ def build_view_dataset() -> pd.DataFrame:
     snapshots = data_layer.latest_per_url_and_date(data_layer.load_snapshots())
     if snapshots.empty:
         return snapshots
-    return _enrich_snapshots(snapshots).sort_values("recorded_at")
+    return _enrich_snapshots(snapshots, dossier_id=dossier_id).sort_values("recorded_at")
 
 
-def all_snapshots_dataset() -> pd.DataFrame:
+def all_snapshots_dataset(dossier_id: str | None = None) -> pd.DataFrame:
     """Tous les relevés enrichis, sans déduplication — pour le journal d'audit.
 
     Contrairement à `build_view_dataset`, conserve les entrées remplacées par un
@@ -55,7 +62,7 @@ def all_snapshots_dataset() -> pd.DataFrame:
     snapshots = data_layer.load_snapshots()
     if snapshots.empty:
         return snapshots
-    return _enrich_snapshots(snapshots).sort_values("recorded_at")
+    return _enrich_snapshots(snapshots, dossier_id=dossier_id).sort_values("recorded_at")
 
 
 def evolution_chart(df: pd.DataFrame, group_by: str = "label"):

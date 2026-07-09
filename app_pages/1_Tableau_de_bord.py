@@ -2,17 +2,24 @@ import streamlit as st
 
 from src import auth, charts, data as data_layer, github_store, style
 
+dossier_id = st.session_state["current_dossier_id"]
+
 st.title("Évolution des vues")
 
-df = charts.build_view_dataset()
+df = charts.build_view_dataset(dossier_id)
 
 if df.empty:
     st.info("Aucun relevé de vues pour l'instant. Ajoutez une URL suivie et un premier relevé.")
     style.render_footer()
     st.stop()
 
-n_contents = data_layer.load_contents().shape[0]
-n_urls = data_layer.load_tracked_urls().shape[0]
+contents = data_layer.load_contents()
+contents_in_dossier = contents[contents["dossier_id"] == dossier_id] if not contents.empty else contents
+urls = data_layer.load_tracked_urls()
+urls_in_dossier = urls[urls["dossier_id"] == dossier_id] if not urls.empty else urls
+
+n_contents = contents_in_dossier.shape[0]
+n_urls = urls_in_dossier.shape[0]
 auto_snapshots = df[df["source"] == "auto"]
 last_collection = auto_snapshots["entered_at"].max() if not auto_snapshots.empty else None
 context_bits = [f"{n_contents} regroupement(s) suivi(s)", f"{n_urls} URL(s)"]
@@ -22,8 +29,8 @@ st.caption(" · ".join(context_bits))
 
 col1, col2, col3 = st.columns(3)
 with col1:
-    contents = ["Tous"] + sorted(df["content_title"].dropna().unique().tolist())
-    content_filter = st.selectbox("Regroupement", contents)
+    content_options = ["Tous"] + sorted(df["content_title"].dropna().unique().tolist())
+    content_filter = st.selectbox("Regroupement", content_options)
 with col2:
     platforms = ["Toutes"] + sorted(df["platform_name"].dropna().unique().tolist())
     platform_filter = st.selectbox("Plateforme", platforms)
@@ -75,7 +82,7 @@ def confirm_delete_snapshot(snapshot_id, label, is_current):
             st.rerun()
 
 
-journal_df = charts.all_snapshots_dataset()
+journal_df = charts.all_snapshots_dataset(dossier_id)
 if content_filter != "Tous":
     journal_df = journal_df[journal_df["content_title"] == content_filter]
 if platform_filter != "Toutes":

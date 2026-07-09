@@ -1,4 +1,4 @@
-"""Chargement des données et logique métier (contenus, URLs suivies, relevés de vues)."""
+"""Chargement des données et logique métier (dossiers, regroupements, URLs suivies, relevés de vues)."""
 
 from __future__ import annotations
 
@@ -7,11 +7,15 @@ import pandas as pd
 from src import github_store as store
 from src.ids import new_id as _new_id
 from src.ids import now_iso as _now_iso
-from src.paths import CONTENTS_PATH, PLATFORMS_PATH, SNAPSHOTS_PATH, TRACKED_URLS_PATH
+from src.paths import CONTENTS_PATH, DOSSIERS_PATH, PLATFORMS_PATH, SNAPSHOTS_PATH, TRACKED_URLS_PATH
 
 
 def load_platforms() -> pd.DataFrame:
     return store.read_csv(PLATFORMS_PATH)
+
+
+def load_dossiers() -> pd.DataFrame:
+    return store.read_csv(DOSSIERS_PATH)
 
 
 def load_contents() -> pd.DataFrame:
@@ -33,11 +37,18 @@ def load_snapshots() -> pd.DataFrame:
     return df
 
 
-def enriched_tracked_urls() -> pd.DataFrame:
-    """tracked_urls jointes avec le nom de plateforme et le titre du contenu (si présent)."""
+def enriched_tracked_urls(dossier_id: str | None = None) -> pd.DataFrame:
+    """tracked_urls jointes avec le nom de plateforme et le titre du contenu (si présent).
+
+    Filtre optionnellement sur `dossier_id` (une URL suivie appartient à exactement un dossier).
+    """
     urls = load_tracked_urls()
     if urls.empty:
         return urls
+    if dossier_id is not None:
+        urls = urls[urls["dossier_id"] == dossier_id]
+        if urls.empty:
+            return urls
     platforms = load_platforms().rename(columns={"id": "platform_id", "name": "platform_name"})
     contents = load_contents().rename(columns={"id": "content_id", "title": "content_title"})
     merged = urls.merge(platforms[["platform_id", "platform_name"]], on="platform_id", how="left")
@@ -45,12 +56,26 @@ def enriched_tracked_urls() -> pd.DataFrame:
     return merged
 
 
-def add_content(title: str, description: str, user: str) -> str:
+def add_dossier(name: str, description: str, user: str) -> str:
+    dossier_id = _new_id()
+    row = {
+        "id": dossier_id,
+        "name": name,
+        "description": description,
+        "created_by": user,
+        "created_at": _now_iso(),
+    }
+    store.append_row(DOSSIERS_PATH, row, f"Ajout dossier: {name} (par {user})")
+    return dossier_id
+
+
+def add_content(title: str, description: str, user: str, dossier_id: str) -> str:
     content_id = _new_id()
     row = {
         "id": content_id,
         "title": title,
         "description": description,
+        "dossier_id": dossier_id,
         "created_by": user,
         "created_at": _now_iso(),
     }
@@ -64,6 +89,7 @@ def add_tracked_url(
     url: str,
     label: str,
     user: str,
+    dossier_id: str,
     collection_method: str = "manual",
 ) -> str:
     url_id = _new_id()
@@ -74,6 +100,7 @@ def add_tracked_url(
         "url": url,
         "label": label,
         "collection_method": collection_method,
+        "dossier_id": dossier_id,
         "added_by": user,
         "added_at": _now_iso(),
     }

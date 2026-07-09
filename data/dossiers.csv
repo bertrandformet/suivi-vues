@@ -1,0 +1,5 @@
+id,name,description,created_by,created_at
+dossier-demo,Démo,Données de démonstration livrées avec le template.,admin,2026-01-01T00:00:00+00:00
+dossier-ia,IA,,admin,2026-01-01T00:00:00+00:00
+dossier-pedagogie,Pédagogie,,admin,2026-01-01T00:00:00+00:00
+dossier-environnement,Environnement,,admin,2026-01-01T00:00:00+00:00

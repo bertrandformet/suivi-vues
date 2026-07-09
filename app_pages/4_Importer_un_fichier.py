@@ -23,7 +23,9 @@ with st.expander("Format attendu"):
     template = "date,url,vues,note\n2026-01-19,https://exemple.org/episode-12,510,\n"
     st.download_button("Télécharger le modèle CSV", template, file_name="modele_relevés.csv", mime="text/csv")
 
-urls = data_layer.enriched_tracked_urls()
+dossier_id = st.session_state["current_dossier_id"]
+
+urls = data_layer.enriched_tracked_urls(dossier_id)
 if urls.empty:
     st.info("Aucune URL suivie pour l'instant. Ajoutez-en une dans « Regroupements & URLs » avant d'importer.")
     style.render_footer()
