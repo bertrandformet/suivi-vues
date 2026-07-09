@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 
-from src import auth, data as data_layer, style
+from src import auth, data as data_layer, github_store, style
 
 st.title("Importer des relevés")
 st.caption("Fichier CSV ou Excel exporté depuis une plateforme. Les lignes sont vérifiées avant d'être enregistrées.")
@@ -25,7 +25,7 @@ with st.expander("Format attendu"):
 
 urls = data_layer.enriched_tracked_urls()
 if urls.empty:
-    st.info("Aucune URL suivie pour l'instant. Ajoutez-en une dans « Contenus & URLs » avant d'importer.")
+    st.info("Aucune URL suivie pour l'instant. Ajoutez-en une dans « Regroupements & URLs » avant d'importer.")
     style.render_footer()
     st.stop()
 
@@ -88,6 +88,8 @@ if st.button("Vérifier le fichier"):
             return "Date invalide"
         if pd.isna(r["_parsed_views"]) or r["_parsed_views"] < 0:
             return "Nombre de vues invalide"
+        if r["_parsed_views"] != int(r["_parsed_views"]):
+            return "Nombre de vues invalide (doit être un entier)"
         return None
 
     working["_error"] = working.apply(error_reason, axis=1)
@@ -110,17 +112,24 @@ if "import_preview" in st.session_state:
     preview = st.session_state["import_preview"]
     if not preview.empty and st.button("Confirmer l'import", type="primary"):
         label_by_id = urls.set_index("id")["label"].to_dict()
-        for _, r in preview.iterrows():
-            data_layer.add_snapshot(
-                tracked_url_id=r["id"],
-                recorded_at=r["recorded_at"],
-                view_count=r["view_count"],
-                user=st.session_state["username"],
-                source="import",
-                note=f"Import : {uploaded.name}",
-                url_label=label_by_id.get(r["id"], ""),
+        try:
+            for _, r in preview.iterrows():
+                data_layer.add_snapshot(
+                    tracked_url_id=r["id"],
+                    recorded_at=r["recorded_at"],
+                    view_count=r["view_count"],
+                    user=st.session_state["username"],
+                    source="import",
+                    note=f"Import : {uploaded.name}",
+                    url_label=label_by_id.get(r["id"], ""),
+                )
+        except github_store.ConflictError:
+            st.error(
+                "Une autre modification vient d'être enregistrée en même temps pendant l'import. "
+                "Certaines lignes n'ont peut-être pas été enregistrées — vérifiez le journal des relevés puis relancez l'import si besoin."
             )
-        st.toast(f"{len(preview)} relevé(s) importé(s).")
-        del st.session_state["import_preview"]
+        else:
+            st.toast(f"{len(preview)} relevé(s) importé(s).")
+            del st.session_state["import_preview"]
 
 style.render_footer()

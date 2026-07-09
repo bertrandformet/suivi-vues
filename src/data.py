@@ -27,6 +27,9 @@ def load_snapshots() -> pd.DataFrame:
     if not df.empty:
         df["view_count"] = pd.to_numeric(df["view_count"], errors="coerce")
         df["recorded_at"] = pd.to_datetime(df["recorded_at"], errors="coerce")
+        # entered_at est stocké en UTC (voir src/ids.now_iso) ; on le garde tz-aware
+        # ici pour que l'affichage puisse le reconvertir vers l'heure de Paris.
+        df["entered_at"] = pd.to_datetime(df["entered_at"], errors="coerce", utc=True)
     return df
 
 
@@ -51,7 +54,7 @@ def add_content(title: str, description: str, user: str) -> str:
         "created_by": user,
         "created_at": _now_iso(),
     }
-    store.append_row(CONTENTS_PATH, row, f"Ajout contenu: {title} (par {user})")
+    store.append_row(CONTENTS_PATH, row, f"Ajout regroupement: {title} (par {user})")
     return content_id
 
 

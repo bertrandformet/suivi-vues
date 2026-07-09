@@ -2,7 +2,7 @@
 
 Suivi de l'évolution des vues d'URLs ciblées sur YouTube, PeerTube, Apple Podcasts, Spotify, Podcast Addict, Deezer, Pocket Casts, Castbox, Overcast, Castro, etc.
 
-Les données (contenus, URLs suivies, relevés de vues) sont stockées sous forme de CSV **dans un dépôt GitHub**, lues et écrites via l'API GitHub — chaque ajout ou ajustement crée un commit, ce qui donne un historique d'audit complet sans base de données externe.
+Les données (regroupements, URLs suivies, relevés de vues) sont stockées sous forme de CSV **dans un dépôt GitHub**, lues et écrites via l'API GitHub — chaque ajout ou ajustement crée un commit, ce qui donne un historique d'audit complet sans base de données externe.
 
 Ce dépôt est un **template réutilisable** : il contient des données et des comptes de démonstration (aucune donnée réelle). Pour un usage réel, dupliquez-le en dépôt privé (voir ci-dessous) pour que vos vraies URLs suivies et votre dashboard quotidien ne soient jamais publics.
 
@@ -82,18 +82,18 @@ Pour le dépôt privé de production, Streamlit Cloud propose une app "privée" 
 ## 8. Utilisation
 
 - **Lecteur** : consulte le Tableau de bord (courbes d'évolution, comparaison par plateforme, table d'audit).
-- **Admin** : en plus, peut créer des contenus, ajouter des URLs à suivre (avec leur méthode de collecte), saisir ou ajuster des relevés de vues, importer des fichiers CSV/Excel, et déclencher la collecte automatique à la demande.
+- **Admin** : en plus, peut créer des regroupements, ajouter des URLs à suivre (avec leur méthode de collecte), saisir ou ajuster des relevés de vues, importer des fichiers CSV/Excel, et déclencher la collecte automatique à la demande.
 - Chaque relevé est conservé (pas d'édition destructive) : un ajustement est une nouvelle ligne horodatée, cochée « ajustement », avec une note explicative. Les relevés automatiques portent la source « auto ». Un relevé erroné peut aussi être supprimé directement depuis le journal d'audit du tableau de bord, avec une confirmation avant suppression.
 
 ### Regrouper les URLs d'un même épisode
 
-Un même épisode (podcast ou vidéo) existe souvent sur plusieurs plateformes à la fois (YouTube, Spotify, Apple Podcasts...). Pour suivre sa performance globale plutôt que plateforme par plateforme, créez un **Contenu** qui les regroupe :
+Un même épisode (podcast ou vidéo) existe souvent sur plusieurs plateformes à la fois (YouTube, Spotify, Apple Podcasts...). Pour suivre sa performance globale plutôt que plateforme par plateforme, créez un **Regroupement** qui les rassemble :
 
-1. Dans « Contenus & URLs » → onglet **Créer un contenu**, donnez-lui un nom (ex. « Mon podcast — Épisode 13 »).
-2. Toujours dans « Contenus & URLs » → onglet **Ajouter une URL suivie**, ajoutez chaque URL de cet épisode (une par plateforme) en la rattachant à ce contenu via le menu « Rattacher à un contenu ».
-3. Sur le Tableau de bord, le filtre « Contenu » permet d'isoler cet épisode, et toutes ses URLs partagent la même couleur sur les graphiques (la couleur code le contenu, jamais la plateforme) pour comparer sa portée d'une plateforme à l'autre.
+1. Dans « Regroupements & URLs » → onglet **Créer un regroupement**, donnez-lui un nom (ex. « Mon podcast — Épisode 13 »).
+2. Toujours dans « Regroupements & URLs » → onglet **Ajouter une URL suivie**, ajoutez chaque URL de cet épisode (une par plateforme) en la rattachant à ce regroupement via le menu « Rattacher à un regroupement ».
+3. Sur le Tableau de bord, le filtre « Regroupement » permet d'isoler cet épisode, et toutes ses URLs partagent la même couleur sur les graphiques (la couleur code le regroupement, jamais la plateforme) pour comparer sa portée d'une plateforme à l'autre.
 
-Une URL peut aussi rester indépendante (sans contenu) si elle ne fait partie d'aucun regroupement.
+Une URL peut aussi rester indépendante si elle ne fait partie d'aucun regroupement.
 
 ## Développement local
 

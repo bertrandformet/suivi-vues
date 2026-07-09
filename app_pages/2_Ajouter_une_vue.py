@@ -3,7 +3,7 @@ import datetime as dt
 import pandas as pd
 import streamlit as st
 
-from src import auth, data as data_layer, style
+from src import auth, data as data_layer, github_store, style
 
 st.title("Ajouter un relevé")
 st.caption(
@@ -18,7 +18,7 @@ if not auth.is_editeur():
 
 urls = data_layer.enriched_tracked_urls()
 if urls.empty:
-    st.info("Aucune URL suivie pour l'instant. Ajoutez-en une dans « Contenus & URLs ».")
+    st.info("Aucune URL suivie pour l'instant. Ajoutez-en une dans « Regroupements & URLs ».")
     style.render_footer()
     st.stop()
 
@@ -80,19 +80,23 @@ if submitted:
     )
     is_adjustment = not existing.empty
 
-    data_layer.add_snapshot(
-        tracked_url_id=selected_row["id"],
-        recorded_at=recorded_at,
-        view_count=view_count,
-        user=st.session_state["username"],
-        source="adjustment" if is_adjustment else "manual",
-        note=note,
-        url_label=selected_row["label"],
-    )
-    kind = "Ajustement enregistré" if is_adjustment else "Relevé enregistré"
-    st.toast(f"{kind} — {selected_row['label']}, {style.format_date_fr(recorded_at)}, {style.format_number(view_count)} vues")
-    st.session_state["add_snapshot_views"] = 0
-    st.session_state["add_snapshot_note"] = ""
-    st.rerun()
+    try:
+        data_layer.add_snapshot(
+            tracked_url_id=selected_row["id"],
+            recorded_at=recorded_at,
+            view_count=view_count,
+            user=st.session_state["username"],
+            source="adjustment" if is_adjustment else "manual",
+            note=note,
+            url_label=selected_row["label"],
+        )
+    except github_store.ConflictError:
+        st.error("Une autre modification vient d'être enregistrée en même temps. Réessayez.")
+    else:
+        kind = "Ajustement enregistré" if is_adjustment else "Relevé enregistré"
+        st.toast(f"{kind} — {selected_row['label']}, {style.format_date_fr(recorded_at)}, {style.format_number(view_count)} vues")
+        st.session_state["add_snapshot_views"] = 0
+        st.session_state["add_snapshot_note"] = ""
+        st.rerun()
 
 style.render_footer()

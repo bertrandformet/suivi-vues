@@ -12,9 +12,12 @@ from src import data as data_layer
 from src import palette
 
 
-def build_view_dataset() -> pd.DataFrame:
-    """Relevés dédupliqués (dernière saisie par URL/date) enrichis avec plateforme et contenu."""
-    snapshots = data_layer.latest_per_url_and_date(data_layer.load_snapshots())
+def _enrich_snapshots(snapshots: pd.DataFrame) -> pd.DataFrame:
+    """Jointe des relevés avec le libellé/plateforme/contenu de leur URL suivie.
+
+    Suffixes explicites (plutôt que de laisser pandas déduire `id_x`/`id_y`) :
+    la colonne `id` du relevé devient `id_snapshot`, celle de l'URL `id_url`.
+    """
     if snapshots.empty:
         return snapshots
     urls = data_layer.enriched_tracked_urls()
@@ -23,10 +26,36 @@ def build_view_dataset() -> pd.DataFrame:
         left_on="tracked_url_id",
         right_on="id",
         how="left",
+        suffixes=("_snapshot", "_url"),
     )
     merged["content_label"] = merged["content_title"].fillna(merged["label"])
     merged["color_key"] = merged.apply(palette.color_key, axis=1)
-    return merged.sort_values("recorded_at")
+    return merged
+
+
+def build_view_dataset() -> pd.DataFrame:
+    """Relevés dédupliqués (dernière saisie par URL/date) enrichis avec plateforme et contenu.
+
+    Destiné aux graphiques : une seule valeur par (URL, date), utile pour tracer
+    une courbe cohérente. Pour l'historique complet (y compris les valeurs
+    remplacées par un ajustement), voir `all_snapshots_dataset`.
+    """
+    snapshots = data_layer.latest_per_url_and_date(data_layer.load_snapshots())
+    if snapshots.empty:
+        return snapshots
+    return _enrich_snapshots(snapshots).sort_values("recorded_at")
+
+
+def all_snapshots_dataset() -> pd.DataFrame:
+    """Tous les relevés enrichis, sans déduplication — pour le journal d'audit.
+
+    Contrairement à `build_view_dataset`, conserve les entrées remplacées par un
+    ajustement ultérieur, pour que le journal reflète réellement qui a saisi quoi.
+    """
+    snapshots = data_layer.load_snapshots()
+    if snapshots.empty:
+        return snapshots
+    return _enrich_snapshots(snapshots).sort_values("recorded_at")
 
 
 def evolution_chart(df: pd.DataFrame, group_by: str = "label"):

@@ -16,7 +16,7 @@ lecture_pages = [
 ]
 edition_pages = [
     st.Page("app_pages/2_Ajouter_une_vue.py", title="Ajouter un relevé"),
-    st.Page("app_pages/3_Gerer_les_URLs.py", title="Contenus & URLs"),
+    st.Page("app_pages/3_Gerer_les_URLs.py", title="Regroupements & URLs"),
     st.Page("app_pages/4_Importer_un_fichier.py", title="Importer des relevés"),
     st.Page("app_pages/5_Collecte_automatique.py", title="Collecte automatique"),
 ]
