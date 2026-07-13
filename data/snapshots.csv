@@ -34,3 +34,4 @@ snap-env-dz-3,url-env-deezer,2026-06-15,68,manual,Valeur d'exemple,admin,2026-06
 snap-env-pa-1,url-env-podcastaddict,2026-04-15,22,manual,Valeur d'exemple,admin,2026-04-15T09:00:00+00:00
 snap-env-pa-2,url-env-podcastaddict,2026-05-15,58,manual,Valeur d'exemple,admin,2026-05-15T09:00:00+00:00
 snap-env-pa-3,url-env-podcastaddict,2026-06-15,95,manual,Valeur d'exemple,admin,2026-06-15T09:00:00+00:00
+bc56d9505a19,demo-url-peertube,2026-07-13,64,auto,Collecte automatique (peertube),github-actions,2026-07-13T08:45:35+00:00
