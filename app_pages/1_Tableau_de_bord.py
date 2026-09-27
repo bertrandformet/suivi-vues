@@ -82,6 +82,39 @@ if calc_platforms:
         if calc_fig:
             st.plotly_chart(calc_fig, use_container_width=True, config={"displayModeBar": True, "displaylogo": False})
 
+st.subheader("Comparateur de périodes")
+st.caption(
+    "Valeur au début et à la fin d'une période, avec évolution en % — "
+    "plateformes et cumuls thématiques inclus."
+)
+all_totals = charts.platform_and_group_totals_dataset(df)
+if all_totals.empty:
+    st.info("Pas assez de données pour comparer des périodes.")
+else:
+    min_date = df["recorded_at"].min().date()
+    max_date = df["recorded_at"].max().date()
+    pc1, pc2 = st.columns(2)
+    with pc1:
+        period_start = st.date_input("Début de période", value=min_date, min_value=min_date, max_value=max_date)
+    with pc2:
+        period_end = st.date_input("Fin de période", value=max_date, min_value=min_date, max_value=max_date)
+
+    comparison = charts.period_comparison(all_totals, period_start, period_end)
+    if comparison.empty:
+        st.info("Aucune donnée sur cette période.")
+    else:
+        st.dataframe(
+            comparison,
+            use_container_width=True,
+            hide_index=True,
+            column_config={
+                "Début": st.column_config.NumberColumn(format="%d"),
+                "Fin": st.column_config.NumberColumn(format="%d"),
+                "Évolution": st.column_config.NumberColumn(format="%+d"),
+                "Évolution (%)": st.column_config.NumberColumn(format="%+.0f%%"),
+            },
+        )
+
 
 @st.dialog("Confirmer la suppression")
 def confirm_delete_snapshot(snapshot_id, label, is_current):

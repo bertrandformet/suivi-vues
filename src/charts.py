@@ -218,6 +218,36 @@ def platform_and_group_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:
     return pd.concat([platform_rows, group_rows], ignore_index=True)
 
 
+def period_comparison(totals: pd.DataFrame, start_date, end_date) -> pd.DataFrame:
+    """Pour chaque plateforme/groupe thématique (sortie de
+    `platform_and_group_totals_dataset`), la valeur au début et à la fin d'une
+    période choisie (dernière valeur connue à ou avant chaque date — même
+    logique de report que les graphiques), plus l'évolution absolue et en %."""
+    if totals.empty:
+        return totals
+    start_ts = pd.Timestamp(start_date)
+    end_ts = pd.Timestamp(end_date)
+
+    rows = []
+    for name, group in totals.groupby("platform_name"):
+        group = group.sort_values("recorded_at")
+        unit = group["platform_unit"].iloc[0]
+        before_start = group[group["recorded_at"] <= start_ts]
+        before_end = group[group["recorded_at"] <= end_ts]
+        val_start = before_start["total"].iloc[-1] if not before_start.empty else None
+        val_end = before_end["total"].iloc[-1] if not before_end.empty else None
+        if val_start is None and val_end is None:
+            continue
+        delta = (val_end - val_start) if (val_start is not None and val_end is not None) else None
+        pct = (delta / val_start * 100) if (delta is not None and val_start) else None
+        rows.append({
+            "Plateforme": name, "Unité": unit,
+            "Début": val_start, "Fin": val_end,
+            "Évolution": delta, "Évolution (%)": pct,
+        })
+    return pd.DataFrame(rows).sort_values("Plateforme")
+
+
 def combined_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:
     """Somme combinée de tous les éléments suivis présents dans `df` (toutes
     plateformes confondues), pour un total "à la carte" choisi par l'utilisateur
