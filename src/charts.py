@@ -66,8 +66,9 @@ def all_snapshots_dataset(dossier_id: str | None = None) -> pd.DataFrame:
 
 
 def evolution_chart(df: pd.DataFrame, group_by: str = "label"):
-    """Courbe d'évolution des vues, une ligne par `group_by` (label ou platform_name),
-    colorée par contenu, avec étiquettes directes en bout de ligne (pas de légende)."""
+    """Courbe d'évolution, une ligne par `group_by` (label ou platform_name), colorée
+    par contenu, avec un marqueur à chaque relevé, une légende et une info-bulle
+    (contenu, date, valeur, unité) au survol."""
     if df.empty:
         return None
 
@@ -80,33 +81,26 @@ def evolution_chart(df: pd.DataFrame, group_by: str = "label"):
         y="view_count",
         color=group_by,
         color_discrete_map=group_color,
-        markers=False,
+        markers=True,
+        custom_data=["content_label", "platform_unit"],
     )
-    fig.update_traces(mode="lines")
+    fig.update_traces(
+        mode="lines+markers",
+        marker=dict(size=6),
+        hovertemplate=(
+            "<b>%{customdata[0]}</b><br>%{x|%d %b %Y}<br>"
+            "%{y:,.0f} %{customdata[1]}<extra>%{fullData.name}</extra>"
+        ),
+    )
     fig.update_layout(
-        showlegend=False,
+        showlegend=True,
+        legend_title_text="",
         xaxis_title="",
         yaxis_title="",
-        hovermode="x unified",
-        margin=dict(r=170),
+        hovermode="closest",
     )
     fig.update_xaxes(showgrid=False)
     fig.update_yaxes(showgrid=True, gridcolor="#EDEEF0", zeroline=False)
-
-    for trace_name, group in df.groupby(group_by):
-        last = group.sort_values("recorded_at").iloc[-1]
-        color = group_color.get(trace_name, "#33618F")
-        fig.add_scatter(
-            x=[last["recorded_at"]], y=[last["view_count"]],
-            mode="markers", marker=dict(color=color, size=7),
-            showlegend=False, hoverinfo="skip",
-        )
-        fig.add_annotation(
-            x=last["recorded_at"], y=last["view_count"],
-            text=f"<b>{trace_name}</b><br>{last['view_count']:,.0f}".replace(",", " "),
-            showarrow=False, xanchor="left", xshift=10, align="left",
-            font=dict(color=color, size=12),
-        )
     return fig
 
 
