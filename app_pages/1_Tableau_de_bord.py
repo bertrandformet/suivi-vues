@@ -57,6 +57,29 @@ bar_fig = charts.latest_by_platform_chart(filtered)
 if bar_fig:
     st.plotly_chart(bar_fig, use_container_width=True, config={"displayModeBar": True, "displaylogo": False})
 
+st.subheader("Calculateur")
+st.caption("Additionne les totaux de plusieurs plateformes au choix (ex : YouTube + PeerTube + Canotech).")
+available_platforms = sorted(df["platform_name"].dropna().unique().tolist())
+calc_platforms = st.multiselect("Plateformes à additionner", available_platforms)
+if calc_platforms:
+    calc_df = df[df["platform_name"].isin(calc_platforms)]
+    calc_units = calc_df["platform_unit"].dropna().unique().tolist()
+    if len(calc_units) > 1:
+        st.warning(
+            f"Unités différentes mélangées ({', '.join(calc_units)}) : "
+            "le total combiné n'a pas de sens direct, à interpréter avec prudence."
+        )
+    calc_totals = charts.combined_totals_dataset(calc_df)
+    if calc_totals.empty:
+        st.info("Aucune donnée pour cette combinaison.")
+    else:
+        latest_total = calc_totals.sort_values("recorded_at").iloc[-1]["total"]
+        unit_label = calc_units[0] if len(calc_units) == 1 else ""
+        st.metric(f"Total combiné — {' + '.join(calc_platforms)}", f"{style.format_number(latest_total)} {unit_label}")
+        calc_fig = charts.combined_total_chart(calc_totals)
+        if calc_fig:
+            st.plotly_chart(calc_fig, use_container_width=True, config={"displayModeBar": True, "displaylogo": False})
+
 
 @st.dialog("Confirmer la suppression")
 def confirm_delete_snapshot(snapshot_id, label, is_current):

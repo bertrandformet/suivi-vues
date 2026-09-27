@@ -123,15 +123,21 @@ def evolution_chart(df: pd.DataFrame, group_by: str = "label"):
     return fig
 
 
+def _pivot_ffill(df: pd.DataFrame) -> pd.DataFrame:
+    """Pivote les relevés (une colonne par élément suivi) et reporte la dernière
+    valeur connue à chaque date où au moins un élément a un nouveau relevé —
+    sans ça, une somme sur plusieurs éléments baisserait artificiellement dès
+    qu'un seul d'entre eux n'a pas de relevé ce jour-là."""
+    pivot = df.pivot_table(index="recorded_at", columns="tracked_url_id", values="view_count", aggfunc="last")
+    return pivot.sort_index().ffill()
+
+
 def platform_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:
     """Somme, par plateforme et par date, de la dernière valeur connue de chaque
-    élément suivi (report de la dernière valeur pour les éléments non mis à jour
-    à cette date précise — sinon la somme baisserait artificiellement)."""
+    élément suivi de cette plateforme."""
     if df.empty:
         return df
-    pivot = df.pivot_table(index="recorded_at", columns="tracked_url_id", values="view_count", aggfunc="last")
-    pivot = pivot.sort_index().ffill()
-
+    pivot = _pivot_ffill(df)
     url_info = df.drop_duplicates("tracked_url_id").set_index("tracked_url_id")[["platform_name", "platform_unit"]]
 
     rows = []
@@ -144,6 +150,37 @@ def platform_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:
                 "platform_unit": unit, "total": total,
             })
     return pd.DataFrame(rows)
+
+
+def combined_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:
+    """Somme combinée de tous les éléments suivis présents dans `df` (toutes
+    plateformes confondues), pour un total "à la carte" choisi par l'utilisateur
+    plutôt qu'un découpage fixe par plateforme."""
+    if df.empty:
+        return df
+    pivot = _pivot_ffill(df)
+    totals = pivot.sum(axis=1, min_count=1).dropna()
+    return pd.DataFrame({"recorded_at": totals.index, "total": totals.values})
+
+
+def combined_total_chart(df: pd.DataFrame):
+    """Courbe d'évolution d'un total combiné (calculateur multi-plateformes)."""
+    if df.empty:
+        return None
+    df = df.copy()
+    date_order = _date_categories(df)
+
+    fig = px.line(df, x="recorded_at_fr", y="total", category_orders={"recorded_at_fr": date_order}, markers=True)
+    fig.update_traces(
+        mode="lines+markers",
+        marker=dict(size=6, color="#33618F"),
+        line=dict(color="#33618F"),
+        hovertemplate="%{x}<br>%{y:,.0f}<extra></extra>",
+    )
+    fig.update_layout(xaxis_title="", yaxis_title="", hovermode="closest")
+    fig.update_xaxes(showgrid=False, tickangle=-45)
+    fig.update_yaxes(showgrid=True, gridcolor="#EDEEF0", zeroline=False, rangemode="tozero")
+    return fig
 
 
 def platform_totals_chart(df: pd.DataFrame):
