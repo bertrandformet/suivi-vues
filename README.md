@@ -2,7 +2,7 @@
 
 Tableau de bord de suivi de métriques dans le temps (vues, écoutes, ou tout autre compteur — participants, téléchargements, sessions...) pour des URLs ciblées sur YouTube, PeerTube, Apple Podcasts, Spotify, Podcast Addict, Deezer, Pocket Casts, Castbox, Overcast, Castro, ou toute autre plateforme que vous ajoutez vous-même. Chaque plateforme déclare sa propre unité (vues, écoutes, participants...) : l'app n'est pas limitée au comptage de vues vidéo/audio.
 
-Les données (éléments suivis, URLs, relevés) sont stockées sous forme de CSV **dans un dépôt GitHub**, lues et écrites via l'API GitHub — chaque ajout ou ajustement crée un commit, ce qui donne un historique d'audit complet sans base de données externe.
+Les données (éléments suivis, URLs, relevés) sont stockées sous forme de CSV **dans un dépôt GitHub privé**, lues et écrites via l'API GitHub — chaque ajout ou ajustement crée un commit, ce qui donne un historique d'audit complet sans base de données externe.
 
 **Collecte** :
 - ✅ **YouTube** et **PeerTube** : collecte automatique (API publique), déclenchable manuellement ou chaque semaine via GitHub Actions.
