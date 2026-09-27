@@ -150,9 +150,12 @@ def platform_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:
         for recorded_at, total in totals.dropna().items():
             rows.append({
                 "recorded_at": recorded_at, "platform_name": platform_name,
-                "platform_unit": unit, "total": total,
+                "platform_unit": unit, "total": total, "detail": "",
             })
     return pd.DataFrame(rows)
+
+
+GROUP_LABEL_PREFIX = "Cumul — "
 
 
 def group_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:
@@ -161,25 +164,29 @@ def group_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:
     suivi. Les plateformes sans groupe assigné n'apparaissent pas ici.
 
     Mêmes colonnes que `platform_totals_dataset` (`platform_name` porte ici le
-    nom du groupe) pour pouvoir concaténer les deux et les tracer ensemble sur
-    le même graphique, à côté des plateformes individuelles."""
+    nom du groupe, préfixé pour se distinguer dans la légende) pour pouvoir
+    concaténer les deux et les tracer ensemble sur le même graphique, à côté
+    des plateformes individuelles. `detail` liste les plateformes cumulées."""
     if df.empty:
         return df
     df = df[df["platform_group"].fillna("") != ""]
     if df.empty:
         return df
     pivot = _pivot_ffill(df)
-    url_info = df.drop_duplicates("tracked_url_id").set_index("tracked_url_id")[["platform_group", "platform_unit"]]
+    url_info = df.drop_duplicates("tracked_url_id").set_index("tracked_url_id")[
+        ["platform_group", "platform_unit", "platform_name"]
+    ]
 
     rows = []
     for group_name, group in url_info.groupby("platform_group"):
         units = group["platform_unit"].unique().tolist()
         unit = units[0] if len(units) == 1 else "/".join(units)
+        detail = " + ".join(sorted(group["platform_name"].unique())) + "<br>"
         totals = pivot[group.index].sum(axis=1, min_count=1)
         for recorded_at, total in totals.dropna().items():
             rows.append({
-                "recorded_at": recorded_at, "platform_name": group_name,
-                "platform_unit": unit, "total": total,
+                "recorded_at": recorded_at, "platform_name": GROUP_LABEL_PREFIX + group_name,
+                "platform_unit": unit, "total": total, "detail": detail,
             })
     return pd.DataFrame(rows)
 
@@ -238,12 +245,15 @@ def platform_totals_chart(df: pd.DataFrame):
     fig = px.line(
         df, x="recorded_at_fr", y="total", color="platform_name",
         markers=True, category_orders={"recorded_at_fr": date_order},
-        custom_data=["platform_unit"],
+        custom_data=["platform_unit", "detail"],
     )
     fig.update_traces(
         mode="lines+markers",
         marker=dict(size=6),
-        hovertemplate="<b>%{fullData.name}</b><br>%{x}<br>%{y:,.0f} %{customdata[0]}<extra></extra>",
+        hovertemplate=(
+            "<b>%{fullData.name}</b><br>%{customdata[1]}"
+            "%{x}<br>%{y:,.0f} %{customdata[0]}<extra></extra>"
+        ),
     )
     fig.update_layout(showlegend=True, legend_title_text="", xaxis_title="", yaxis_title="", hovermode="closest")
     fig.update_xaxes(showgrid=False, tickangle=-45)
