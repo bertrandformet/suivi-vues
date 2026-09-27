@@ -20,7 +20,7 @@ _YOUTUBE_PATTERNS = [
     re.compile(r"(?:youtube\.com/watch\?v=|youtube\.com/shorts/|youtube\.com/embed/|youtu\.be/)([A-Za-z0-9_-]{6,})"),
 ]
 
-_PEERTUBE_PATTERN = re.compile(r"/(?:w|videos/watch)/([0-9a-fA-F-]{20,})")
+_PEERTUBE_PATTERN = re.compile(r"/(?:w|videos/watch)/([0-9a-zA-Z-]{20,})")
 
 
 class CollectorError(Exception):
