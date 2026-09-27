@@ -115,7 +115,8 @@ current_ids = set(df["id_snapshot"])
 journal_df = journal_df.copy()
 journal_df["is_current"] = journal_df["id_snapshot"].isin(current_ids)
 
-with st.expander("Journal des relevés"):
+st.subheader("Journal des relevés")
+with st.expander("Afficher le détail"):
     st.caption(
         "Historique complet, y compris les relevés remplacés par un ajustement ultérieur. "
         "« Remplacé » signifie que ce relevé n'apparaît plus sur les graphiques ci-dessus, "
