@@ -182,7 +182,10 @@ def latest_by_platform_chart(df: pd.DataFrame):
         color="color_key",
         color_discrete_map=color_map,
         orientation="h",
-        hover_data={"content_label": True, "color_key": False, "view_count": True},
+        custom_data=["content_label", "view_count", "platform_unit"],
+    )
+    fig.update_traces(
+        hovertemplate="<b>%{customdata[0]}</b><br>%{customdata[1]:,.0f} %{customdata[2]}<extra></extra>",
     )
     fig.update_layout(showlegend=False, xaxis_title="", yaxis_title="")
     fig.update_xaxes(rangemode="tozero")
