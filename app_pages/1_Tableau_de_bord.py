@@ -60,7 +60,9 @@ if bar_fig:
 st.subheader("Données cumulées")
 st.caption("Additionne les totaux de plusieurs plateformes au choix (ex : YouTube + PeerTube + Canotech).")
 available_platforms = sorted(df["platform_name"].dropna().unique().tolist())
-calc_platforms = st.multiselect("Plateformes à additionner", available_platforms)
+calc_platforms = st.multiselect(
+    "Plateformes à additionner", available_platforms, placeholder="Choisir des plateformes",
+)
 if calc_platforms:
     calc_df = df[df["platform_name"].isin(calc_platforms)]
     calc_units = calc_df["platform_unit"].dropna().unique().tolist()
