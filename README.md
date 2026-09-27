@@ -5,8 +5,10 @@ Tableau de bord de suivi de métriques dans le temps (vues, écoutes, ou tout au
 Les données (éléments suivis, URLs, relevés) sont stockées sous forme de CSV **dans un dépôt GitHub privé**, lues et écrites via l'API GitHub — chaque ajout ou ajustement crée un commit, ce qui donne un historique d'audit complet sans base de données externe.
 
 **Collecte** :
-- ✅ **YouTube** et **PeerTube** : collecte automatique (API publique), déclenchable manuellement ou chaque semaine via GitHub Actions.
+- ✅ **YouTube** et **PeerTube** : collecte automatique (API publique), déclenchable manuellement ou chaque semaine via GitHub Actions. PeerTube ne nécessite aucune clé (endpoint public ouvert) ; YouTube nécessite une clé API Google Cloud (voir étape 4).
 - **Toute autre plateforme sans API publique** (podcasts, formations, téléchargements...) : ces relevés restent en saisie manuelle ou en import de fichier — la plupart des plateformes n'exposent pas d'API publique de comptage pour du contenu dont on n'est pas propriétaire. L'architecture (`src/collectors.py`) est prévue pour qu'on puisse ajouter facilement une future source automatique, quelle qu'elle soit.
+
+**Pourquoi Streamlit** : ce projet privilégie zéro serveur à gérer et zéro base de données externe. Streamlit Community Cloud héberge gratuitement une app Python à partir d'un simple dépôt GitHub, avec authentification et widgets (formulaires, tableaux, graphiques Plotly) intégrés — sans backend à écrire ni infrastructure à maintenir. Combiné à GitHub comme base de données (CSV versionnés, voir ci-dessous), tout l'outil tient dans un seul dépôt, gratuit à héberger et à faire évoluer.
 
 ## 0. Code (public) et données (privées) : deux dépôts séparés
 
