@@ -12,6 +12,19 @@ import plotly.express as px
 
 from src import data as data_layer
 from src import palette
+from src import style
+
+
+def _french_date_ticks(fig, dates):
+    """Force les ticks de l'axe X aux seules dates de relevé réelles, formatées en
+    français — Plotly.js n'a pas de locale FR embarquée, on formate donc nous-mêmes
+    plutôt que de laisser afficher des mois en anglais."""
+    ticks = sorted(pd.Timestamp(d) for d in pd.Series(dates).dropna().unique())
+    fig.update_xaxes(
+        tickvals=ticks,
+        ticktext=[style.format_date_fr(d) for d in ticks],
+        tickangle=-45,
+    )
 
 
 def _enrich_snapshots(snapshots: pd.DataFrame, dossier_id: str | None = None) -> pd.DataFrame:
@@ -72,6 +85,9 @@ def evolution_chart(df: pd.DataFrame, group_by: str = "label"):
     if df.empty:
         return None
 
+    df = df.copy()
+    df["recorded_at_fr"] = df["recorded_at"].apply(style.format_date_fr)
+
     color_map = palette.build_color_map(df.sort_values("recorded_at")["color_key"])
     group_color = df.groupby(group_by)["color_key"].first().map(color_map).to_dict()
 
@@ -82,13 +98,13 @@ def evolution_chart(df: pd.DataFrame, group_by: str = "label"):
         color=group_by,
         color_discrete_map=group_color,
         markers=True,
-        custom_data=["content_label", "platform_unit"],
+        custom_data=["content_label", "platform_unit", "recorded_at_fr"],
     )
     fig.update_traces(
         mode="lines+markers",
         marker=dict(size=6),
         hovertemplate=(
-            "<b>%{customdata[0]}</b><br>%{x|%d %b %Y}<br>"
+            "<b>%{customdata[0]}</b><br>%{customdata[2]}<br>"
             "%{y:,.0f} %{customdata[1]}<extra>%{fullData.name}</extra>"
         ),
     )
@@ -100,7 +116,8 @@ def evolution_chart(df: pd.DataFrame, group_by: str = "label"):
         hovermode="closest",
     )
     fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(showgrid=True, gridcolor="#EDEEF0", zeroline=False)
+    fig.update_yaxes(showgrid=True, gridcolor="#EDEEF0", zeroline=False, rangemode="tozero")
+    _french_date_ticks(fig, df["recorded_at"])
     return fig
 
 
@@ -132,32 +149,39 @@ def platform_totals_chart(df: pd.DataFrame):
     if df.empty:
         return None
 
+    df = df.copy()
+    df["recorded_at_fr"] = df["recorded_at"].apply(style.format_date_fr)
+
     fig = px.line(
         df, x="recorded_at", y="total", color="platform_name",
-        markers=True, custom_data=["platform_unit"],
+        markers=True, custom_data=["platform_unit", "recorded_at_fr"],
     )
     fig.update_traces(
         mode="lines+markers",
         marker=dict(size=6),
-        hovertemplate="<b>%{fullData.name}</b><br>%{x|%d %b %Y}<br>%{y:,.0f} %{customdata[0]}<extra></extra>",
+        hovertemplate="<b>%{fullData.name}</b><br>%{customdata[1]}<br>%{y:,.0f} %{customdata[0]}<extra></extra>",
     )
     fig.update_layout(showlegend=True, legend_title_text="", xaxis_title="", yaxis_title="", hovermode="closest")
     fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(showgrid=True, gridcolor="#EDEEF0", zeroline=False)
+    fig.update_yaxes(showgrid=True, gridcolor="#EDEEF0", zeroline=False, rangemode="tozero")
+    _french_date_ticks(fig, df["recorded_at"])
     return fig
 
 
 def latest_by_platform_chart(df: pd.DataFrame):
-    """Barres horizontales : dernier relevé connu par plateforme, colorées par contenu."""
+    """Barres horizontales : dernier relevé connu par plateforme, colorées par contenu,
+    avec le total de la plateforme annoté en bout de barre."""
     if df.empty:
         return None
     latest = df.sort_values("recorded_at").drop_duplicates(subset=["tracked_url_id"], keep="last")
     color_map = palette.build_color_map(latest["color_key"])
+    order = latest.groupby("platform_name")["view_count"].sum().sort_values().index.tolist()
 
     fig = px.bar(
-        latest.sort_values("view_count"),
+        latest,
         x="view_count",
         y="platform_name",
+        category_orders={"platform_name": order},
         color="color_key",
         color_discrete_map=color_map,
         orientation="h",
@@ -166,4 +190,14 @@ def latest_by_platform_chart(df: pd.DataFrame):
     )
     fig.update_traces(texttemplate="%{text:,.0f}")
     fig.update_layout(showlegend=False, xaxis_title="", yaxis_title="")
+    fig.update_xaxes(rangemode="tozero")
+
+    totals = latest.groupby("platform_name").agg(total=("view_count", "sum"), unit=("platform_unit", "first"))
+    for platform_name, row in totals.iterrows():
+        fig.add_annotation(
+            x=row["total"], y=platform_name,
+            text=f"<b>{style.format_number(row['total'])} {row['unit']}</b>",
+            showarrow=False, xanchor="left", xshift=8, align="left",
+            font=dict(size=12, color="#2B2E33"),
+        )
     return fig

@@ -30,7 +30,11 @@ st.caption(" · ".join(context_bits))
 col1, col2, col3 = st.columns(3)
 with col1:
     content_options = ["Tous"] + sorted(df["content_title"].dropna().unique().tolist())
-    content_filter = st.selectbox("Regroupement", content_options)
+    content_filter = st.selectbox(
+        "Regroupement", content_options,
+        help="Un regroupement rassemble les URLs suivies d'un même contenu, "
+        "par exemple un épisode décliné sur YouTube et Spotify à la fois.",
+    )
 with col2:
     platforms = ["Toutes"] + sorted(df["platform_name"].dropna().unique().tolist())
     platform_filter = st.selectbox("Plateforme", platforms)
@@ -52,15 +56,15 @@ if group_by == "platform_name":
 else:
     fig = charts.evolution_chart(filtered, group_by=group_by)
 if fig:
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 else:
     st.info("Aucune donnée pour ces filtres.")
 
 st.subheader("Dernier relevé par plateforme")
-st.caption("La couleur indique le regroupement, pas la plateforme.")
+st.caption("Chaque barre est divisée par regroupement : survolez un segment pour voir lequel.")
 bar_fig = charts.latest_by_platform_chart(filtered)
 if bar_fig:
-    st.plotly_chart(bar_fig, use_container_width=True)
+    st.plotly_chart(bar_fig, use_container_width=True, config={"displayModeBar": False})
 
 
 @st.dialog("Confirmer la suppression")
@@ -99,7 +103,7 @@ current_ids = set(df["id_snapshot"])
 journal_df = journal_df.copy()
 journal_df["is_current"] = journal_df["id_snapshot"].isin(current_ids)
 
-with st.expander("Journal des relevés (audit)"):
+with st.expander("Journal des relevés"):
     st.caption(
         "Historique complet, y compris les relevés remplacés par un ajustement ultérieur. "
         "« Remplacé » signifie que ce relevé n'apparaît plus sur les graphiques ci-dessus, "
