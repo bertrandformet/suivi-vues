@@ -104,6 +104,49 @@ def evolution_chart(df: pd.DataFrame, group_by: str = "label"):
     return fig
 
 
+def platform_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:
+    """Somme, par plateforme et par date, de la dernière valeur connue de chaque
+    élément suivi (report de la dernière valeur pour les éléments non mis à jour
+    à cette date précise — sinon la somme baisserait artificiellement)."""
+    if df.empty:
+        return df
+    pivot = df.pivot_table(index="recorded_at", columns="tracked_url_id", values="view_count", aggfunc="last")
+    pivot = pivot.sort_index().ffill()
+
+    url_info = df.drop_duplicates("tracked_url_id").set_index("tracked_url_id")[["platform_name", "platform_unit"]]
+
+    rows = []
+    for platform_name, group in url_info.groupby("platform_name"):
+        unit = group["platform_unit"].iloc[0]
+        totals = pivot[group.index].sum(axis=1, min_count=1)
+        for recorded_at, total in totals.dropna().items():
+            rows.append({
+                "recorded_at": recorded_at, "platform_name": platform_name,
+                "platform_unit": unit, "total": total,
+            })
+    return pd.DataFrame(rows)
+
+
+def platform_totals_chart(df: pd.DataFrame):
+    """Courbe d'évolution des totaux par plateforme (somme de tous les éléments suivis)."""
+    if df.empty:
+        return None
+
+    fig = px.line(
+        df, x="recorded_at", y="total", color="platform_name",
+        markers=True, custom_data=["platform_unit"],
+    )
+    fig.update_traces(
+        mode="lines+markers",
+        marker=dict(size=6),
+        hovertemplate="<b>%{fullData.name}</b><br>%{x|%d %b %Y}<br>%{y:,.0f} %{customdata[0]}<extra></extra>",
+    )
+    fig.update_layout(showlegend=True, legend_title_text="", xaxis_title="", yaxis_title="", hovermode="closest")
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(showgrid=True, gridcolor="#EDEEF0", zeroline=False)
+    return fig
+
+
 def latest_by_platform_chart(df: pd.DataFrame):
     """Barres horizontales : dernier relevé connu par plateforme, colorées par contenu."""
     if df.empty:

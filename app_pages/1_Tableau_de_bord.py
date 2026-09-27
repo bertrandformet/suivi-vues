@@ -35,7 +35,10 @@ with col2:
     platforms = ["Toutes"] + sorted(df["platform_name"].dropna().unique().tolist())
     platform_filter = st.selectbox("Plateforme", platforms)
 with col3:
-    group_by = st.selectbox("Une courbe par", ["label", "platform_name"], format_func=lambda x: "URL suivie" if x == "label" else "Plateforme")
+    group_by = st.selectbox(
+        "Une courbe par", ["platform_name", "label"],
+        format_func=lambda x: "URL suivie (détail)" if x == "label" else "Plateforme (cumulé)",
+    )
 
 filtered = df.copy()
 if content_filter != "Tous":
@@ -43,7 +46,11 @@ if content_filter != "Tous":
 if platform_filter != "Toutes":
     filtered = filtered[filtered["platform_name"] == platform_filter]
 
-fig = charts.evolution_chart(filtered, group_by=group_by)
+if group_by == "platform_name":
+    totals = charts.platform_totals_dataset(filtered)
+    fig = charts.platform_totals_chart(totals)
+else:
+    fig = charts.evolution_chart(filtered, group_by=group_by)
 if fig:
     st.plotly_chart(fig, use_container_width=True)
 else:
