@@ -49,10 +49,13 @@ def enriched_tracked_urls(dossier_id: str | None = None) -> pd.DataFrame:
         urls = urls[urls["dossier_id"] == dossier_id]
         if urls.empty:
             return urls
-    platforms = load_platforms().rename(columns={"id": "platform_id", "name": "platform_name"})
+    platforms = load_platforms().rename(
+        columns={"id": "platform_id", "name": "platform_name", "unit": "platform_unit"}
+    )
     contents = load_contents().rename(columns={"id": "content_id", "title": "content_title"})
-    merged = urls.merge(platforms[["platform_id", "platform_name"]], on="platform_id", how="left")
+    merged = urls.merge(platforms[["platform_id", "platform_name", "platform_unit"]], on="platform_id", how="left")
     merged = merged.merge(contents[["content_id", "content_title"]], on="content_id", how="left")
+    merged["platform_unit"] = merged["platform_unit"].fillna("vues")
     return merged
 
 
@@ -116,6 +119,7 @@ def add_snapshot(
     source: str = "manual",
     note: str = "",
     url_label: str = "",
+    unit: str = "vues",
 ) -> str:
     snapshot_id = _new_id()
     recorded_at_str = recorded_at.isoformat() if hasattr(recorded_at, "isoformat") else str(recorded_at)
@@ -130,7 +134,7 @@ def add_snapshot(
         "entered_at": _now_iso(),
     }
     label = url_label or tracked_url_id
-    message = f"Vue: {label} — {recorded_at_str} — {view_count} vues ({source}, par {user})"
+    message = f"Relevé: {label} — {recorded_at_str} — {view_count} {unit} ({source}, par {user})"
     store.append_row(SNAPSHOTS_PATH, row, message)
     return snapshot_id
 

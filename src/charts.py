@@ -25,7 +25,7 @@ def _enrich_snapshots(snapshots: pd.DataFrame, dossier_id: str | None = None) ->
         return snapshots
     urls = data_layer.enriched_tracked_urls()
     merged = snapshots.merge(
-        urls[["id", "label", "url", "platform_name", "content_title", "content_id", "dossier_id"]],
+        urls[["id", "label", "url", "platform_name", "platform_unit", "content_title", "content_id", "dossier_id"]],
         left_on="tracked_url_id",
         right_on="id",
         how="left",

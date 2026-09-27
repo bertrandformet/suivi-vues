@@ -44,6 +44,7 @@ choice = st.selectbox("URL suivie", urls["choice"])
 selected_row = urls[urls["choice"] == choice].iloc[0]
 last = last_snapshot_for(selected_row["id"])
 default_views = int(last["view_count"]) if last is not None else 0
+unit = selected_row.get("platform_unit", "vues")
 
 if st.session_state.get("_last_url_choice") != choice:
     st.session_state["add_snapshot_views"] = default_views
@@ -52,7 +53,7 @@ if st.session_state.get("_last_url_choice") != choice:
 
 if last is not None:
     st.caption(
-        f"Dernier relevé : **{style.format_number(last['view_count'])}** le "
+        f"Dernier relevé : **{style.format_number(last['view_count'])}** {unit} le "
         f"{style.format_date_fr(last['recorded_at'])} ({style.SOURCE_LABELS.get(last['source'], last['source'])})"
     )
 
@@ -61,7 +62,7 @@ with st.form("add_snapshot_form", clear_on_submit=False):
     with c1:
         recorded_at = st.date_input("Date du relevé", value=dt.date.today())
     with c2:
-        view_count = st.number_input("Nombre de vues", min_value=0, step=1, key="add_snapshot_views")
+        view_count = st.number_input(f"Nombre de {unit}", min_value=0, step=1, key="add_snapshot_views")
     note = st.text_input("Note (optionnel)", placeholder="Ex : correction après export erroné", key="add_snapshot_note")
     submitted = st.form_submit_button("Enregistrer le relevé", type="primary")
 
@@ -91,12 +92,13 @@ if submitted:
             source="adjustment" if is_adjustment else "manual",
             note=note,
             url_label=selected_row["label"],
+            unit=unit,
         )
     except github_store.ConflictError:
         st.error("Une autre modification vient d'être enregistrée en même temps. Réessayez.")
     else:
         kind = "Ajustement enregistré" if is_adjustment else "Relevé enregistré"
-        st.toast(f"{kind} — {selected_row['label']}, {style.format_date_fr(recorded_at)}, {style.format_number(view_count)} vues")
+        st.toast(f"{kind} — {selected_row['label']}, {style.format_date_fr(recorded_at)}, {style.format_number(view_count)} {unit}")
         st.session_state["add_snapshot_views"] = 0
         st.session_state["add_snapshot_note"] = ""
         st.rerun()

@@ -17,10 +17,10 @@ with st.expander("Format attendu"):
         "|---|---|\n"
         "| `date` | AAAA-MM-JJ — ex : 2026-01-19 |\n"
         "| `url` | doit correspondre à une URL suivie existante (ou son libellé) |\n"
-        "| `vues` | nombre entier ≥ 0 |\n"
+        "| `valeur` | nombre entier ≥ 0 (vues, écoutes, participants... selon la plateforme) |\n"
         "| `note` | optionnelle |\n"
     )
-    template = "date,url,vues,note\n2026-01-19,https://exemple.org/episode-12,510,\n"
+    template = "date,url,valeur,note\n2026-01-19,https://exemple.org/episode-12,510,\n"
     st.download_button("Télécharger le modèle CSV", template, file_name="modele_relevés.csv", mime="text/csv")
 
 dossier_id = st.session_state["current_dossier_id"]
@@ -51,7 +51,7 @@ mode = st.radio(
 
 columns = raw.columns.tolist()
 date_col = st.selectbox("Colonne date", columns)
-views_col = st.selectbox("Colonne nombre de vues", columns)
+views_col = st.selectbox("Colonne valeur", columns)
 
 url_col = None
 single_url_choice = None
@@ -89,9 +89,9 @@ if st.button("Vérifier le fichier"):
         if pd.isna(r["_parsed_date"]):
             return "Date invalide"
         if pd.isna(r["_parsed_views"]) or r["_parsed_views"] < 0:
-            return "Nombre de vues invalide"
+            return "Valeur invalide"
         if r["_parsed_views"] != int(r["_parsed_views"]):
-            return "Nombre de vues invalide (doit être un entier)"
+            return "Valeur invalide (doit être un entier)"
         return None
 
     working["_error"] = working.apply(error_reason, axis=1)
@@ -114,6 +114,7 @@ if "import_preview" in st.session_state:
     preview = st.session_state["import_preview"]
     if not preview.empty and st.button("Confirmer l'import", type="primary"):
         label_by_id = urls.set_index("id")["label"].to_dict()
+        unit_by_id = urls.set_index("id")["platform_unit"].to_dict()
         try:
             for _, r in preview.iterrows():
                 data_layer.add_snapshot(
@@ -124,6 +125,7 @@ if "import_preview" in st.session_state:
                     source="import",
                     note=f"Import : {uploaded.name}",
                     url_label=label_by_id.get(r["id"], ""),
+                    unit=unit_by_id.get(r["id"], "vues"),
                 )
         except github_store.ConflictError:
             st.error(

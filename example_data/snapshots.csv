@@ -13,3 +13,6 @@ demo-snap-pt-2,demo-url-peertube,2026-05-01,11,auto,Collecte automatique (peertu
 demo-snap-pt-3,demo-url-peertube,2026-05-15,14,auto,Collecte automatique (peertube),admin,2026-05-15T06:03:00+00:00
 demo-snap-pt-4,demo-url-peertube,2026-06-01,17,auto,Collecte automatique (peertube),admin,2026-06-01T06:03:00+00:00
 demo-snap-pt-5,demo-url-peertube,2026-06-15,19,auto,Collecte automatique (peertube),admin,2026-06-15T06:03:00+00:00
+demo-snap-form-1,demo-url-formation,2026-04-15,45,manual,Valeur d'exemple,admin,2026-04-15T09:00:00+00:00
+demo-snap-form-2,demo-url-formation,2026-05-15,78,manual,Valeur d'exemple,admin,2026-05-15T09:00:00+00:00
+demo-snap-form-3,demo-url-formation,2026-06-15,112,manual,Valeur d'exemple,admin,2026-06-15T09:00:00+00:00

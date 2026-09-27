@@ -4,12 +4,12 @@ from src import auth, charts, data as data_layer, github_store, style
 
 dossier_id = st.session_state["current_dossier_id"]
 
-st.title("Évolution des vues")
+st.title("Tableau de bord")
 
 df = charts.build_view_dataset(dossier_id)
 
 if df.empty:
-    st.info("Aucun relevé de vues pour l'instant. Ajoutez une URL suivie et un premier relevé.")
+    st.info("Aucun relevé pour l'instant. Ajoutez une URL suivie et un premier relevé.")
     style.render_footer()
     st.stop()
 
@@ -112,7 +112,7 @@ with st.expander("Journal des relevés (audit)"):
             "label": "URL",
             "platform_name": "Plateforme",
             "content_title": "Regroupement",
-            "view_count": st.column_config.NumberColumn("Vues", format="%d"),
+            "view_count": st.column_config.NumberColumn("Valeur", format="%d"),
             "statut": "Statut",
             "source": "Source",
             "note": "Note",
@@ -127,7 +127,7 @@ with st.expander("Journal des relevés (audit)"):
         option_labels = {
             row["id_snapshot"]: (
                 f"{style.format_date_fr(row['recorded_at'])} — {row['label']} — "
-                f"{style.format_number(row['view_count'])} vues "
+                f"{style.format_number(row['view_count'])} {row.get('platform_unit', 'vues')} "
                 f"({style.SOURCE_LABELS.get(row['source'], row['source'])})"
                 + ("" if row["is_current"] else " — remplacé, absent du graphique")
             )

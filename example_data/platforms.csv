@@ -1,12 +1,13 @@
-id,name
-youtube,YouTube
-peertube,PeerTube
-apple_podcasts,Apple Podcasts
-spotify,Spotify
-podcast_addict,Podcast Addict
-deezer,Deezer
-pocket_casts,Pocket Casts
-castbox,Castbox
-overcast,Overcast
-castro,Castro
-canotech,Canotech
+id,name,unit
+youtube,YouTube,vues
+peertube,PeerTube,vues
+apple_podcasts,Apple Podcasts,écoutes
+spotify,Spotify,écoutes
+podcast_addict,Podcast Addict,écoutes
+deezer,Deezer,écoutes
+pocket_casts,Pocket Casts,écoutes
+castbox,Castbox,écoutes
+overcast,Overcast,écoutes
+castro,Castro,écoutes
+canotech,Canotech,vues
+formation,Plateforme de formation (générique),participants
