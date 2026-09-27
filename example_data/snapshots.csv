@@ -1,0 +1,15 @@
+id,tracked_url_id,recorded_at,view_count,source,note,entered_by,entered_at
+demo-snap-1,demo-url-manual,2026-01-05,120,manual,Valeur d'exemple,admin,2026-01-05T09:00:00+00:00
+demo-snap-2,demo-url-manual,2026-01-12,340,manual,Valeur d'exemple,admin,2026-01-12T09:00:00+00:00
+demo-snap-3,demo-url-manual,2026-01-19,510,manual,Valeur d'exemple,admin,2026-01-19T09:00:00+00:00
+demo-snap-4,demo-url-spotify,2026-01-05,80,manual,Valeur d'exemple,admin,2026-01-05T09:00:00+00:00
+demo-snap-5,demo-url-spotify,2026-01-12,150,manual,Valeur d'exemple,admin,2026-01-12T09:00:00+00:00
+demo-snap-6,demo-url-spotify,2026-01-19,210,manual,Valeur d'exemple,admin,2026-01-19T09:00:00+00:00
+demo-snap-7,demo-url-deezer,2026-01-05,20,manual,Valeur d'exemple,admin,2026-01-05T09:00:00+00:00
+demo-snap-8,demo-url-deezer,2026-01-12,45,manual,Valeur d'exemple,admin,2026-01-12T09:00:00+00:00
+demo-snap-9,demo-url-deezer,2026-01-19,70,manual,Valeur d'exemple,admin,2026-01-19T09:00:00+00:00
+demo-snap-pt-1,demo-url-peertube,2026-04-15,8,auto,Collecte automatique (peertube),admin,2026-04-15T06:03:00+00:00
+demo-snap-pt-2,demo-url-peertube,2026-05-01,11,auto,Collecte automatique (peertube),admin,2026-05-01T06:03:00+00:00
+demo-snap-pt-3,demo-url-peertube,2026-05-15,14,auto,Collecte automatique (peertube),admin,2026-05-15T06:03:00+00:00
+demo-snap-pt-4,demo-url-peertube,2026-06-01,17,auto,Collecte automatique (peertube),admin,2026-06-01T06:03:00+00:00
+demo-snap-pt-5,demo-url-peertube,2026-06-15,19,auto,Collecte automatique (peertube),admin,2026-06-15T06:03:00+00:00
