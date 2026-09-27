@@ -47,7 +47,7 @@ if group_by == "platform_name":
 else:
     fig = charts.evolution_chart(filtered, group_by=group_by)
 if fig:
-    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": True, "displaylogo": False})
 else:
     st.info("Aucune donnée pour ces filtres.")
 
@@ -55,7 +55,7 @@ st.subheader("Dernier relevé par plateforme")
 st.caption("Chaque barre est divisée par élément suivi : survolez un segment pour voir lequel.")
 bar_fig = charts.latest_by_platform_chart(filtered)
 if bar_fig:
-    st.plotly_chart(bar_fig, use_container_width=True, config={"displayModeBar": False})
+    st.plotly_chart(bar_fig, use_container_width=True, config={"displayModeBar": True, "displaylogo": False})
 
 
 @st.dialog("Confirmer la suppression")
