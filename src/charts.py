@@ -135,6 +135,18 @@ def _pivot_ffill(df: pd.DataFrame) -> pd.DataFrame:
     return pivot.sort_index().ffill()
 
 
+def _drop_flat_runs(totals: pd.Series) -> pd.Series:
+    """Ne garde que les points où la valeur change vraiment (premier point de
+    chaque palier) — sinon le report de la dernière valeur connue entre deux
+    relevés réels (nécessaire pour que la somme reste correcte) dessine des
+    segments plats parasites au lieu de relier directement les vrais relevés."""
+    totals = totals.dropna()
+    if totals.empty:
+        return totals
+    changed = totals.diff().fillna(1) != 0
+    return totals[changed]
+
+
 def platform_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:
     """Somme, par plateforme et par date, de la dernière valeur connue de chaque
     élément suivi de cette plateforme."""
@@ -147,7 +159,7 @@ def platform_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:
     for platform_name, group in url_info.groupby("platform_name"):
         unit = group["platform_unit"].iloc[0]
         totals = pivot[group.index].sum(axis=1, min_count=1)
-        for recorded_at, total in totals.dropna().items():
+        for recorded_at, total in _drop_flat_runs(totals).items():
             rows.append({
                 "recorded_at": recorded_at, "platform_name": platform_name,
                 "platform_unit": unit, "total": total, "detail": "",
@@ -183,7 +195,7 @@ def group_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:
         unit = units[0] if len(units) == 1 else "/".join(units)
         detail = " + ".join(sorted(group["platform_name"].unique())) + "<br>"
         totals = pivot[group.index].sum(axis=1, min_count=1)
-        for recorded_at, total in totals.dropna().items():
+        for recorded_at, total in _drop_flat_runs(totals).items():
             rows.append({
                 "recorded_at": recorded_at, "platform_name": GROUP_LABEL_PREFIX + group_name,
                 "platform_unit": unit, "total": total, "detail": detail,
@@ -210,7 +222,7 @@ def combined_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:
     if df.empty:
         return df
     pivot = _pivot_ffill(df)
-    totals = pivot.sum(axis=1, min_count=1).dropna()
+    totals = _drop_flat_runs(pivot.sum(axis=1, min_count=1))
     return pd.DataFrame({"recorded_at": totals.index, "total": totals.values})
 
 
