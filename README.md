@@ -6,7 +6,7 @@ Les données (éléments suivis, URLs, relevés) sont stockées sous forme de CS
 
 **Collecte** :
 - ✅ **YouTube** et **PeerTube** : collecte automatique (API publique), déclenchable manuellement ou chaque semaine via GitHub Actions.
-- **Toute autre plateforme** (podcasts, formations, téléchargements...) : ces relevés restent en saisie manuelle ou en import de fichier — la plupart des plateformes n'exposent pas d'API publique de comptage pour du contenu dont on n'est pas propriétaire. L'architecture (`src/collectors.py`) est prévue pour qu'on puisse ajouter facilement une future source automatique, quelle qu'elle soit.
+- **Toute autre plateforme sans API publique** (podcasts, formations, téléchargements...) : ces relevés restent en saisie manuelle ou en import de fichier — la plupart des plateformes n'exposent pas d'API publique de comptage pour du contenu dont on n'est pas propriétaire. L'architecture (`src/collectors.py`) est prévue pour qu'on puisse ajouter facilement une future source automatique, quelle qu'elle soit.
 
 ## 0. Code (public) et données (privées) : deux dépôts séparés
 
