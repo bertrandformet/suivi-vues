@@ -15,16 +15,13 @@ from src import palette
 from src import style
 
 
-def _french_date_ticks(fig, dates):
-    """Force les ticks de l'axe X aux seules dates de relevé réelles, formatées en
-    français — Plotly.js n'a pas de locale FR embarquée, on formate donc nous-mêmes
-    plutôt que de laisser afficher des mois en anglais."""
-    ticks = sorted(pd.Timestamp(d) for d in pd.Series(dates).dropna().unique())
-    fig.update_xaxes(
-        tickvals=ticks,
-        ticktext=[style.format_date_fr(d) for d in ticks],
-        tickangle=-45,
-    )
+def _french_date_ticks(fig):
+    """Format de date numérique (jj/mm/aaaa) sur l'axe X : Plotly.js n'a pas de
+    locale FR embarquée pour les noms de mois, mais un format tout-numérique
+    n'en a pas besoin. On laisse Plotly choisir l'espacement des ticks lui-même
+    (son choix automatique reste plus lisible qu'un tick par date réelle, qui
+    s'entasse dès que plusieurs relevés sont proches dans le temps)."""
+    fig.update_xaxes(tickformat="%d/%m/%Y")
 
 
 def _enrich_snapshots(snapshots: pd.DataFrame, dossier_id: str | None = None) -> pd.DataFrame:
@@ -117,7 +114,7 @@ def evolution_chart(df: pd.DataFrame, group_by: str = "label"):
     )
     fig.update_xaxes(showgrid=False)
     fig.update_yaxes(showgrid=True, gridcolor="#EDEEF0", zeroline=False, rangemode="tozero")
-    _french_date_ticks(fig, df["recorded_at"])
+    _french_date_ticks(fig)
     return fig
 
 
@@ -164,7 +161,7 @@ def platform_totals_chart(df: pd.DataFrame):
     fig.update_layout(showlegend=True, legend_title_text="", xaxis_title="", yaxis_title="", hovermode="closest")
     fig.update_xaxes(showgrid=False)
     fig.update_yaxes(showgrid=True, gridcolor="#EDEEF0", zeroline=False, rangemode="tozero")
-    _french_date_ticks(fig, df["recorded_at"])
+    _french_date_ticks(fig)
     return fig
 
 
