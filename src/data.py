@@ -1,4 +1,4 @@
-"""Chargement des données et logique métier (dossiers, regroupements, URLs suivies, relevés de vues)."""
+"""Chargement des données et logique métier (dossiers, éléments suivis, URLs suivies, relevés)."""
 
 from __future__ import annotations
 
@@ -82,7 +82,7 @@ def add_content(title: str, description: str, user: str, dossier_id: str) -> str
         "created_by": user,
         "created_at": _now_iso(),
     }
-    store.append_row(CONTENTS_PATH, row, f"Ajout regroupement: {title} (par {user})")
+    store.append_row(CONTENTS_PATH, row, f"Ajout élément suivi: {title} (par {user})")
     return content_id
 
 

@@ -5,10 +5,10 @@ from src.collectors import COLLECTORS
 
 dossier_id = st.session_state["current_dossier_id"]
 
-st.title("Regroupements & URLs suivies")
+st.title("Éléments suivis & URLs")
 st.caption(
-    "Un regroupement rassemble ses URLs sur les différentes plateformes. "
-    "Créez le regroupement d'abord, rattachez-lui ensuite ses URLs."
+    "Un élément suivi rassemble ses URLs sur les différentes plateformes. "
+    "Créez l'élément suivi d'abord, rattachez-lui ensuite ses URLs."
 )
 
 if not auth.is_editeur():
@@ -16,20 +16,20 @@ if not auth.is_editeur():
     style.render_footer()
     st.stop()
 
-tab_contents, tab_urls = st.tabs(["Créer un regroupement", "Ajouter une URL suivie"])
+tab_contents, tab_urls = st.tabs(["Créer un élément suivi", "Ajouter une URL suivie"])
 
 with tab_contents:
     with st.form("add_content_form", clear_on_submit=True):
-        title = st.text_input("Titre du regroupement")
+        title = st.text_input("Titre de l'élément suivi")
         description = st.text_area("Description (optionnel)")
-        submitted = st.form_submit_button("Créer le regroupement", type="primary")
+        submitted = st.form_submit_button("Créer l'élément suivi", type="primary")
     if submitted and title:
         try:
             data_layer.add_content(title, description, st.session_state["username"], dossier_id)
         except github_store.ConflictError:
             st.error("Une autre modification vient d'être enregistrée en même temps. Réessayez.")
         else:
-            st.toast(f"Regroupement « {title} » créé.")
+            st.toast(f"Élément suivi « {title} » créé.")
 
 with tab_urls:
     platforms = data_layer.load_platforms()
@@ -46,7 +46,7 @@ with tab_urls:
         url = st.text_input("URL")
         label = st.text_input("Libellé", placeholder="Ex : Épisode 12 — YouTube")
         content_options = ["Aucun (URL indépendante)"] + contents["title"].tolist()
-        content_choice = st.selectbox("Rattacher à un regroupement", content_options)
+        content_choice = st.selectbox("Rattacher à un élément suivi", content_options)
         submitted = st.form_submit_button("Ajouter l'URL", type="primary")
 
     if submitted and url and label:
@@ -80,7 +80,7 @@ with tab_urls:
             column_config={
                 "label": "Libellé",
                 "platform_name": "Plateforme",
-                "content_title": "Regroupement",
+                "content_title": "Élément suivi",
                 "url": "URL",
                 "collection_method": "Méthode",
                 "added_by": "Ajouté par",

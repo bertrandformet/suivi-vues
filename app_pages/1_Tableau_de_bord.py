@@ -22,7 +22,7 @@ n_contents = contents_in_dossier.shape[0]
 n_urls = urls_in_dossier.shape[0]
 auto_snapshots = df[df["source"] == "auto"]
 last_collection = auto_snapshots["entered_at"].max() if not auto_snapshots.empty else None
-context_bits = [f"{n_contents} regroupement(s) suivi(s)", f"{n_urls} URL(s)"]
+context_bits = [f"{n_contents} élément(s) suivi(s)", f"{n_urls} URL(s)"]
 if last_collection is not None:
     context_bits.append(f"dernière collecte le {style.format_date_fr(style.to_local(last_collection))}")
 st.caption(" · ".join(context_bits))
@@ -31,8 +31,8 @@ col1, col2, col3 = st.columns(3)
 with col1:
     content_options = ["Tous"] + sorted(df["content_title"].dropna().unique().tolist())
     content_filter = st.selectbox(
-        "Regroupement", content_options,
-        help="Un regroupement rassemble les URLs suivies d'un même contenu, "
+        "Élément suivi", content_options,
+        help="Un élément suivi rassemble les URLs suivies d'un même contenu, "
         "par exemple un épisode décliné sur YouTube et Spotify à la fois.",
     )
 with col2:
@@ -61,7 +61,7 @@ else:
     st.info("Aucune donnée pour ces filtres.")
 
 st.subheader("Dernier relevé par plateforme")
-st.caption("Chaque barre est divisée par regroupement : survolez un segment pour voir lequel.")
+st.caption("Chaque barre est divisée par élément suivi : survolez un segment pour voir lequel.")
 bar_fig = charts.latest_by_platform_chart(filtered)
 if bar_fig:
     st.plotly_chart(bar_fig, use_container_width=True, config={"displayModeBar": False})
@@ -122,7 +122,7 @@ with st.expander("Journal des relevés"):
             "recorded_at": st.column_config.DateColumn("Date", format="D MMM YYYY"),
             "label": "URL",
             "platform_name": "Plateforme",
-            "content_title": "Regroupement",
+            "content_title": "Élément suivi",
             "view_count": st.column_config.NumberColumn("Valeur", format="%d"),
             "statut": "Statut",
             "source": "Source",

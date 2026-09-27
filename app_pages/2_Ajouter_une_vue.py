@@ -20,7 +20,7 @@ dossier_id = st.session_state["current_dossier_id"]
 
 urls = data_layer.enriched_tracked_urls(dossier_id)
 if urls.empty:
-    st.info("Aucune URL suivie pour l'instant. Ajoutez-en une dans « Regroupements & URLs ».")
+    st.info("Aucune URL suivie pour l'instant. Ajoutez-en une dans « Éléments suivis & URLs ».")
     style.render_footer()
     st.stop()
 
