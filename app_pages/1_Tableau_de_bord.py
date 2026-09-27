@@ -42,7 +42,7 @@ if platform_filter != "Toutes":
     filtered = filtered[filtered["platform_name"] == platform_filter]
 
 if group_by == "platform_name":
-    totals = charts.platform_totals_dataset(filtered)
+    totals = charts.platform_and_group_totals_dataset(filtered)
     fig = charts.platform_totals_chart(totals)
 else:
     fig = charts.evolution_chart(filtered, group_by=group_by)

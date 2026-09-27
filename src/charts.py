@@ -40,7 +40,10 @@ def _enrich_snapshots(snapshots: pd.DataFrame, dossier_id: str | None = None) ->
         return snapshots
     urls = data_layer.enriched_tracked_urls()
     merged = snapshots.merge(
-        urls[["id", "label", "url", "platform_name", "platform_unit", "content_title", "content_id", "dossier_id"]],
+        urls[[
+            "id", "label", "url", "platform_name", "platform_unit", "platform_group",
+            "content_title", "content_id", "dossier_id",
+        ]],
         left_on="tracked_url_id",
         right_on="id",
         how="left",
@@ -150,6 +153,47 @@ def platform_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:
                 "platform_unit": unit, "total": total,
             })
     return pd.DataFrame(rows)
+
+
+def group_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:
+    """Somme, par groupe thématique de plateformes (colonne `group` de
+    `platforms.csv`) et par date, de la dernière valeur connue de chaque élément
+    suivi. Les plateformes sans groupe assigné n'apparaissent pas ici.
+
+    Mêmes colonnes que `platform_totals_dataset` (`platform_name` porte ici le
+    nom du groupe) pour pouvoir concaténer les deux et les tracer ensemble sur
+    le même graphique, à côté des plateformes individuelles."""
+    if df.empty:
+        return df
+    df = df[df["platform_group"].fillna("") != ""]
+    if df.empty:
+        return df
+    pivot = _pivot_ffill(df)
+    url_info = df.drop_duplicates("tracked_url_id").set_index("tracked_url_id")[["platform_group", "platform_unit"]]
+
+    rows = []
+    for group_name, group in url_info.groupby("platform_group"):
+        units = group["platform_unit"].unique().tolist()
+        unit = units[0] if len(units) == 1 else "/".join(units)
+        totals = pivot[group.index].sum(axis=1, min_count=1)
+        for recorded_at, total in totals.dropna().items():
+            rows.append({
+                "recorded_at": recorded_at, "platform_name": group_name,
+                "platform_unit": unit, "total": total,
+            })
+    return pd.DataFrame(rows)
+
+
+def platform_and_group_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:
+    """Totaux par plateforme, augmentés des totaux par groupe thématique
+    (colonne `group` de `platforms.csv`) tracés sur le même graphique."""
+    platform_rows = platform_totals_dataset(df)
+    group_rows = group_totals_dataset(df)
+    if group_rows.empty:
+        return platform_rows
+    if platform_rows.empty:
+        return group_rows
+    return pd.concat([platform_rows, group_rows], ignore_index=True)
 
 
 def combined_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:

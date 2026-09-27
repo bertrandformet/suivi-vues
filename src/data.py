@@ -50,12 +50,17 @@ def enriched_tracked_urls(dossier_id: str | None = None) -> pd.DataFrame:
         if urls.empty:
             return urls
     platforms = load_platforms().rename(
-        columns={"id": "platform_id", "name": "platform_name", "unit": "platform_unit"}
+        columns={"id": "platform_id", "name": "platform_name", "unit": "platform_unit", "group": "platform_group"}
     )
+    if "platform_group" not in platforms.columns:
+        platforms["platform_group"] = ""
     contents = load_contents().rename(columns={"id": "content_id", "title": "content_title"})
-    merged = urls.merge(platforms[["platform_id", "platform_name", "platform_unit"]], on="platform_id", how="left")
+    merged = urls.merge(
+        platforms[["platform_id", "platform_name", "platform_unit", "platform_group"]], on="platform_id", how="left"
+    )
     merged = merged.merge(contents[["content_id", "content_title"]], on="content_id", how="left")
     merged["platform_unit"] = merged["platform_unit"].fillna("vues")
+    merged["platform_group"] = merged["platform_group"].fillna("")
     return merged
 
 
