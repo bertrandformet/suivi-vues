@@ -47,12 +47,25 @@ Copiez chaque hash dans les secrets (voir étape suivante). Pour le déploiement
 
 ## 4. (Optionnel) Créer une clé API YouTube
 
-Nécessaire uniquement pour activer la collecte automatique des vues YouTube :
-1. Sur [Google Cloud Console](https://console.cloud.google.com/apis/credentials), créez un projet (gratuit).
-2. Activez l'API "YouTube Data API v3".
-3. Créez une clé API et copiez-la dans les secrets (étape suivante).
+Nécessaire uniquement pour activer la collecte automatique des vues YouTube. Sans clé, les URLs YouTube resteront en erreur lors de la collecte automatique — elles peuvent en attendant être suivies manuellement.
 
-Sans clé, les URLs YouTube resteront en erreur lors de la collecte automatique — elles peuvent en attendant être suivies manuellement.
+**a. Créer (ou sélectionner) un projet Google Cloud**
+1. Allez sur [console.cloud.google.com](https://console.cloud.google.com/) (connectez-vous avec un compte Google).
+2. En haut de la page, cliquez le sélecteur de projet (à côté du logo « Google Cloud »).
+3. Cliquez **Nouveau projet**, donnez-lui un nom (ex. `suivi-vues`), laissez le reste par défaut, cliquez **Créer**.
+4. Attendez quelques secondes puis vérifiez que ce projet est bien sélectionné en haut (sinon la clé sera créée dans le mauvais projet).
+
+**b. Activer l'API YouTube Data v3**
+1. Allez directement sur [cette page](https://console.cloud.google.com/apis/library/youtube.googleapis.com) (lien direct vers l'API).
+2. Vérifiez que le bon projet est sélectionné en haut.
+3. Cliquez **Activer**.
+
+**c. Créer la clé API**
+1. Allez sur [console.cloud.google.com/apis/credentials](https://console.cloud.google.com/apis/credentials).
+2. Cliquez **+ Créer des identifiants** (en haut) → **Clé API**.
+3. Dans la fenêtre **Créer une clé API** qui s'ouvre : donnez-lui un nom (ex. `Clé API YT`), puis dans **Sélectionner des restrictions d'API**, filtrez et cochez **YouTube Data API v3**, cliquez **OK**.
+4. Sous **Restrictions relatives aux applications**, laissez **Aucun** (la clé est appelée depuis un script serveur — GitHub Actions / Streamlit Cloud — pas depuis un navigateur ou une appli).
+5. Cliquez **Créer**. La clé générée (commence par `AIza...`) s'affiche — copiez-la immédiatement, elle sert dans les secrets (étape suivante) et dans le secret GitHub Actions `YOUTUBE_API_KEY` (étape 6).
 
 ## 5. Configurer les secrets
 
