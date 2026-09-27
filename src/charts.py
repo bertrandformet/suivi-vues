@@ -27,10 +27,10 @@ def _add_date_label(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _french_date_axis(fig):
-    """Format de date numérique (jj/mm/aaaa) sur l'axe X : Plotly.js n'a pas de
-    locale FR embarquée pour les noms de mois. Laisse Plotly choisir
-    l'espacement des ticks automatiquement (proportionnel au temps)."""
-    fig.update_xaxes(tickformat="%d/%m/%Y", tickangle=-45)
+    """Un tick par mois (format mm/aaaa, numérique — Plotly.js n'a pas de
+    locale FR embarquée pour les noms de mois). L'axe reste temporel continu
+    (proportionnel au temps réel) ; seuls les ticks affichés sont mensuels."""
+    fig.update_xaxes(tickformat="%m/%Y", dtick="M1", tickangle=-45)
 
 
 def _enrich_snapshots(snapshots: pd.DataFrame, dossier_id: str | None = None) -> pd.DataFrame:
