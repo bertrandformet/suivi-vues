@@ -27,26 +27,17 @@ if last_collection is not None:
     context_bits.append(f"dernière collecte le {style.format_date_fr(style.to_local(last_collection))}")
 st.caption(" · ".join(context_bits))
 
-col1, col2, col3 = st.columns(3)
+col1, col2 = st.columns(2)
 with col1:
-    content_options = ["Tous"] + sorted(df["content_title"].dropna().unique().tolist())
-    content_filter = st.selectbox(
-        "Élément suivi", content_options,
-        help="Un élément suivi rassemble les URLs suivies d'un même contenu, "
-        "par exemple un épisode décliné sur YouTube et Spotify à la fois.",
-    )
-with col2:
     platforms = ["Toutes"] + sorted(df["platform_name"].dropna().unique().tolist())
     platform_filter = st.selectbox("Plateforme", platforms)
-with col3:
+with col2:
     group_by = st.selectbox(
         "Une courbe par", ["platform_name", "label"],
         format_func=lambda x: "URL suivie (détail)" if x == "label" else "Plateforme (cumulé)",
     )
 
 filtered = df.copy()
-if content_filter != "Tous":
-    filtered = filtered[filtered["content_title"] == content_filter]
 if platform_filter != "Toutes":
     filtered = filtered[filtered["platform_name"] == platform_filter]
 
@@ -94,8 +85,6 @@ def confirm_delete_snapshot(snapshot_id, label, is_current):
 
 
 journal_df = charts.all_snapshots_dataset(dossier_id)
-if content_filter != "Tous":
-    journal_df = journal_df[journal_df["content_title"] == content_filter]
 if platform_filter != "Toutes":
     journal_df = journal_df[journal_df["platform_name"] == platform_filter]
 
