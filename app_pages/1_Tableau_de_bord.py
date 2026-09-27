@@ -108,7 +108,7 @@ with st.expander("Journal des relevés (audit)"):
         use_container_width=True,
         hide_index=True,
         column_config={
-            "recorded_at": "Date",
+            "recorded_at": st.column_config.DateColumn("Date", format="D MMM YYYY"),
             "label": "URL",
             "platform_name": "Plateforme",
             "content_title": "Regroupement",
