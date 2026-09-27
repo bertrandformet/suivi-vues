@@ -15,13 +15,18 @@ from src import palette
 from src import style
 
 
-def _french_date_ticks(fig):
-    """Format de date numérique (jj/mm/aaaa) sur l'axe X : Plotly.js n'a pas de
-    locale FR embarquée pour les noms de mois, mais un format tout-numérique
-    n'en a pas besoin. On laisse Plotly choisir l'espacement des ticks lui-même
-    (son choix automatique reste plus lisible qu'un tick par date réelle, qui
-    s'entasse dès que plusieurs relevés sont proches dans le temps)."""
-    fig.update_xaxes(tickformat="%d/%m/%Y")
+def _date_categories(df: pd.DataFrame) -> list[str]:
+    """Ajoute une colonne `recorded_at_fr` (date en français) à `df` et renvoie
+    l'ordre chronologique de ses valeurs distinctes, pour tracer un axe X
+    catégoriel qui n'affiche que les dates où il existe un relevé — pas de
+    continuité temporelle artificielle avec des dates sans donnée."""
+    df["recorded_at_fr"] = df["recorded_at"].apply(style.format_date_fr)
+    return (
+        df[["recorded_at", "recorded_at_fr"]]
+        .drop_duplicates()
+        .sort_values("recorded_at")["recorded_at_fr"]
+        .tolist()
+    )
 
 
 def _enrich_snapshots(snapshots: pd.DataFrame, dossier_id: str | None = None) -> pd.DataFrame:
@@ -83,25 +88,26 @@ def evolution_chart(df: pd.DataFrame, group_by: str = "label"):
         return None
 
     df = df.copy()
-    df["recorded_at_fr"] = df["recorded_at"].apply(style.format_date_fr)
+    date_order = _date_categories(df)
 
     color_map = palette.build_color_map(df.sort_values("recorded_at")["color_key"])
     group_color = df.groupby(group_by)["color_key"].first().map(color_map).to_dict()
 
     fig = px.line(
         df,
-        x="recorded_at",
+        x="recorded_at_fr",
         y="view_count",
         color=group_by,
         color_discrete_map=group_color,
         markers=True,
-        custom_data=["content_label", "platform_unit", "recorded_at_fr"],
+        category_orders={"recorded_at_fr": date_order},
+        custom_data=["content_label", "platform_unit"],
     )
     fig.update_traces(
         mode="lines+markers",
         marker=dict(size=6),
         hovertemplate=(
-            "<b>%{customdata[0]}</b><br>%{customdata[2]}<br>"
+            "<b>%{customdata[0]}</b><br>%{x}<br>"
             "%{y:,.0f} %{customdata[1]}<extra>%{fullData.name}</extra>"
         ),
     )
@@ -112,9 +118,8 @@ def evolution_chart(df: pd.DataFrame, group_by: str = "label"):
         yaxis_title="",
         hovermode="closest",
     )
-    fig.update_xaxes(showgrid=False)
+    fig.update_xaxes(showgrid=False, tickangle=-45)
     fig.update_yaxes(showgrid=True, gridcolor="#EDEEF0", zeroline=False, rangemode="tozero")
-    _french_date_ticks(fig)
     return fig
 
 
@@ -147,21 +152,21 @@ def platform_totals_chart(df: pd.DataFrame):
         return None
 
     df = df.copy()
-    df["recorded_at_fr"] = df["recorded_at"].apply(style.format_date_fr)
+    date_order = _date_categories(df)
 
     fig = px.line(
-        df, x="recorded_at", y="total", color="platform_name",
-        markers=True, custom_data=["platform_unit", "recorded_at_fr"],
+        df, x="recorded_at_fr", y="total", color="platform_name",
+        markers=True, category_orders={"recorded_at_fr": date_order},
+        custom_data=["platform_unit"],
     )
     fig.update_traces(
         mode="lines+markers",
         marker=dict(size=6),
-        hovertemplate="<b>%{fullData.name}</b><br>%{customdata[1]}<br>%{y:,.0f} %{customdata[0]}<extra></extra>",
+        hovertemplate="<b>%{fullData.name}</b><br>%{x}<br>%{y:,.0f} %{customdata[0]}<extra></extra>",
     )
     fig.update_layout(showlegend=True, legend_title_text="", xaxis_title="", yaxis_title="", hovermode="closest")
-    fig.update_xaxes(showgrid=False)
+    fig.update_xaxes(showgrid=False, tickangle=-45)
     fig.update_yaxes(showgrid=True, gridcolor="#EDEEF0", zeroline=False, rangemode="tozero")
-    _french_date_ticks(fig)
     return fig
 
 
