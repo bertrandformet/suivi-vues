@@ -7,18 +7,26 @@ from src.collection_runner import run_collection
 
 dossier_id = st.session_state["current_dossier_id"]
 
-st.title("Collecte automatique")
-st.caption(
-    "URLs YouTube et PeerTube uniquement (API). Une tâche planifiée lance aussi la collecte chaque lundi à 06:00."
-)
+urls = data_layer.enriched_tracked_urls(dossier_id)
+eligible = urls[urls["collection_method"].isin(COLLECTORS.keys())] if not urls.empty else urls
+
+# Titre et sous-titre reflètent les plateformes réellement actives ici (pas
+# forcément toutes celles que l'app sait collecter — ex. YouTube sans clé API).
+active_platforms = sorted(eligible["platform_name"].dropna().unique().tolist()) if not eligible.empty else []
+if active_platforms:
+    st.title("Collecte " + " & ".join(active_platforms))
+    st.caption(
+        f"{' et '.join(active_platforms)} uniquement (API). "
+        "Une tâche planifiée lance aussi la collecte chaque lundi à 06:00."
+    )
+else:
+    st.title("Collecte automatique")
+    st.caption("Aucune plateforme n'est actuellement configurée en collecte automatique.")
 
 if not auth.is_editeur():
     st.error("Réservé aux éditeurs.")
     style.render_footer()
     st.stop()
-
-urls = data_layer.enriched_tracked_urls(dossier_id)
-eligible = urls[urls["collection_method"].isin(COLLECTORS.keys())] if not urls.empty else urls
 
 if eligible.empty:
     st.info("Aucune URL n'est configurée en collecte automatique pour l'instant.")

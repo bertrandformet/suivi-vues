@@ -57,7 +57,7 @@ bar_fig = charts.latest_by_platform_chart(filtered)
 if bar_fig:
     st.plotly_chart(bar_fig, use_container_width=True, config={"displayModeBar": True, "displaylogo": False})
 
-st.subheader("Calculateur")
+st.subheader("Données cumulées")
 st.caption("Additionne les totaux de plusieurs plateformes au choix (ex : YouTube + PeerTube + Canotech).")
 available_platforms = sorted(df["platform_name"].dropna().unique().tolist())
 calc_platforms = st.multiselect("Plateformes à additionner", available_platforms)
