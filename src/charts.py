@@ -15,18 +15,22 @@ from src import palette
 from src import style
 
 
-def _date_categories(df: pd.DataFrame) -> list[str]:
-    """Ajoute une colonne `recorded_at_fr` (date en français) à `df` et renvoie
-    l'ordre chronologique de ses valeurs distinctes, pour tracer un axe X
-    catégoriel qui n'affiche que les dates où il existe un relevé — pas de
-    continuité temporelle artificielle avec des dates sans donnée."""
+def _add_date_label(df: pd.DataFrame) -> pd.DataFrame:
+    """Ajoute une colonne `recorded_at_fr` (date en français, pour l'info-bulle
+    uniquement). L'axe X reste un vrai axe temporel continu (`recorded_at`) :
+    l'espacement doit être proportionnel au temps réel écoulé entre deux
+    relevés, sinon la pente de la courbe ne reflète plus le vrai rythme
+    d'évolution (ex. 4 relevés rapprochés en octobre puis un saut de plusieurs
+    mois ne doivent pas occuper le même espace visuel)."""
     df["recorded_at_fr"] = df["recorded_at"].apply(style.format_date_fr)
-    return (
-        df[["recorded_at", "recorded_at_fr"]]
-        .drop_duplicates()
-        .sort_values("recorded_at")["recorded_at_fr"]
-        .tolist()
-    )
+    return df
+
+
+def _french_date_axis(fig):
+    """Format de date numérique (jj/mm/aaaa) sur l'axe X : Plotly.js n'a pas de
+    locale FR embarquée pour les noms de mois. Laisse Plotly choisir
+    l'espacement des ticks automatiquement (proportionnel au temps)."""
+    fig.update_xaxes(tickformat="%d/%m/%Y", tickangle=-45)
 
 
 def _enrich_snapshots(snapshots: pd.DataFrame, dossier_id: str | None = None) -> pd.DataFrame:
@@ -90,27 +94,25 @@ def evolution_chart(df: pd.DataFrame, group_by: str = "label"):
     if df.empty:
         return None
 
-    df = df.copy()
-    date_order = _date_categories(df)
+    df = _add_date_label(df.copy())
 
     color_map = palette.build_color_map(df.sort_values("recorded_at")["color_key"])
     group_color = df.groupby(group_by)["color_key"].first().map(color_map).to_dict()
 
     fig = px.line(
         df,
-        x="recorded_at_fr",
+        x="recorded_at",
         y="view_count",
         color=group_by,
         color_discrete_map=group_color,
         markers=True,
-        category_orders={"recorded_at_fr": date_order},
-        custom_data=["content_label", "platform_unit"],
+        custom_data=["content_label", "platform_unit", "recorded_at_fr"],
     )
     fig.update_traces(
         mode="lines+markers",
         marker=dict(size=6),
         hovertemplate=(
-            "<b>%{customdata[0]}</b><br>%{x}<br>"
+            "<b>%{customdata[0]}</b><br>%{customdata[2]}<br>"
             "%{y:,.0f} %{customdata[1]}<extra>%{fullData.name}</extra>"
         ),
     )
@@ -121,7 +123,8 @@ def evolution_chart(df: pd.DataFrame, group_by: str = "label"):
         yaxis_title="",
         hovermode="closest",
     )
-    fig.update_xaxes(showgrid=False, tickangle=-45)
+    fig.update_xaxes(showgrid=False)
+    _french_date_axis(fig)
     fig.update_yaxes(showgrid=True, gridcolor="#EDEEF0", zeroline=False, rangemode="tozero")
     return fig
 
@@ -230,18 +233,18 @@ def combined_total_chart(df: pd.DataFrame):
     """Courbe d'évolution d'un total combiné (calculateur multi-plateformes)."""
     if df.empty:
         return None
-    df = df.copy()
-    date_order = _date_categories(df)
+    df = _add_date_label(df.copy())
 
-    fig = px.line(df, x="recorded_at_fr", y="total", category_orders={"recorded_at_fr": date_order}, markers=True)
+    fig = px.line(df, x="recorded_at", y="total", markers=True, custom_data=["recorded_at_fr"])
     fig.update_traces(
         mode="lines+markers",
         marker=dict(size=6, color="#33618F"),
         line=dict(color="#33618F"),
-        hovertemplate="%{x}<br>%{y:,.0f}<extra></extra>",
+        hovertemplate="%{customdata[0]}<br>%{y:,.0f}<extra></extra>",
     )
     fig.update_layout(xaxis_title="", yaxis_title="", hovermode="closest")
-    fig.update_xaxes(showgrid=False, tickangle=-45)
+    fig.update_xaxes(showgrid=False)
+    _french_date_axis(fig)
     fig.update_yaxes(showgrid=True, gridcolor="#EDEEF0", zeroline=False, rangemode="tozero")
     return fig
 
@@ -251,24 +254,23 @@ def platform_totals_chart(df: pd.DataFrame):
     if df.empty:
         return None
 
-    df = df.copy()
-    date_order = _date_categories(df)
+    df = _add_date_label(df.copy())
 
     fig = px.line(
-        df, x="recorded_at_fr", y="total", color="platform_name",
-        markers=True, category_orders={"recorded_at_fr": date_order},
-        custom_data=["platform_unit", "detail"],
+        df, x="recorded_at", y="total", color="platform_name",
+        markers=True, custom_data=["platform_unit", "detail", "recorded_at_fr"],
     )
     fig.update_traces(
         mode="lines+markers",
         marker=dict(size=6),
         hovertemplate=(
             "<b>%{fullData.name}</b><br>%{customdata[1]}"
-            "%{x}<br>%{y:,.0f} %{customdata[0]}<extra></extra>"
+            "%{customdata[2]}<br>%{y:,.0f} %{customdata[0]}<extra></extra>"
         ),
     )
     fig.update_layout(showlegend=True, legend_title_text="", xaxis_title="", yaxis_title="", hovermode="closest")
-    fig.update_xaxes(showgrid=False, tickangle=-45)
+    fig.update_xaxes(showgrid=False)
+    _french_date_axis(fig)
     fig.update_yaxes(showgrid=True, gridcolor="#EDEEF0", zeroline=False, rangemode="tozero")
     return fig
 
