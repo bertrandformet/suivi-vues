@@ -1,31 +1,31 @@
 # Suivi Vues
 
-Suivi de l'évolution des vues d'URLs ciblées sur YouTube, PeerTube, Apple Podcasts, Spotify, Podcast Addict, Deezer, Pocket Casts, Castbox, Overcast, Castro, etc.
+Tableau de bord de suivi de métriques dans le temps (vues, écoutes, ou tout autre compteur — participants, téléchargements, sessions...) pour des URLs ciblées sur YouTube, PeerTube, Apple Podcasts, Spotify, Podcast Addict, Deezer, Pocket Casts, Castbox, Overcast, Castro, ou toute autre plateforme que vous ajoutez vous-même. Chaque plateforme déclare sa propre unité (vues, écoutes, participants...) : l'app n'est pas limitée au comptage de vues vidéo/audio.
 
-Les données (regroupements, URLs suivies, relevés de vues) sont stockées sous forme de CSV **dans un dépôt GitHub**, lues et écrites via l'API GitHub — chaque ajout ou ajustement crée un commit, ce qui donne un historique d'audit complet sans base de données externe.
+Les données (éléments suivis, URLs, relevés) sont stockées sous forme de CSV **dans un dépôt GitHub**, lues et écrites via l'API GitHub — chaque ajout ou ajustement crée un commit, ce qui donne un historique d'audit complet sans base de données externe.
 
-Ce dépôt est un **template réutilisable** : il contient des données et des comptes de démonstration (aucune donnée réelle). Pour un usage réel, dupliquez-le en dépôt privé (voir ci-dessous) pour que vos vraies URLs suivies et votre dashboard quotidien ne soient jamais publics.
-
-**Collecte des vues** :
+**Collecte** :
 - ✅ **YouTube** et **PeerTube** : collecte automatique (API publique), déclenchable manuellement ou chaque semaine via GitHub Actions.
-- **Apple Podcasts, Spotify, Podcast Addict, Deezer, Pocket Casts, Castbox, Overcast, Castro, etc.** : aucune de ces plateformes n'expose publiquement un nombre de vues/écoutes par épisode pour du contenu dont on n'est pas propriétaire — ces relevés restent en saisie manuelle ou en import de fichier. L'architecture (`src/collectors.py`) est prévue pour qu'on puisse ajouter facilement une future source automatique, quelle qu'elle soit.
+- **Toute autre plateforme** (podcasts, formations, téléchargements...) : ces relevés restent en saisie manuelle ou en import de fichier — la plupart des plateformes n'exposent pas d'API publique de comptage pour du contenu dont on n'est pas propriétaire. L'architecture (`src/collectors.py`) est prévue pour qu'on puisse ajouter facilement une future source automatique, quelle qu'elle soit.
 
-## 0. Dépôt public (démo) vs dépôt privé (production)
+## 0. Code (public) et données (privées) : deux dépôts séparés
 
-Sur Streamlit Community Cloud (gratuit), une app n'est privée (accès restreint par email) que si elle est déployée depuis un **dépôt GitHub privé** — un seul dépôt privé est permis par compte.
+Ce dépôt ne contient **aucune donnée réelle** — seulement le code et un jeu de données d'exemple (`example_data/`, non lu par l'app en production) pour illustrer le modèle. Les vraies données (vos URLs suivies, vos relevés) doivent vivre dans un **second dépôt GitHub, privé**, que vous créez séparément :
 
-- **Ce dépôt (public)** : gardez-le tel quel, avec ses données de démo et ses mots de passe de démo documentés ci-dessous. Vous pouvez le déployer publiquement sur Streamlit Cloud pour montrer l'outil, ou le partager/forker pour un autre projet.
-- **Votre dépôt de production (privé)** : dupliquez ce dépôt (bouton "Use this template" sur GitHub, ou fork rendu privé) dans un nouveau dépôt **privé**. Remplacez le contenu de `data/*.csv` par vos vraies URLs (ou repartez de zéro en ne gardant que les en-têtes), et configurez ses propres secrets (vrai token, vrais mots de passe, vraie clé YouTube). C'est ce dépôt privé qui sera déployé comme l'unique app privée Streamlit Cloud pour un usage quotidien.
+- **Ce dépôt (public)** : le code de l'app, forkable/réutilisable tel quel. Aucune fuite possible puisqu'il ne contient jamais vos données réelles.
+- **Votre dépôt de données (privé)** : un dépôt GitHub minimal contenant seulement les CSV (`dossiers.csv`, `contents.csv`, `platforms.csv`, `tracked_urls.csv`, `snapshots.csv` — voir `example_data/` pour le format exact). L'app y lit/écrit via l'API GitHub Contents, configuré dans les secrets (étape 5).
 
-Le code est strictement identique entre les deux ; seuls les secrets et les données changent.
+Cette séparation évite de dupliquer le code à chaque mise à jour : un seul dépôt de code, un dépôt de données par déploiement réel.
 
-## 1. Créer le dépôt GitHub
+## 1. Créer les deux dépôts GitHub
 
-1. Créez un dépôt sur GitHub (public pour le template/démo, **privé** pour la production) et poussez ce projet dedans :
+1. Ce dépôt de code reste tel quel (forkez-le ou clonez-le si besoin).
+2. Créez un **second dépôt GitHub, privé**, pour vos données — vide, ou initialisé avec une copie de `example_data/` renommée `data/` comme point de départ :
    ```bash
-   git remote add origin git@github.com:<votre-org>/<votre-repo>.git
-   git add .
-   git commit -m "Initialisation du tableau de bord"
+   mkdir mon-projet-data && cd mon-projet-data
+   git init && git remote add origin git@github.com:<votre-org>/<votre-repo>-data.git
+   cp -r <chemin-vers-ce-repo>/example_data ./data
+   git add data && git commit -m "Initialisation des données"
    git push -u origin main
    ```
 
@@ -57,18 +57,21 @@ Sans clé, les URLs YouTube resteront en erreur lors de la collecte automatique 
 ## 5. Configurer les secrets
 
 Dupliquez `.streamlit/secrets.toml.example` en `.streamlit/secrets.toml` (local, ignoré par git) ou collez son contenu dans le gestionnaire de secrets de Streamlit Cloud. Remplissez :
-- `[github]` : le token généré à l'étape 2, le nom du dépôt (`owner/repo`), la branche.
+- `[github]` : le token généré à l'étape 2, le nom de **votre dépôt de données privé** (`owner/votre-repo-data`, pas ce dépôt de code), la branche.
 - `[youtube]` : la clé API de l'étape 4 (optionnel).
 - `[auth.cookie]` : une clé aléatoire longue (sert à signer le cookie de session).
 - `[auth.credentials.usernames.admin]` et `[auth.credentials.usernames.lecteur]` : les hashs générés à l'étape 3.
 
 ## 6. Activer la collecte automatique hebdomadaire (GitHub Actions)
 
-Le fichier `.github/workflows/collect.yml` est déjà inclus et se déclenche chaque lundi, plus manuellement depuis l'onglet **Actions** du dépôt (bouton "Run workflow"). Il n'a besoin que d'un seul secret à ajouter vous-même :
-1. Sur GitHub : Settings → Secrets and variables → Actions → New repository secret.
-2. Ajoutez `YOUTUBE_API_KEY` (même valeur qu'à l'étape 4). Le token d'écriture GitHub est généré automatiquement par Actions, aucun autre secret n'est nécessaire pour ce workflow.
+Le fichier `.github/workflows/collect.yml` est déjà inclus et se déclenche chaque lundi, plus manuellement depuis l'onglet **Actions** du dépôt (bouton "Run workflow"). Comme les données vivent dans un dépôt séparé, le token d'écriture automatique de GitHub Actions (`secrets.GITHUB_TOKEN`, généré pour ce dépôt de code) ne suffit pas — il faut lui donner un accès dédié à votre dépôt de données :
 
-Le déclenchement manuel est aussi possible directement depuis le dashboard (page "Collecte automatique", bouton "Lancer la collecte maintenant"), en plus du cron hebdomadaire.
+1. Modifiez `GITHUB_REPO: bertrandformet/suivi-vues-data` dans `collect.yml` pour y mettre le nom de **votre propre dépôt de données** (`owner/votre-repo-data`).
+2. Créez un token fine-grained (github.com/settings/tokens?type=beta) limité à ce dépôt de données, permission **Contents: Read and write**.
+3. Sur ce dépôt de code : Settings → Secrets and variables → Actions → New repository secret → nommez-le `DATA_REPO_TOKEN`, collez le token.
+4. Ajoutez aussi `YOUTUBE_API_KEY` (même valeur qu'à l'étape 4) si vous voulez la collecte YouTube automatique.
+
+Le déclenchement manuel est aussi possible directement depuis le dashboard (page de collecte, bouton "Lancer la collecte maintenant"), en plus du cron hebdomadaire.
 
 ## 7. Déployer sur Streamlit Community Cloud
 
@@ -77,23 +80,24 @@ Le déclenchement manuel est aussi possible directement depuis le dashboard (pag
 3. Dans les paramètres de l'app → Secrets, collez le contenu de votre `secrets.toml`.
 4. Déployez. L'app est accessible via l'URL fournie par Streamlit ; connectez-vous avec `admin` ou `lecteur`.
 
-Pour le dépôt privé de production, Streamlit Cloud propose une app "privée" (accès restreint à une liste d'emails invités) en plus du login intégré déjà présent dans l'app — à activer dans les paramètres de partage de l'app.
+Streamlit Cloud ne restreint l'accès par email ("app privée") que pour une app déployée depuis un **dépôt GitHub privé** — comme ce dépôt de code reste public par conception (pour rester réutilisable), l'unique barrière d'accès est le login intégré à l'app (admin/lecteur). Si vous voulez la double barrière, déployez plutôt depuis un fork **privé** de ce dépôt de code — vos données réelles resteront de toute façon dans leur dépôt séparé, jamais dans ce dépôt de code.
 
 ## 8. Utilisation
 
-- **Lecteur** : consulte le Tableau de bord (courbes d'évolution, comparaison par plateforme, table d'audit).
-- **Admin** : en plus, peut créer des regroupements, ajouter des URLs à suivre (avec leur méthode de collecte), saisir ou ajuster des relevés de vues, importer des fichiers CSV/Excel, et déclencher la collecte automatique à la demande.
-- Chaque relevé est conservé (pas d'édition destructive) : un ajustement est une nouvelle ligne horodatée, cochée « ajustement », avec une note explicative. Les relevés automatiques portent la source « auto ». Un relevé erroné peut aussi être supprimé directement depuis le journal d'audit du tableau de bord, avec une confirmation avant suppression.
+- **Lecteur** : consulte le Tableau de bord (courbes d'évolution, comparaison par plateforme, données cumulées, table d'audit).
+- **Admin** : en plus, peut créer des éléments suivis, ajouter des URLs à suivre (avec leur méthode de collecte), saisir ou ajuster des relevés, importer des fichiers CSV/Excel, et déclencher la collecte automatique à la demande.
+- Chaque relevé est conservé (pas d'édition destructive) : un ajustement est une nouvelle ligne horodatée, cochée « ajustement », avec une note explicative. Les relevés automatiques portent la source « auto ». Un relevé erroné peut aussi être supprimé directement depuis le journal des relevés du tableau de bord, avec une confirmation avant suppression.
+- **Données cumulées** : le tableau de bord affiche par défaut un total par plateforme (somme de tous les éléments suivis de cette plateforme, dans le temps). Une section « Données cumulées » permet en plus d'additionner librement plusieurs plateformes entre elles (ex. YouTube + PeerTube), avec un avertissement si leurs unités diffèrent (vues vs participants, par exemple).
 
 ### Regrouper les URLs d'un même épisode
 
-Un même épisode (podcast ou vidéo) existe souvent sur plusieurs plateformes à la fois (YouTube, Spotify, Apple Podcasts...). Pour suivre sa performance globale plutôt que plateforme par plateforme, créez un **Regroupement** qui les rassemble :
+Un même épisode (podcast ou vidéo) existe souvent sur plusieurs plateformes à la fois (YouTube, Spotify, Apple Podcasts...). Pour suivre sa performance globale plutôt que plateforme par plateforme, créez un **élément suivi** qui les rassemble :
 
-1. Dans « Regroupements & URLs » → onglet **Créer un regroupement**, donnez-lui un nom (ex. « Mon podcast — Épisode 13 »).
-2. Toujours dans « Regroupements & URLs » → onglet **Ajouter une URL suivie**, ajoutez chaque URL de cet épisode (une par plateforme) en la rattachant à ce regroupement via le menu « Rattacher à un regroupement ».
-3. Sur le Tableau de bord, le filtre « Regroupement » permet d'isoler cet épisode, et toutes ses URLs partagent la même couleur sur les graphiques (la couleur code le regroupement, jamais la plateforme) pour comparer sa portée d'une plateforme à l'autre.
+1. Dans « Éléments suivis & URLs » → onglet **Créer un élément suivi**, donnez-lui un nom (ex. « Mon podcast — Épisode 13 »).
+2. Toujours dans « Éléments suivis & URLs » → onglet **Ajouter une URL suivie**, ajoutez chaque URL de cet épisode (une par plateforme) en la rattachant à cet élément via le menu « Rattacher à un élément suivi ».
+3. Sur le Tableau de bord, filtrez par plateforme ou passez la vue en « URL suivie (détail) » pour comparer sa portée d'une plateforme à l'autre — toutes les URLs d'un même élément suivi partagent la même couleur sur les graphiques (la couleur code l'élément suivi, jamais la plateforme).
 
-Une URL peut aussi rester indépendante si elle ne fait partie d'aucun regroupement.
+Une URL peut aussi rester indépendante si elle ne fait partie d'aucun élément suivi. Chaque plateforme (`platforms.csv`) déclare sa propre unité — au-delà des vues/écoutes, rien n'empêche de suivre par exemple des participants à une formation ou des téléchargements, voir `example_data/platforms.csv` pour un exemple générique.
 
 ## Passer de deux comptes à plusieurs comptes
 
@@ -119,7 +123,7 @@ Aucune dépendance nouvelle, aucune donnée envoyée à un tiers : les identifia
 
 **2. Restreindre qui peut ouvrir l'app (complémentaire, sans code)**
 
-Sur le dépôt privé de production, Streamlit Cloud permet d'inviter des emails précis dans les paramètres de partage de l'app — une deuxième barrière gratuite, native, avant même d'arriver à l'écran de connexion.
+Si vous déployez depuis un fork privé du dépôt de code (voir étape 7), Streamlit Cloud permet aussi d'inviter des emails précis dans les paramètres de partage de l'app — une deuxième barrière gratuite, native, avant même d'arriver à l'écran de connexion.
 
 **3. Si vous avez besoin d'un vrai système de comptes en libre-service** (auto-inscription, réinitialisation de mot de passe, beaucoup d'utilisateurs), ces options gratuites en démarrage et respectueuses des données méritent d'être évaluées le moment venu — cela demande un vrai développement (remplacer `streamlit-authenticator` par leur SDK), pas juste une configuration :
 - [Supabase Auth](https://supabase.com/auth) — offre gratuite généreuse, données hébergées dans une base Postgres que vous contrôlez.
