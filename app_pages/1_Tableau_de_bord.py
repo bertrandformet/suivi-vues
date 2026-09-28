@@ -107,10 +107,7 @@ if calc_platforms:
 st.divider()
 st.markdown('<div id="comparateur-periodes" style="scroll-margin-top:80px;"></div>', unsafe_allow_html=True)
 st.subheader("Comparateur de périodes")
-st.caption(
-    "Valeur au début et à la fin d'une période, avec évolution en % — "
-    "plateformes et cumuls thématiques inclus."
-)
+st.caption("Valeur au début et à la fin d'une période, avec évolution en % — toutes catégories incluses.")
 all_totals = charts.platform_and_group_totals_dataset(df)
 if all_totals.empty:
     st.info("Pas assez de données pour comparer des périodes.")
