@@ -20,7 +20,7 @@ with st.expander("Format attendu"):
         "| `valeur` | nombre entier ≥ 0 (vues, écoutes, participants... selon la plateforme) |\n"
         "| `note` | optionnelle |\n"
     )
-    template = "date,identifiant,valeur,note\n2026-01-19,https://exemple.org/episode-12,510,\n"
+    template = "date;identifiant;valeur;note\n2026-01-19;https://exemple.org/episode-12;510;\n"
     st.download_button("Télécharger le modèle CSV", template, file_name="modele_relevés.csv", mime="text/csv")
 
 dossier_id = st.session_state["current_dossier_id"]
@@ -39,7 +39,10 @@ if not uploaded:
 if uploaded.name.endswith(".xlsx"):
     raw = pd.read_excel(uploaded)
 else:
-    raw = pd.read_csv(uploaded)
+    # sep=None (détection auto) : Excel en français exporte les CSV avec un
+    # point-virgule par défaut, pas une virgule — sans ça, le fichier
+    # s'ouvre/s'importe avec tout dans une seule colonne.
+    raw = pd.read_csv(uploaded, sep=None, engine="python")
 
 st.subheader("Aperçu")
 st.dataframe(raw.head(5), use_container_width=True, hide_index=True)
@@ -85,7 +88,7 @@ if st.button("Vérifier le fichier"):
 
     def error_reason(r):
         if pd.isna(r["id"]):
-            return "URL non reconnue"
+            return "Identifiant non reconnu"
         if pd.isna(r["_parsed_date"]):
             return "Date invalide"
         if pd.isna(r["_parsed_views"]) or r["_parsed_views"] < 0:
