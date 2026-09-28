@@ -222,7 +222,12 @@ def period_comparison(totals: pd.DataFrame, start_date, end_date) -> pd.DataFram
     """Pour chaque plateforme/groupe thématique (sortie de
     `platform_and_group_totals_dataset`), la valeur au début et à la fin d'une
     période choisie (dernière valeur connue à ou avant chaque date — même
-    logique de report que les graphiques), plus l'évolution absolue et en %."""
+    logique de report que les graphiques), plus l'évolution absolue et en %.
+
+    Si une plateforme n'a pas encore de relevé à la date de début choisie (elle
+    a commencé plus tard), on prend son tout premier relevé connu plutôt que
+    de laisser un blanc — sinon les plateformes suivies depuis peu n'affichent
+    jamais aucune évolution tant que la période ne remonte pas jusqu'à elles."""
     if totals.empty:
         return totals
     start_ts = pd.Timestamp(start_date)
@@ -234,8 +239,13 @@ def period_comparison(totals: pd.DataFrame, start_date, end_date) -> pd.DataFram
         unit = group["platform_unit"].iloc[0]
         before_start = group[group["recorded_at"] <= start_ts]
         before_end = group[group["recorded_at"] <= end_ts]
-        val_start = before_start["total"].iloc[-1] if not before_start.empty else None
         val_end = before_end["total"].iloc[-1] if not before_end.empty else None
+        if not before_start.empty:
+            val_start = before_start["total"].iloc[-1]
+        elif not before_end.empty:
+            val_start = group["total"].iloc[0]
+        else:
+            val_start = None
         if val_start is None and val_end is None:
             continue
         delta = (val_end - val_start) if (val_start is not None and val_end is not None) else None

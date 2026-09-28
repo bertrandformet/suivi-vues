@@ -1,3 +1,5 @@
+import datetime as dt
+
 import streamlit as st
 
 from src import auth, charts, data as data_layer, github_store, style
@@ -93,9 +95,12 @@ if all_totals.empty:
 else:
     min_date = df["recorded_at"].min().date()
     max_date = df["recorded_at"].max().date()
+    default_start = max(min_date, dt.date(2025, 10, 1))
+    if default_start > max_date:
+        default_start = min_date
     pc1, pc2 = st.columns(2)
     with pc1:
-        period_start = st.date_input("Début de période", value=min_date, min_value=min_date, max_value=max_date)
+        period_start = st.date_input("Début de période", value=default_start, min_value=min_date, max_value=max_date)
     with pc2:
         period_end = st.date_input("Fin de période", value=max_date, min_value=min_date, max_value=max_date)
 
@@ -107,6 +112,7 @@ else:
             comparison,
             use_container_width=True,
             hide_index=True,
+            height=int(36 * (len(comparison) + 1) + 3),
             column_config={
                 "Début": st.column_config.NumberColumn(format="%d"),
                 "Fin": st.column_config.NumberColumn(format="%d"),
