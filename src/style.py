@@ -1,6 +1,7 @@
 """CSS léger transversal (nombres tabulaires, gris conforme WCAG AA) et
 utilitaires de formatage FR, appliqués sur toutes les pages."""
 
+import html
 from zoneinfo import ZoneInfo
 
 import pandas as pd
@@ -86,6 +87,58 @@ SOURCE_LABELS = {
     "import": "import CSV",
     "adjustment": "ajustement",
 }
+
+
+def render_comparison_table(df: pd.DataFrame):
+    """Tableau HTML pour le comparateur de périodes : la composition d'un
+    cumul thématique s'affiche en sous-texte sous son nom, dans la même
+    cellule — st.dataframe ne permet pas ce genre de mise en forme par cellule.
+    """
+    header_cells = "".join(
+        f"<th style='padding:6px 12px;font-size:12.5px;color:{MUTED_TEXT};"
+        f"font-weight:600;text-align:{align}'>{label}</th>"
+        for label, align in [
+            ("Catégorie", "left"), ("Unité", "left"), ("Début", "right"),
+            ("Fin", "right"), ("Évolution", "right"), ("Évolution (%)", "right"),
+        ]
+    )
+
+    def fmt_int(value):
+        return format_number(value) if pd.notna(value) else "—"
+
+    rows = []
+    for _, r in df.iterrows():
+        composition = r.get("Composition") or ""
+        sub = (
+            f"<br><span style='font-size:11.5px;color:{MUTED_TEXT}'>{html.escape(composition)}</span>"
+            if composition else ""
+        )
+        evol = r["Évolution"]
+        evol_color = MUTED_TEXT
+        if pd.notna(evol) and evol > 0:
+            evol_color = "#1E7A46"
+        elif pd.notna(evol) and evol < 0:
+            evol_color = "#B3261E"
+        evol_text = f"{evol:+,.0f}".replace(",", " ") if pd.notna(evol) else "—"
+        pct = r["Évolution (%)"]
+        pct_text = f"{pct:+.0f}%" if pd.notna(pct) else "—"
+        rows.append(
+            "<tr style='border-bottom:1px solid #EDEEF0;'>"
+            f"<td style='padding:9px 12px;'>{html.escape(str(r['Catégorie']))}{sub}</td>"
+            f"<td style='padding:9px 12px;color:{MUTED_TEXT};'>{html.escape(str(r['Unité']))}</td>"
+            f"<td style='padding:9px 12px;text-align:right;font-variant-numeric:tabular-nums;'>{fmt_int(r['Début'])}</td>"
+            f"<td style='padding:9px 12px;text-align:right;font-variant-numeric:tabular-nums;'>{fmt_int(r['Fin'])}</td>"
+            f"<td style='padding:9px 12px;text-align:right;color:{evol_color};font-variant-numeric:tabular-nums;'>{evol_text}</td>"
+            f"<td style='padding:9px 12px;text-align:right;color:{evol_color};font-variant-numeric:tabular-nums;'>{pct_text}</td>"
+            "</tr>"
+        )
+
+    table_html = (
+        "<table style='width:100%;border-collapse:collapse;font-size:14px;'>"
+        f"<thead><tr style='border-bottom:1px solid #E4E3DF;'>{header_cells}</tr></thead>"
+        f"<tbody>{''.join(rows)}</tbody></table>"
+    )
+    st.markdown(table_html, unsafe_allow_html=True)
 
 
 def render_footer():

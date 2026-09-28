@@ -127,18 +127,7 @@ else:
     if comparison.empty:
         st.info("Aucune donnée sur cette période.")
     else:
-        st.dataframe(
-            comparison,
-            use_container_width=True,
-            hide_index=True,
-            height=int(35 * (len(comparison) + 1) + 3),
-            column_config={
-                "Début": st.column_config.NumberColumn(format="%d"),
-                "Fin": st.column_config.NumberColumn(format="%d"),
-                "Évolution": st.column_config.NumberColumn(format="%+d"),
-                "Évolution (%)": st.column_config.NumberColumn(format="%+.0f%%"),
-            },
-        )
+        style.render_comparison_table(comparison)
 
 
 @st.dialog("Confirmer la suppression")
