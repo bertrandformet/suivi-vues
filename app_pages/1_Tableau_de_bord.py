@@ -42,7 +42,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.markdown('<div id="evolution"></div>', unsafe_allow_html=True)
+st.markdown('<div id="evolution" style="scroll-margin-top:80px;"></div>', unsafe_allow_html=True)
 st.subheader("Évolution")
 
 col1, col2 = st.columns(2)
@@ -70,7 +70,7 @@ else:
     st.info("Aucune donnée pour ces filtres.")
 
 st.divider()
-st.markdown('<div id="cumul-plateforme"></div>', unsafe_allow_html=True)
+st.markdown('<div id="cumul-plateforme" style="scroll-margin-top:80px;"></div>', unsafe_allow_html=True)
 st.subheader("Dernier cumul par plateforme")
 st.caption("Chaque barre est divisée par élément suivi : survolez un segment pour voir lequel.")
 bar_fig = charts.latest_by_platform_chart(filtered)
@@ -78,7 +78,7 @@ if bar_fig:
     st.plotly_chart(bar_fig, use_container_width=True, config={"displayModeBar": True, "displaylogo": False})
 
 st.divider()
-st.markdown('<div id="donnees-cumulees"></div>', unsafe_allow_html=True)
+st.markdown('<div id="donnees-cumulees" style="scroll-margin-top:80px;"></div>', unsafe_allow_html=True)
 st.subheader("Données cumulées")
 st.caption("Additionne les totaux de plusieurs plateformes au choix (ex : YouTube + PeerTube + Canotech).")
 available_platforms = sorted(df["platform_name"].dropna().unique().tolist())
@@ -105,7 +105,7 @@ if calc_platforms:
             st.plotly_chart(calc_fig, use_container_width=True, config={"displayModeBar": True, "displaylogo": False})
 
 st.divider()
-st.markdown('<div id="comparateur-periodes"></div>', unsafe_allow_html=True)
+st.markdown('<div id="comparateur-periodes" style="scroll-margin-top:80px;"></div>', unsafe_allow_html=True)
 st.subheader("Comparateur de périodes")
 st.caption(
     "Valeur au début et à la fin d'une période, avec évolution en % — "
@@ -179,7 +179,7 @@ journal_df = journal_df.copy()
 journal_df["is_current"] = journal_df["id_snapshot"].isin(current_ids)
 
 st.divider()
-st.markdown('<div id="journal"></div>', unsafe_allow_html=True)
+st.markdown('<div id="journal" style="scroll-margin-top:80px;"></div>', unsafe_allow_html=True)
 st.subheader("Journal des relevés")
 with st.expander("Afficher le détail"):
     st.caption(
