@@ -45,6 +45,9 @@ def enriched_tracked_urls(dossier_id: str | None = None) -> pd.DataFrame:
     urls = load_tracked_urls()
     if urls.empty:
         return urls
+    if "forecast" not in urls.columns:
+        urls["forecast"] = 0
+    urls["forecast"] = pd.to_numeric(urls["forecast"], errors="coerce").fillna(0)
     if dossier_id is not None:
         urls = urls[urls["dossier_id"] == dossier_id]
         if urls.empty:

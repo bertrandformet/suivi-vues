@@ -46,7 +46,7 @@ def _enrich_snapshots(snapshots: pd.DataFrame, dossier_id: str | None = None) ->
     merged = snapshots.merge(
         urls[[
             "id", "label", "url", "platform_name", "platform_unit", "platform_group",
-            "content_title", "content_id", "dossier_id",
+            "content_title", "content_id", "dossier_id", "forecast",
         ]],
         left_on="tracked_url_id",
         right_on="id",
@@ -330,11 +330,25 @@ def latest_by_platform_chart(df: pd.DataFrame):
     fig.update_layout(showlegend=False, xaxis_title="", yaxis_title="")
     fig.update_xaxes(rangemode="tozero")
 
-    totals = latest.groupby("platform_name").agg(total=("view_count", "sum"), unit=("platform_unit", "first"))
+    totals = latest.groupby("platform_name").agg(
+        total=("view_count", "sum"), unit=("platform_unit", "first"), forecast=("forecast", "sum")
+    )
+
+    forecast_rows = totals[totals["forecast"] > 0]
+    if not forecast_rows.empty:
+        fig.add_bar(
+            x=forecast_rows["forecast"], y=forecast_rows.index, orientation="h",
+            marker=dict(color="#D8D8D2", pattern=dict(shape="/", fgcolor="#8A94A0", size=6, solidity=0.3)),
+            showlegend=False, hoverinfo="skip", name="Prévision",
+        )
+
     for platform_name, row in totals.iterrows():
+        text = f"<b>{style.format_number(row['total'])} {row['unit']}</b>"
+        if row["forecast"] > 0:
+            text += f" <span style='color:#8A94A0'>(+{style.format_number(row['forecast'])} prévus)</span>"
         fig.add_annotation(
-            x=row["total"], y=platform_name,
-            text=f"<b>{style.format_number(row['total'])} {row['unit']}</b>",
+            x=row["total"] + row["forecast"], y=platform_name,
+            text=text,
             showarrow=False, xanchor="left", xshift=8, align="left",
             font=dict(size=12, color="#2B2E33"),
         )
