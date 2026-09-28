@@ -29,6 +29,22 @@ if last_collection is not None:
     context_bits.append(f"dernière collecte le {style.format_date_fr(style.to_local(last_collection))}")
 st.caption(" · ".join(context_bits))
 
+st.markdown(
+    """
+    <div style="display:flex;gap:18px;flex-wrap:wrap;font-size:13.5px;margin:2px 0 18px 0;">
+      <a href="#evolution" style="color:#33618F;text-decoration:none;">↓ Évolution</a>
+      <a href="#cumul-plateforme" style="color:#33618F;text-decoration:none;">↓ Dernier cumul</a>
+      <a href="#donnees-cumulees" style="color:#33618F;text-decoration:none;">↓ Données cumulées</a>
+      <a href="#comparateur-periodes" style="color:#33618F;text-decoration:none;">↓ Comparateur</a>
+      <a href="#journal" style="color:#33618F;text-decoration:none;">↓ Journal</a>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown('<div id="evolution"></div>', unsafe_allow_html=True)
+st.subheader("Évolution")
+
 col1, col2 = st.columns(2)
 with col1:
     platforms = ["Toutes"] + sorted(df["platform_name"].dropna().unique().tolist())
@@ -53,12 +69,16 @@ if fig:
 else:
     st.info("Aucune donnée pour ces filtres.")
 
+st.divider()
+st.markdown('<div id="cumul-plateforme"></div>', unsafe_allow_html=True)
 st.subheader("Dernier cumul par plateforme")
 st.caption("Chaque barre est divisée par élément suivi : survolez un segment pour voir lequel.")
 bar_fig = charts.latest_by_platform_chart(filtered)
 if bar_fig:
     st.plotly_chart(bar_fig, use_container_width=True, config={"displayModeBar": True, "displaylogo": False})
 
+st.divider()
+st.markdown('<div id="donnees-cumulees"></div>', unsafe_allow_html=True)
 st.subheader("Données cumulées")
 st.caption("Additionne les totaux de plusieurs plateformes au choix (ex : YouTube + PeerTube + Canotech).")
 available_platforms = sorted(df["platform_name"].dropna().unique().tolist())
@@ -84,6 +104,8 @@ if calc_platforms:
         if calc_fig:
             st.plotly_chart(calc_fig, use_container_width=True, config={"displayModeBar": True, "displaylogo": False})
 
+st.divider()
+st.markdown('<div id="comparateur-periodes"></div>', unsafe_allow_html=True)
 st.subheader("Comparateur de périodes")
 st.caption(
     "Valeur au début et à la fin d'une période, avec évolution en % — "
@@ -156,6 +178,8 @@ current_ids = set(df["id_snapshot"])
 journal_df = journal_df.copy()
 journal_df["is_current"] = journal_df["id_snapshot"].isin(current_ids)
 
+st.divider()
+st.markdown('<div id="journal"></div>', unsafe_allow_html=True)
 st.subheader("Journal des relevés")
 with st.expander("Afficher le détail"):
     st.caption(
