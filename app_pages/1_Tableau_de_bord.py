@@ -4,7 +4,7 @@ from src import auth, charts, data as data_layer, github_store, style
 
 dossier_id = st.session_state["current_dossier_id"]
 
-st.title("Tableau de bord")
+st.title("Tableau de suivi")
 
 df = charts.build_view_dataset(dossier_id)
 

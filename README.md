@@ -1,6 +1,6 @@
 # Suivi Vues
 
-Tableau de bord de suivi de métriques dans le temps (vues, écoutes, ou tout autre compteur — participants, téléchargements, sessions...) pour des URLs ciblées sur YouTube, PeerTube, Apple Podcasts, Spotify, etc. ou toute autre plateforme que vous ajoutez vous-même. Chaque plateforme déclare sa propre unité (vues, écoutes, participants...) : l'app n'est pas limitée au comptage de vues vidéo/audio.
+Tableau de suivi de métriques dans le temps (vues, écoutes, ou tout autre compteur — participants, téléchargements, sessions...) pour des URLs ciblées sur YouTube, PeerTube, Apple Podcasts, Spotify, etc. ou toute autre plateforme que vous ajoutez vous-même. Chaque plateforme déclare sa propre unité (vues, écoutes, participants...) : l'app n'est pas limitée au comptage de vues vidéo/audio.
 
 Les données (éléments suivis, URLs, relevés) sont stockées sous forme de CSV **dans un dépôt GitHub privé**, lues et écrites via l'API GitHub — chaque ajout ou ajustement crée un commit, ce qui donne un historique d'audit complet sans base de données externe.
 
@@ -99,7 +99,7 @@ Streamlit Cloud ne restreint l'accès par email ("app privée") que pour une app
 
 ## 8. Utilisation
 
-- **Lecteur** : consulte le Tableau de bord (courbes d'évolution, comparaison par plateforme, données cumulées, table d'audit).
+- **Lecteur** : consulte le Tableau de suivi (courbes d'évolution, comparaison par plateforme, données cumulées, comparateur de périodes, journal des relevés).
 - **Admin** : en plus, peut créer des éléments suivis, ajouter des URLs à suivre (avec leur méthode de collecte), saisir ou ajuster des relevés, importer des fichiers CSV/Excel, et déclencher la collecte automatique à la demande.
 - Chaque relevé est conservé (pas d'édition destructive) : un ajustement est une nouvelle ligne horodatée, cochée « ajustement », avec une note explicative. Les relevés automatiques portent la source « auto ». Un relevé erroné peut aussi être supprimé directement depuis le journal des relevés du tableau de bord, avec une confirmation avant suppression.
 - **Données cumulées** : le tableau de bord affiche par défaut un total par plateforme (somme de tous les éléments suivis de cette plateforme, dans le temps). Une section « Données cumulées » permet en plus d'additionner librement plusieurs plateformes entre elles (ex. YouTube + PeerTube), avec un avertissement si leurs unités diffèrent (vues vs participants, par exemple).
@@ -110,7 +110,7 @@ Un même épisode (podcast ou vidéo) existe souvent sur plusieurs plateformes �
 
 1. Dans « Éléments suivis & URLs » → onglet **Créer un élément suivi**, donnez-lui un nom (ex. « Mon podcast — Épisode 13 »).
 2. Toujours dans « Éléments suivis & URLs » → onglet **Ajouter une URL suivie**, ajoutez chaque URL de cet épisode (une par plateforme) en la rattachant à cet élément via le menu « Rattacher à un élément suivi ».
-3. Sur le Tableau de bord, filtrez par plateforme ou passez la vue en « URL suivie (détail) » pour comparer sa portée d'une plateforme à l'autre — toutes les URLs d'un même élément suivi partagent la même couleur sur les graphiques (la couleur code l'élément suivi, jamais la plateforme).
+3. Sur le Tableau de suivi, filtrez par plateforme ou passez la vue en « URL suivie (détail) » pour comparer sa portée d'une plateforme à l'autre — toutes les URLs d'un même élément suivi partagent la même couleur sur les graphiques (la couleur code l'élément suivi, jamais la plateforme).
 
 Une URL peut aussi rester indépendante si elle ne fait partie d'aucun élément suivi. Chaque plateforme (`platforms.csv`) déclare sa propre unité — au-delà des vues/écoutes, rien n'empêche de suivre par exemple des participants à une formation ou des téléchargements, voir `example_data/platforms.csv` pour un exemple générique.
 
