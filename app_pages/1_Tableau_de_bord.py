@@ -48,7 +48,7 @@ st.subheader("Évolution")
 col1, col2 = st.columns(2)
 with col1:
     platforms = ["Toutes"] + sorted(df["platform_name"].dropna().unique().tolist())
-    platform_filter = st.selectbox("Plateforme", platforms)
+    platform_filter = st.selectbox("Catégorie", platforms)
 with col2:
     group_by = st.selectbox(
         "Une courbe par", ["platform_name", "label"],
@@ -71,7 +71,7 @@ else:
 
 st.divider()
 st.markdown('<div id="cumul-plateforme" style="scroll-margin-top:80px;"></div>', unsafe_allow_html=True)
-st.subheader("Dernier cumul par plateforme")
+st.subheader("Dernier cumul par catégorie")
 st.caption("Chaque barre est divisée par élément suivi : survolez un segment pour voir lequel.")
 bar_fig = charts.latest_by_platform_chart(filtered)
 if bar_fig:
