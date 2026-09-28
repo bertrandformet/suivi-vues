@@ -7,7 +7,7 @@ from src import auth, data as data_layer, github_store, style
 
 st.title("Ajouter un relevé")
 st.caption(
-    "Un relevé = la valeur du compteur d'une URL à une date donnée. "
+    "Un relevé = la valeur du compteur d'un item suivi à une date donnée. "
     "Entrée pour enregistrer, la sélection est conservée pour la saisie en série."
 )
 
@@ -20,7 +20,7 @@ dossier_id = st.session_state["current_dossier_id"]
 
 urls = data_layer.enriched_tracked_urls(dossier_id)
 if urls.empty:
-    st.info("Aucune URL suivie pour l'instant. Ajoutez-en une dans « Éléments suivis & URLs ».")
+    st.info("Aucun item suivi pour l'instant. Ajoutez-en un dans « Éléments suivis & URLs ».")
     style.render_footer()
     st.stop()
 
@@ -40,7 +40,7 @@ def last_snapshot_for(url_id):
     return None if rows.empty else rows.iloc[-1]
 
 
-choice = st.selectbox("URL suivie", urls["choice"])
+choice = st.selectbox("Item suivi", urls["choice"])
 selected_row = urls[urls["choice"] == choice].iloc[0]
 last = last_snapshot_for(selected_row["id"])
 default_views = int(last["view_count"]) if last is not None else 0

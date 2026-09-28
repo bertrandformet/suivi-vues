@@ -11,7 +11,7 @@ st.title("Tableau de suivi")
 df = charts.build_view_dataset(dossier_id)
 
 if df.empty:
-    st.info("Aucun relevé pour l'instant. Ajoutez une URL suivie et un premier relevé.")
+    st.info("Aucun relevé pour l'instant. Ajoutez un item suivi et un premier relevé.")
     style.render_footer()
     st.stop()
 

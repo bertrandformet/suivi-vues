@@ -16,7 +16,7 @@ if not auth.is_editeur():
     style.render_footer()
     st.stop()
 
-tab_contents, tab_urls = st.tabs(["Créer un élément suivi", "Ajouter une URL suivie"])
+tab_contents, tab_urls = st.tabs(["Créer un élément suivi", "Ajouter un item suivi"])
 
 with tab_contents:
     with st.form("add_content_form", clear_on_submit=True):
@@ -47,7 +47,7 @@ with tab_urls:
         label = st.text_input("Libellé", placeholder="Ex : Épisode 12 — YouTube")
         content_options = ["Aucun (URL indépendante)"] + contents["title"].tolist()
         content_choice = st.selectbox("Rattacher à un élément suivi", content_options)
-        submitted = st.form_submit_button("Ajouter l'URL", type="primary")
+        submitted = st.form_submit_button("Ajouter l'item", type="primary")
 
     if submitted and url and label:
         content_id = None
@@ -60,9 +60,9 @@ with tab_urls:
         except github_store.ConflictError:
             st.error("Une autre modification vient d'être enregistrée en même temps. Réessayez.")
         else:
-            st.toast(f"URL « {label} » ajoutée pour {platform_choice}.")
+            st.toast(f"Item « {label} » ajouté pour {platform_choice}.")
 
-    st.subheader("URLs suivies")
+    st.subheader("Items suivis")
     tracked = data_layer.enriched_tracked_urls(dossier_id)
     if not tracked.empty:
         display = tracked.copy()

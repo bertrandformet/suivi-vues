@@ -16,18 +16,18 @@ with st.expander("Format attendu"):
         "| Colonne | Description |\n"
         "|---|---|\n"
         "| `date` | AAAA-MM-JJ — ex : 2026-01-19 |\n"
-        "| `url` | doit correspondre à une URL suivie existante (ou son libellé) |\n"
+        "| `identifiant` | doit correspondre à un item suivi existant (son URL ou son libellé) |\n"
         "| `valeur` | nombre entier ≥ 0 (vues, écoutes, participants... selon la plateforme) |\n"
         "| `note` | optionnelle |\n"
     )
-    template = "date,url,valeur,note\n2026-01-19,https://exemple.org/episode-12,510,\n"
+    template = "date,identifiant,valeur,note\n2026-01-19,https://exemple.org/episode-12,510,\n"
     st.download_button("Télécharger le modèle CSV", template, file_name="modele_relevés.csv", mime="text/csv")
 
 dossier_id = st.session_state["current_dossier_id"]
 
 urls = data_layer.enriched_tracked_urls(dossier_id)
 if urls.empty:
-    st.info("Aucune URL suivie pour l'instant. Ajoutez-en une dans « Éléments suivis & URLs » avant d'importer.")
+    st.info("Aucun item suivi pour l'instant. Ajoutez-en un dans « Éléments suivis & URLs » avant d'importer.")
     style.render_footer()
     st.stop()
 
@@ -46,7 +46,7 @@ st.dataframe(raw.head(5), use_container_width=True, hide_index=True)
 
 mode = st.radio(
     "Ce fichier concerne...",
-    ["une seule URL suivie", "plusieurs URLs (une colonne identifie l'URL/le libellé)"],
+    ["un seul item suivi", "plusieurs items (une colonne identifie l'URL/le libellé)"],
 )
 
 columns = raw.columns.tolist()
@@ -61,16 +61,16 @@ urls["choice"] = urls.apply(
     axis=1,
 )
 
-if mode == "une seule URL suivie":
-    single_url_choice = st.selectbox("URL suivie concernée", urls["choice"])
+if mode == "un seul item suivi":
+    single_url_choice = st.selectbox("Item suivi concerné", urls["choice"])
 else:
-    url_col = st.selectbox("Colonne identifiant l'URL (correspond à l'URL ou au libellé saisi)", columns)
+    url_col = st.selectbox("Colonne identifiant l'item (correspond à l'URL ou au libellé saisi)", columns)
 
 if st.button("Vérifier le fichier"):
     working = raw[[date_col, views_col] + ([url_col] if url_col else [])].copy()
     working.columns = ["recorded_at", "view_count"] + (["identifier"] if url_col else [])
 
-    if mode != "une seule URL suivie":
+    if mode != "un seul item suivi":
         lookup = pd.concat([
             urls[["id", "url"]].rename(columns={"url": "identifier"}),
             urls[["id", "label"]].rename(columns={"label": "identifier"}),
