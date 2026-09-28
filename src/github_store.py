@@ -33,3 +33,9 @@ def remove_row(path: str, row_id: str, message: str):
     df = gh_api.remove_row(get_config(), path, row_id, message)
     read_csv.clear()
     return df
+
+
+def update_row(path: str, row_id: str, updates: dict, message: str):
+    df = gh_api.update_row(get_config(), path, row_id, updates, message)
+    read_csv.clear()
+    return df

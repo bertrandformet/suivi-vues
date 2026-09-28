@@ -119,6 +119,13 @@ def add_tracked_url(
     return url_id
 
 
+def update_tracked_url_label(tracked_url_id: str, new_label: str, user: str):
+    store.update_row(
+        TRACKED_URLS_PATH, tracked_url_id, {"label": new_label},
+        f"Renommage item suivi {tracked_url_id} -> « {new_label} » (par {user})",
+    )
+
+
 def add_snapshot(
     tracked_url_id: str,
     recorded_at,

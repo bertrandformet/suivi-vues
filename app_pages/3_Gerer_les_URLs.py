@@ -63,6 +63,7 @@ with tab_urls:
             st.toast(f"Item « {label} » ajouté pour {platform_choice}.")
 
     st.subheader("Items suivis")
+    st.caption("Le libellé se modifie directement dans le tableau (double-clic sur la cellule).")
     tracked = data_layer.enriched_tracked_urls(dossier_id)
     if not tracked.empty:
         display = tracked.copy()
@@ -71,13 +72,16 @@ with tab_urls:
         display["collection_method"] = display["collection_method"].apply(
             lambda m: "Auto" if m in COLLECTORS else "Manuel"
         )
-        display = display.sort_values(["content_title", "label"])
-        display_cols = ["label", "platform_name", "content_title", "url", "collection_method", "added_by", "added_at"]
-        st.dataframe(
-            display[[c for c in display_cols if c in display.columns]],
+        display = display.sort_values(["content_title", "label"]).reset_index(drop=True)
+        display_cols = ["id", "label", "platform_name", "content_title", "url", "collection_method", "added_by", "added_at"]
+        display = display[[c for c in display_cols if c in display.columns]]
+        edited = st.data_editor(
+            display,
             use_container_width=True,
             hide_index=True,
+            disabled=[c for c in display.columns if c != "label"],
             column_config={
+                "id": None,
                 "label": "Libellé",
                 "platform_name": "Plateforme",
                 "content_title": "Élément suivi",
@@ -86,6 +90,18 @@ with tab_urls:
                 "added_by": "Ajouté par",
                 "added_at": "Ajouté le",
             },
+            key="tracked_urls_editor",
         )
+        changed = edited[edited["label"] != display["label"]]
+        if not changed.empty:
+            if st.button(f"Enregistrer {len(changed)} libellé(s) modifié(s)", type="primary"):
+                try:
+                    for _, row in changed.iterrows():
+                        data_layer.update_tracked_url_label(row["id"], row["label"], st.session_state["username"])
+                except github_store.ConflictError:
+                    st.error("Une autre modification vient d'être enregistrée en même temps. Réessayez.")
+                else:
+                    st.toast(f"{len(changed)} libellé(s) mis à jour.")
+                    st.rerun()
 
 style.render_footer()

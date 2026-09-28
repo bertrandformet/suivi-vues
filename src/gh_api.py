@@ -111,3 +111,26 @@ def remove_row(cfg: GitHubConfig, path: str, row_id: str, message: str, id_colum
             raise
         return remove_row(cfg, path, row_id, message, id_column, retry=False)
     return df
+
+
+def update_row(
+    cfg: GitHubConfig, path: str, row_id: str, updates: dict, message: str,
+    id_column: str = "id", retry: bool = True,
+):
+    """Met à jour les champs de `updates` sur la ligne dont `id_column` vaut `row_id`
+    (lecture fraîche + écriture). Ne touche à aucune autre ligne ni colonne."""
+    content, sha = get_file(cfg, path)
+    if content is None:
+        return None
+    df = pd.read_csv(StringIO(content), dtype=str, keep_default_na=False)
+    mask = df[id_column] == row_id
+    for key, value in updates.items():
+        df.loc[mask, key] = value
+    csv_text = df.to_csv(index=False)
+    try:
+        put_file(cfg, path, csv_text, sha, message)
+    except ConflictError:
+        if not retry:
+            raise
+        return update_row(cfg, path, row_id, updates, message, id_column, retry=False)
+    return df
