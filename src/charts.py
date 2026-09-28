@@ -250,8 +250,13 @@ def period_comparison(totals: pd.DataFrame, start_date, end_date) -> pd.DataFram
             continue
         delta = (val_end - val_start) if (val_start is not None and val_end is not None) else None
         pct = (delta / val_start * 100) if (delta is not None and val_start) else None
+        composition = ""
+        if "detail" in group.columns:
+            raw_detail = group["detail"].iloc[0]
+            if isinstance(raw_detail, str) and raw_detail:
+                composition = raw_detail.replace("<br>", "").strip()
         rows.append({
-            "Catégorie": name, "Unité": unit,
+            "Catégorie": name, "Composition": composition, "Unité": unit,
             "Début": val_start, "Fin": val_end,
             "Évolution": delta, "Évolution (%)": pct,
         })
