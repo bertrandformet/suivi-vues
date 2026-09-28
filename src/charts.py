@@ -251,11 +251,11 @@ def period_comparison(totals: pd.DataFrame, start_date, end_date) -> pd.DataFram
         delta = (val_end - val_start) if (val_start is not None and val_end is not None) else None
         pct = (delta / val_start * 100) if (delta is not None and val_start) else None
         rows.append({
-            "Plateforme": name, "Unité": unit,
+            "Catégorie": name, "Unité": unit,
             "Début": val_start, "Fin": val_end,
             "Évolution": delta, "Évolution (%)": pct,
         })
-    return pd.DataFrame(rows).sort_values("Plateforme")
+    return pd.DataFrame(rows).sort_values("Catégorie")
 
 
 def combined_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:

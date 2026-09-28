@@ -26,7 +26,7 @@ auto_snapshots = df[df["source"] == "auto"]
 last_collection = auto_snapshots["entered_at"].max() if not auto_snapshots.empty else None
 context_bits = [f"{n_contents} élément(s) suivi(s)", f"{n_urls} URL(s)"]
 if last_collection is not None:
-    context_bits.append(f"dernière collecte le {style.format_date_fr(style.to_local(last_collection))}")
+    context_bits.append(f"dernière mise à jour le {style.format_date_fr(style.to_local(last_collection))}")
 st.caption(" · ".join(context_bits))
 
 st.markdown(
@@ -52,7 +52,7 @@ with col1:
 with col2:
     group_by = st.selectbox(
         "Une courbe par", ["platform_name", "label"],
-        format_func=lambda x: "URL suivie (détail)" if x == "label" else "Plateforme (cumulé)",
+        format_func=lambda x: "Item suivi (détail)" if x == "label" else "Catégorie (cumulé)",
     )
 
 filtered = df.copy()
@@ -80,10 +80,10 @@ if bar_fig:
 st.divider()
 st.markdown('<div id="donnees-cumulees" style="scroll-margin-top:80px;"></div>', unsafe_allow_html=True)
 st.subheader("Données cumulées")
-st.caption("Additionne les totaux de plusieurs plateformes au choix (ex : YouTube + PeerTube + Canotech).")
+st.caption("Additionne les totaux de plusieurs catégories au choix (ex : YouTube + PeerTube + Canotech).")
 available_platforms = sorted(df["platform_name"].dropna().unique().tolist())
 calc_platforms = st.multiselect(
-    "Plateformes à additionner", available_platforms, placeholder="Choisir des plateformes",
+    "Catégories à additionner", available_platforms, placeholder="Choisir des catégories",
 )
 if calc_platforms:
     calc_df = df[df["platform_name"].isin(calc_platforms)]
@@ -134,7 +134,7 @@ else:
             comparison,
             use_container_width=True,
             hide_index=True,
-            height=int(36 * (len(comparison) + 1) + 3),
+            height=int(35 * (len(comparison) + 1) + 3),
             column_config={
                 "Début": st.column_config.NumberColumn(format="%d"),
                 "Fin": st.column_config.NumberColumn(format="%d"),
