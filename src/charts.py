@@ -45,7 +45,7 @@ def _enrich_snapshots(snapshots: pd.DataFrame, dossier_id: str | None = None) ->
     urls = data_layer.enriched_tracked_urls()
     merged = snapshots.merge(
         urls[[
-            "id", "label", "url", "platform_name", "platform_unit", "platform_group",
+            "id", "label", "url", "platform_name", "platform_unit", "platform_group", "platform_dashed",
             "content_title", "content_id", "dossier_id", "forecast",
         ]],
         left_on="tracked_url_id",
@@ -126,6 +126,9 @@ def evolution_chart(df: pd.DataFrame, group_by: str = "label"):
     fig.update_xaxes(showgrid=False)
     _french_date_axis(fig)
     fig.update_yaxes(showgrid=True, gridcolor="#EDEEF0", zeroline=False, rangemode="tozero")
+    if "platform_dashed" in df.columns:
+        dashed_by_name = df.groupby(group_by)["platform_dashed"].first().to_dict()
+        fig.for_each_trace(lambda t: t.update(line_dash="dash") if dashed_by_name.get(t.name) else None)
     return fig
 
 
@@ -156,16 +159,21 @@ def platform_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:
     if df.empty:
         return df
     pivot = _pivot_ffill(df)
-    url_info = df.drop_duplicates("tracked_url_id").set_index("tracked_url_id")[["platform_name", "platform_unit"]]
+    if "platform_dashed" not in df.columns:
+        df = df.assign(platform_dashed=False)
+    url_info = df.drop_duplicates("tracked_url_id").set_index("tracked_url_id")[
+        ["platform_name", "platform_unit", "platform_dashed"]
+    ]
 
     rows = []
     for platform_name, group in url_info.groupby("platform_name"):
         unit = group["platform_unit"].iloc[0]
+        dashed = bool(group["platform_dashed"].iloc[0])
         totals = pivot[group.index].sum(axis=1, min_count=1)
         for recorded_at, total in _drop_flat_runs(totals).items():
             rows.append({
                 "recorded_at": recorded_at, "platform_name": platform_name,
-                "platform_unit": unit, "total": total, "detail": "",
+                "platform_unit": unit, "total": total, "detail": "", "dashed": dashed,
             })
     return pd.DataFrame(rows)
 
@@ -201,7 +209,7 @@ def group_totals_dataset(df: pd.DataFrame) -> pd.DataFrame:
         for recorded_at, total in _drop_flat_runs(totals).items():
             rows.append({
                 "recorded_at": recorded_at, "platform_name": GROUP_LABEL_PREFIX + group_name,
-                "platform_unit": unit, "total": total, "detail": detail,
+                "platform_unit": unit, "total": total, "detail": detail, "dashed": False,
             })
     return pd.DataFrame(rows)
 
@@ -317,6 +325,9 @@ def platform_totals_chart(df: pd.DataFrame):
     fig.update_xaxes(showgrid=False)
     _french_date_axis(fig)
     fig.update_yaxes(showgrid=True, gridcolor="#EDEEF0", zeroline=False, rangemode="tozero")
+    if "dashed" in df.columns:
+        dashed_by_name = df.groupby("platform_name")["dashed"].first().to_dict()
+        fig.for_each_trace(lambda t: t.update(line_dash="dash") if dashed_by_name.get(t.name) else None)
     return fig
 
 
