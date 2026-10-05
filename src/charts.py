@@ -128,7 +128,7 @@ def evolution_chart(df: pd.DataFrame, group_by: str = "label"):
     fig.update_yaxes(showgrid=True, gridcolor="#EDEEF0", zeroline=False, rangemode="tozero")
     if "platform_dashed" in df.columns:
         dashed_by_name = df.groupby(group_by)["platform_dashed"].first().to_dict()
-        fig.for_each_trace(lambda t: t.update(line_dash="dash") if dashed_by_name.get(t.name) else None)
+        fig.for_each_trace(lambda t: t.update(line_dash="dot") if dashed_by_name.get(t.name) else None)
     return fig
 
 
@@ -302,6 +302,25 @@ def combined_total_chart(df: pd.DataFrame):
     return fig
 
 
+def _legend_label(name: str, detail: str, max_line: int = 30) -> str:
+    """Nom de légende d'un cumul thématique : le nom, puis en italique la liste
+    des plateformes cumulées (coupée en lignes courtes pour ne pas élargir la
+    légende). Les plateformes seules gardent leur nom tel quel."""
+    parts = [p.strip() for p in str(detail).replace("<br>", "").split(" + ") if p.strip()]
+    if not parts:
+        return name
+    lines, current = [], ""
+    for part in parts:
+        candidate = f"{current} + {part}" if current else part
+        if current and len(candidate) > max_line:
+            lines.append(current + " +")
+            current = part
+        else:
+            current = candidate
+    lines.append(current)
+    return f"{name}<br><i>{'<br>'.join(lines)}</i>"
+
+
 def platform_totals_chart(df: pd.DataFrame):
     """Courbe d'évolution des totaux par plateforme (somme de tous les éléments suivis)."""
     if df.empty:
@@ -311,13 +330,13 @@ def platform_totals_chart(df: pd.DataFrame):
 
     fig = px.line(
         df, x="recorded_at", y="total", color="platform_name",
-        markers=True, custom_data=["platform_unit", "detail", "recorded_at_fr"],
+        markers=True, custom_data=["platform_unit", "detail", "recorded_at_fr", "platform_name"],
     )
     fig.update_traces(
         mode="lines+markers",
         marker=dict(size=6),
         hovertemplate=(
-            "<b>%{fullData.name}</b><br>%{customdata[1]}"
+            "<b>%{customdata[3]}</b><br>%{customdata[1]}"
             "%{customdata[2]}<br>%{y:,.0f} %{customdata[0]}<extra></extra>"
         ),
     )
@@ -327,7 +346,9 @@ def platform_totals_chart(df: pd.DataFrame):
     fig.update_yaxes(showgrid=True, gridcolor="#EDEEF0", zeroline=False, rangemode="tozero")
     if "dashed" in df.columns:
         dashed_by_name = df.groupby("platform_name")["dashed"].first().to_dict()
-        fig.for_each_trace(lambda t: t.update(line_dash="dash") if dashed_by_name.get(t.name) else None)
+        fig.for_each_trace(lambda t: t.update(line_dash="dot") if dashed_by_name.get(t.name) else None)
+    detail_by_name = df.groupby("platform_name")["detail"].first().to_dict()
+    fig.for_each_trace(lambda t: t.update(name=_legend_label(t.name, detail_by_name.get(t.name, ""))))
     return fig
 
 
